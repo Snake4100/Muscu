@@ -21,6 +21,13 @@ public class Exercice implements Parcelable {
         this.series = new ArrayList<Serie>();
     }
 
+    public Exercice(Parcel in){
+        this.seance = (Seance) (Seance) in.readValue(Seance.class.getClassLoader());
+        this.typeExercice = (TypeExercice) (TypeExercice) in.readValue(TypeExercice.class.getClassLoader());
+        this.series = new ArrayList<Serie>();
+        in.readList(this.series,null);
+    }
+
     public Seance getSeance() {
         return seance;
     }
@@ -45,6 +52,11 @@ public class Exercice implements Parcelable {
         this.series = series;
     }
 
+    public String toString()
+    {
+        return this.typeExercice.getNom();
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -52,8 +64,10 @@ public class Exercice implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelableArray({seance,typeExercice},2);
-        dest.writeStringArray(new String[]{seance, typeExercice,});
+        dest.writeValue(this.seance);
+        dest.writeValue(this.typeExercice);
+        dest.writeList(this.series);
+
     }
 
     public static final Parcelable.Creator<Exercice> CREATOR = new Parcelable.Creator<Exercice>() {

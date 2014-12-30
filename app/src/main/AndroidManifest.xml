@@ -29,7 +29,7 @@
             android:label="@string/title_activity_choisir_exercice" >
         </activity>
         <activity
-            android:name="com.muscu.benjamin.muscu.LesExercicesActivity"
+            android:name=".LesTypesExercicesActivity"
             android:label="@string/title_activity_exercices" >
         </activity>
         <activity

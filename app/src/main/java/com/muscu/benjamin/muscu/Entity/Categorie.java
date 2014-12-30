@@ -1,5 +1,7 @@
 package com.muscu.benjamin.muscu.Entity;
 
+import android.util.Log;
+
 /**
  * Created by benjamin on 27/12/2014.
  */
@@ -26,7 +28,7 @@ public enum Categorie {
             return Categorie.Cardio;
 
         else
-            return null;
+            return Categorie.Musculation;
     }
 
 }

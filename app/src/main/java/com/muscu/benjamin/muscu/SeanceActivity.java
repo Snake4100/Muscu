@@ -1,18 +1,23 @@
 package com.muscu.benjamin.muscu;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.muscu.benjamin.muscu.Entity.Exercice;
 import com.muscu.benjamin.muscu.Entity.Seance;
+import com.muscu.benjamin.muscu.Entity.TypeExercice;
 
 import java.util.Date;
 
@@ -20,7 +25,8 @@ import java.util.Date;
 
 public class SeanceActivity extends Activity {
     private Seance laSeance = null;
-    private final int NEW_EXERCICE = 1;
+    private final int NEW_EXERCICE=1;
+    private ArrayAdapter<Exercice> seancesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,15 +68,68 @@ public class SeanceActivity extends Activity {
         //on crée les actions sur les boutons
         boutonNouvelExercice.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //on envoi vers la vue de selection d'un exercice
-                Intent intent = new Intent(SeanceActivity.this, LesExercicesActivity.class);
-                intent.putExtra("seance",SeanceActivity.this.laSeance);
-                startActivity(intent);
+                SeanceActivity.this.alertListeTypeExercice();
             }
         });
 
 
     }
+
+    //http://stackoverflow.com/questions/15762905/how-to-display-list-view-in-alert-dialog-in-android
+    private void alertListeTypeExercice()
+    {
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(
+                SeanceActivity.this);
+        builderSingle.setIcon(R.drawable.ic_launcher);
+        builderSingle.setTitle("Choisissez un exercice");
+        final ArrayAdapter<TypeExercice> arrayAdapter = new ArrayAdapter<TypeExercice>(
+                SeanceActivity.this,
+                android.R.layout.select_dialog_singlechoice);
+        arrayAdapter.addAll(donneesTest.getTypesExercices());
+
+        builderSingle.setNegativeButton("cancel",
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        builderSingle.setAdapter(arrayAdapter,
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(SeanceActivity.this, ExerciceActivity.class);
+                        intent.putExtra("typeExercice", arrayAdapter.getItem(which));
+                        intent.putExtra("seance", SeanceActivity.this.laSeance);
+                        startActivityForResult(intent,NEW_EXERCICE);
+                        dialog.dismiss();
+                    }
+                });
+        builderSingle.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //on vérifie que le nombre d'exercice est bon
+        Log.e("debug", "nombre d'exercices : " + this.laSeance.getExercices().size());
+
+        //on creer le liste adapter avec les exercices
+        this.seancesAdapter = new ArrayAdapter<Exercice>(this, android.R.layout.simple_list_item_1, this.laSeance.getExercices());
+        ListView listExercice = (ListView) findViewById(R.id.listExerciceSeance);
+        listExercice.setAdapter(this.seancesAdapter);
+        listExercice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
+
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -87,27 +146,6 @@ public class SeanceActivity extends Activity {
                 break;
 
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.e("debug", "nombre d'exercices : " + this.laSeance.getExercices().size());
-        this.actualiserListeExercice();
-
-        TextView nomSeanceText = (TextView) findViewById(R.id.nomSeance_text);
-        nomSeanceText.setText(this.laSeance.getNom());
-
-    }
-
-    private void actualiserListeExercice() {
-        ListView listExercice = (ListView) findViewById(R.id.listExerciceSeance);
-        for (Exercice exercice : this.laSeance.getExercices()) {
-            Button bouton = new Button(this);
-            bouton.setText(exercice.getTypeExercice().getNom());
-        }
-
-
     }
 
     @Override

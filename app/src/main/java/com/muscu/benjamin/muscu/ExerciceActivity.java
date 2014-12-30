@@ -17,13 +17,14 @@ import com.muscu.benjamin.muscu.Entity.TypeExercice;
 
 public class ExerciceActivity extends Activity {
 
-    Exercice sonExercice;
+    private Exercice sonExercice;
+    private int nbRepetition = 0;
+    private int tempsRepos=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercice);
-
 
         TextView nomExerciceText = (TextView)findViewById(R.id.exerciceName);
 
@@ -45,11 +46,21 @@ public class ExerciceActivity extends Activity {
         boutonClore.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                Log.e("debug","nombre d'exercices : "+ExerciceActivity.this.sonExercice.getSeance().getExercices().size());
-                ExerciceActivity.this.sonExercice.getSeance().setNom("BAHAHAHHAHAHAHAH");
+                //on renvoi l'exercice à la seance
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("exercice", ExerciceActivity.this.sonExercice);
+                setResult(RESULT_OK,resultIntent);
+                //on ferme l'actvité
                 finish();
             }
         });
+
+        /*
+            ———————————————————————————————————————$$$$$$$————————————————————————————————————
+            FAIRE UNE POPUP QUI DEMANDE LE NOMBRE DE REPETITION SOUHAITÉ ET LE TEMPS DE REPOS
+            ———————————————————————————————————————$$$$$$$————————————————————————————————————
+
+         */
     }
 
 
