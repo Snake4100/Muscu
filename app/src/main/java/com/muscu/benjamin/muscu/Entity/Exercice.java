@@ -14,11 +14,15 @@ public class Exercice implements Parcelable {
     private Seance seance;
     private TypeExercice typeExercice;
     private List<Serie> series;
+    private int nbSeriesSouhaite;
+    private int tempsRepos;
 
-    public Exercice(Seance seance, TypeExercice typeExercice) {
+    public Exercice(Seance seance, TypeExercice typeExercice,int nbSeriesSouhaite, int tempsRepos) {
         this.seance = seance;
         this.typeExercice = typeExercice;
         this.series = new ArrayList<Serie>();
+        this.nbSeriesSouhaite = nbSeriesSouhaite;
+        this.tempsRepos = tempsRepos;
     }
 
     public Exercice(Parcel in){
@@ -26,6 +30,8 @@ public class Exercice implements Parcelable {
         this.typeExercice = (TypeExercice) (TypeExercice) in.readValue(TypeExercice.class.getClassLoader());
         this.series = new ArrayList<Serie>();
         in.readList(this.series,null);
+        this.nbSeriesSouhaite = in.readInt();
+        this.tempsRepos = in.readInt();
     }
 
     public Seance getSeance() {
@@ -52,6 +58,14 @@ public class Exercice implements Parcelable {
         this.series = series;
     }
 
+    public int getNbSeriesSouhaite() {
+        return nbSeriesSouhaite;
+    }
+
+    public void setNbSeriesSouhaite(int nbSeriesSouhaite) {
+        this.nbSeriesSouhaite = nbSeriesSouhaite;
+    }
+
     public String toString()
     {
         return this.typeExercice.getNom();
@@ -67,6 +81,8 @@ public class Exercice implements Parcelable {
         dest.writeValue(this.seance);
         dest.writeValue(this.typeExercice);
         dest.writeList(this.series);
+        dest.writeInt(this.nbSeriesSouhaite);
+        dest.writeInt(this.tempsRepos);
 
     }
 

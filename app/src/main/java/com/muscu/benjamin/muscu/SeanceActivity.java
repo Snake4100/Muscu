@@ -114,8 +114,6 @@ public class SeanceActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        //on vérifie que le nombre d'exercice est bon
-        Log.e("debug", "nombre d'exercices : " + this.laSeance.getExercices().size());
 
         //on creer le liste adapter avec les exercices
         this.seancesAdapter = new ArrayAdapter<Exercice>(this, android.R.layout.simple_list_item_1, this.laSeance.getExercices());
