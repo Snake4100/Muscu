@@ -19,24 +19,15 @@
         android:text="@string/cloreExercice_button"
         android:id="@+id/button_cloreExercice"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="96dp" />
+        android:layout_centerHorizontal="true" />
 
-    <ScrollView
+    <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/scrollView3"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:id="@+id/listView_series"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_above="@+id/button_cloreExercice"
-        android:layout_below="@+id/exerciceName" >
-
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/listView_series" />
-    </ScrollView>
+        android:layout_below="@+id/exerciceName" />
 
 </RelativeLayout>

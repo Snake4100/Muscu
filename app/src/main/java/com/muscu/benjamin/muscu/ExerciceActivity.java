@@ -191,21 +191,17 @@ public class ExerciceActivity extends Activity {
 
         }catch (NoSuchMethodError e) {
             Log.e("Debug", "Older SDK, using old Builder");
-
             builderSingle.setView(layout);
-
         }
 
-
-
         //on crée et on ajoute la série à l'exercice
-        ExerciceActivity.this.seriesAdapter.add(new Serie(this.defaultPoids(), this.defaultNbRepetitions()));
-
+        this.seriesAdapter.add(new Serie(this.defaultPoids(), this.defaultNbRepetitions()));
 
         //on met une valeur par default le poid et le nombre de répétition
         NumberPicker numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_poids);
         numberPicker.setOnValueChangedListener( new NumberPicker.OnValueChangeListener() {
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                Log.e("debug","picker poids : "+picker.getValue());
                 List<Serie> listSerie = ExerciceActivity.this.sonExercice.getSeries();
                 listSerie.get(listSerie.size()-1).setPoids(picker.getValue());
             }
@@ -214,10 +210,10 @@ public class ExerciceActivity extends Activity {
         numberPicker.setMaxValue(10000);
         numberPicker.setValue(0);
 
-
         numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_repetitions);
         numberPicker.setOnValueChangedListener( new NumberPicker.OnValueChangeListener() {
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                Log.e("debug","picker nbrepetitions : "+picker.getValue());
                 List<Serie> listSerie = ExerciceActivity.this.sonExercice.getSeries();
                 listSerie.get(listSerie.size()-1).setRepetitions(picker.getValue());
             }
@@ -229,9 +225,7 @@ public class ExerciceActivity extends Activity {
         builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                RelativeLayout layout = (RelativeLayout) RelativeLayout.inflate(ExerciceActivity.this, R.layout.activity_exercice, null);
-                ListView listSeries = (ListView) layout.findViewById(R.id.listView_series);
-                listSeries.invalidateViews();
+                ExerciceActivity.this.seriesAdapter.notifyDataSetChanged();
 
 
                 //on lance la série suivante
@@ -239,7 +233,6 @@ public class ExerciceActivity extends Activity {
                 dialog.dismiss();
             }
         });
-
 
         builderSingle.show();
     }
