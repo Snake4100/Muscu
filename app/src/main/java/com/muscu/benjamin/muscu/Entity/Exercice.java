@@ -29,7 +29,7 @@ public class Exercice implements Parcelable {
         this.seance = (Seance) (Seance) in.readValue(Seance.class.getClassLoader());
         this.typeExercice = (TypeExercice) (TypeExercice) in.readValue(TypeExercice.class.getClassLoader());
         this.series = new ArrayList<Serie>();
-        in.readList(this.series,null);
+        this.series = in.readArrayList(Serie.class.getClassLoader());
         this.nbSeriesSouhaite = in.readInt();
         this.tempsRepos = in.readInt();
     }
