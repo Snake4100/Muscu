@@ -11,8 +11,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
@@ -22,14 +24,17 @@ import android.widget.TimePicker;
 
 import com.muscu.benjamin.muscu.Entity.Exercice;
 import com.muscu.benjamin.muscu.Entity.Seance;
+import com.muscu.benjamin.muscu.Entity.Serie;
 import com.muscu.benjamin.muscu.Entity.TypeExercice;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ExerciceActivity extends Activity {
 
     private Exercice sonExercice;
-    private int nbSerieSouhaite = 0;
-    private int tempsRepos = 0;
+    private ArrayAdapter<Serie> seriesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,18 +48,21 @@ public class ExerciceActivity extends Activity {
 
         //si typeExercice est différent de null, c'est qu'on crée un exercice
         if (typeExercice != null && laSeanceEnCours != null) {
-            //on affiche l'alert pour configurer les temps de repos et le nombre de séries souhaité
-            this.alertConfigurationExercice();
 
             //on créer l'exercice
-            this.sonExercice = new Exercice(laSeanceEnCours, typeExercice, this.nbSerieSouhaite, this.tempsRepos);
-            nomExerciceText.setText(this.sonExercice.getTypeExercice().getNom());
+            ExerciceActivity.this.sonExercice = new Exercice(laSeanceEnCours, typeExercice, this.defaultNbSeries(),  this.defaultTempsRepos());
+            nomExerciceText.setText( ExerciceActivity.this.sonExercice.getTypeExercice().getNom());
+
+            //on affiche l'alert pour configurer les temps de repos et le nombre de séries souhaité
+            this.alertConfigurationExercice(laSeanceEnCours,typeExercice);
+
 
         } else {
 
             nomExerciceText.setText("Type exercice ou seance null");
         }
 
+        //bouton pour clore l'exercice
         Button boutonClore = (Button) findViewById(R.id.button_cloreExercice);
         boutonClore.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -68,10 +76,22 @@ public class ExerciceActivity extends Activity {
             }
         });
 
+
+        //on crée l'adapter de la listeview des series
+        this.seriesAdapter = new ArrayAdapter<Serie>(this, android.R.layout.simple_list_item_1, this.sonExercice.getSeries());
+        ListView listSeries = (ListView) findViewById(R.id.listView_series);
+        listSeries.setAdapter(this.seriesAdapter);
+        listSeries.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
+
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void alertConfigurationExercice() {
+    private void alertConfigurationExercice(Seance laSeanceEnCours,TypeExercice typeExercice) {
 
         LinearLayout layout = (LinearLayout) LinearLayout.inflate(this, R.layout.configuration_exercice, null);
 
@@ -84,31 +104,175 @@ public class ExerciceActivity extends Activity {
 
         //on crée la liste view qui va contenir les éléments de l'alert
         ListView listView = new ListView(this);
-        builderSingle.setView(R.layout.configuration_exercice);
+
+        try{
+            builderSingle.setView(R.layout.configuration_exercice);
+
+        }catch (NoSuchMethodError e) {
+            Log.e("Debug", "Older SDK, using old Builder");
+            builderSingle.setView(layout);
+
+        }
+
 
         //on met une valeur par default le nombre de série et le temps de repos
         NumberPicker numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_nbSerie);
+        numberPicker.setOnValueChangedListener(( new NumberPicker.
+                OnValueChangeListener() {
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                Log.e("Debug","NB série récupéré : "+picker.getValue());
+                ExerciceActivity.this.sonExercice.setNbSeriesSouhaite(picker.getValue());
+            }
+        }));
         numberPicker.setMinValue(1);
         numberPicker.setMaxValue(100);
-        numberPicker.setValue(4);
+        numberPicker.setValue(this.defaultNbSeries());
+
 
         numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_tempsRepos);
+        numberPicker.setOnValueChangedListener(( new NumberPicker.
+                OnValueChangeListener() {
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                ExerciceActivity.this.sonExercice.setTempsRepos(picker.getValue());
+            }
+        }));
         numberPicker.setMinValue(1);
         numberPicker.setMaxValue(10000);
-        numberPicker.setValue(60);
+        numberPicker.setValue(this.defaultTempsRepos());
+
 
         builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //récupération du nombre de série souhaite
                 LinearLayout layout = (LinearLayout) LinearLayout.inflate(ExerciceActivity.this, R.layout.configuration_exercice, null);
-                NumberPicker numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_nbSerie);
-                ExerciceActivity.this.nbSerieSouhaite = numberPicker.getValue();
 
-                //récupération du temps de repos souhaité
-                numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_tempsRepos);
-                ExerciceActivity.this.tempsRepos = numberPicker.getValue();
+                //on lance les series
+                ExerciceActivity.this.startSerie();
 
+                //on ferme la fenetre
+                dialog.dismiss();
+            }
+        });
+
+
+        builderSingle.show();
+    }
+
+    private int defaultNbSeries(){
+        return 4;
+    }
+
+    private int defaultTempsRepos(){
+        return 60;
+    }
+
+    private void startSerie(){
+        //temps qu'on a pas fait le nombre de série souhaité
+
+        Log.e("Debug","Start serie : "+this.sonExercice.getNbSeriesSouhaite()+" != "+this.sonExercice.getSeries().size());
+        if(this.sonExercice.getNbSeriesSouhaite() != this.sonExercice.getSeries().size()){
+            //on affiche l'alerte pour saisir les résultats de la série
+            alertResultatSerie(this.sonExercice.getSeries().size()+1);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void alertResultatSerie(int numeroSerie){
+        LinearLayout layout = (LinearLayout) LinearLayout.inflate(this, R.layout.resultat_serie, null);
+
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(ExerciceActivity.this);
+        builderSingle.setIcon(R.drawable.ic_launcher);
+        builderSingle.setTitle("Série "+numeroSerie);
+
+
+        //on crée la liste view qui va contenir les éléments de l'alert
+        try{
+            builderSingle.setView(R.layout.resultat_serie);
+
+        }catch (NoSuchMethodError e) {
+            Log.e("Debug", "Older SDK, using old Builder");
+
+            builderSingle.setView(layout);
+
+        }
+
+
+
+        //on crée et on ajoute la série à l'exercice
+        ExerciceActivity.this.seriesAdapter.add(new Serie(this.defaultPoids(), this.defaultNbRepetitions()));
+
+
+        //on met une valeur par default le poid et le nombre de répétition
+        NumberPicker numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_poids);
+        numberPicker.setOnValueChangedListener( new NumberPicker.OnValueChangeListener() {
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                List<Serie> listSerie = ExerciceActivity.this.sonExercice.getSeries();
+                listSerie.get(listSerie.size()-1).setPoids(picker.getValue());
+            }
+        });
+        numberPicker.setMinValue(0);
+        numberPicker.setMaxValue(10000);
+        numberPicker.setValue(0);
+
+
+        numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_repetitions);
+        numberPicker.setOnValueChangedListener( new NumberPicker.OnValueChangeListener() {
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                List<Serie> listSerie = ExerciceActivity.this.sonExercice.getSeries();
+                listSerie.get(listSerie.size()-1).setRepetitions(picker.getValue());
+            }
+        });
+        numberPicker.setMinValue(0);
+        numberPicker.setMaxValue(10000);
+        numberPicker.setValue(0);
+
+        builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                RelativeLayout layout = (RelativeLayout) RelativeLayout.inflate(ExerciceActivity.this, R.layout.activity_exercice, null);
+                ListView listSeries = (ListView) layout.findViewById(R.id.listView_series);
+                listSeries.invalidateViews();
+
+
+                //on lance la série suivante
+                ExerciceActivity.this.startSerie();
+                dialog.dismiss();
+            }
+        });
+
+
+        builderSingle.show();
+    }
+
+    private int defaultPoids()
+    {
+        return 0;
+    }
+
+    private int defaultNbRepetitions(){
+        return 0;
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void alertTimerRepos(){
+
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(ExerciceActivity.this);
+        builderSingle.setIcon(R.drawable.ic_launcher);
+        builderSingle.setTitle("Repos");
+
+
+        //on crée le chronometre
+        //Chronometer chronometer = new Chronometer(this);
+        //chronometer.
+
+
+
+        builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                //on lance la série suivante
+                ExerciceActivity.this.startSerie();
                 dialog.dismiss();
             }
         });

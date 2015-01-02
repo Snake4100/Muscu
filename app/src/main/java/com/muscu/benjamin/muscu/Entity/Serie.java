@@ -40,4 +40,8 @@ public class Serie {
     public void setRepetitions(int repetitions) {
         this.repetitions = repetitions;
     }
+
+    public String toString(){
+        return this.repetitions+" répétitions à "+this.poids+"kg";
+    }
 }

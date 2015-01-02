@@ -58,12 +58,24 @@ public class Exercice implements Parcelable {
         this.series = series;
     }
 
+    public void addSerie(Serie uneSerie){
+        this.series.add(uneSerie);
+    }
+
     public int getNbSeriesSouhaite() {
         return nbSeriesSouhaite;
     }
 
     public void setNbSeriesSouhaite(int nbSeriesSouhaite) {
         this.nbSeriesSouhaite = nbSeriesSouhaite;
+    }
+
+    public int getTempsRepos() {
+        return tempsRepos;
+    }
+
+    public void setTempsRepos(int tempsRepos) {
+        this.tempsRepos = tempsRepos;
     }
 
     public String toString()
