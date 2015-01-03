@@ -90,6 +90,7 @@ public class ExerciceActivity extends Activity {
 
     }
 
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void alertConfigurationExercice(Seance laSeanceEnCours,TypeExercice typeExercice) {
 
@@ -168,7 +169,6 @@ public class ExerciceActivity extends Activity {
 
     private void startSerie(){
         //temps qu'on a pas fait le nombre de série souhaité
-
         Log.e("Debug","Start serie : "+this.sonExercice.getNbSeriesSouhaite()+" != "+this.sonExercice.getSeries().size());
         if(this.sonExercice.getNbSeriesSouhaite() != this.sonExercice.getSeries().size()){
             //on affiche l'alerte pour saisir les résultats de la série
@@ -295,4 +295,6 @@ public class ExerciceActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }
