@@ -146,7 +146,6 @@ public class ExerciceActivity extends Activity {
         numberPicker.setMaxValue(100);
         numberPicker.setValue(this.defaultNbSeries());
 
-
         numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_tempsRepos);
         numberPicker.setOnValueChangedListener(( new NumberPicker.
                 OnValueChangeListener() {
@@ -245,9 +244,9 @@ public class ExerciceActivity extends Activity {
                 List<Serie> listSerie = ExerciceActivity.this.sonExercice.getSeries();
                 ExerciceActivity.this.daoSerie.create(listSerie.get(listSerie.size()-1));
 
+                //on lance le chrono
+                ExerciceActivity.this.alertTimerRepos();
 
-                //on lance la série suivante
-                ExerciceActivity.this.startSerie();
                 dialog.dismiss();
             }
         });
@@ -273,10 +272,9 @@ public class ExerciceActivity extends Activity {
 
 
         //on crée le chronometre
-        //Chronometer chronometer = new Chronometer(this);
-        //chronometer.
-
-
+        Chronometer chronometer = new Chronometer(this);
+        builderSingle.setView(chronometer);
+        chronometer.start();
 
         builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
