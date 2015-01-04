@@ -24,11 +24,9 @@ import com.muscu.benjamin.muscu.Entity.TypeExercice;
 
 import java.util.Date;
 
-
-
 public class SeanceActivity extends Activity {
     private Seance laSeance = null;
-    private final int NEW_EXERCICE=1;
+    //private final int NEW_EXERCICE=1;
     private ArrayAdapter<Exercice> seancesAdapter;
     private TypeExerciceDAO daoTypeExercice;
     private ExerciceDAO daoExercice;
@@ -56,9 +54,6 @@ public class SeanceActivity extends Activity {
 
         //si on ouvre une seance existante
         if (this.laSeance != null) {
-
-            //on récupère ses exercices
-            this.laSeance.setExercices(this.daoExercice.getSeanceExercices(this.laSeance));
 
             //si la seance est close
             if (this.laSeance.isClose()) {
@@ -101,7 +96,6 @@ public class SeanceActivity extends Activity {
         final ArrayAdapter<TypeExercice> arrayAdapter = new ArrayAdapter<TypeExercice>(
                 SeanceActivity.this,
                 android.R.layout.select_dialog_singlechoice);
-        //arrayAdapter.addAll(donneesTest.getTypesExercices());
         arrayAdapter.addAll(this.daoTypeExercice.getAll());
 
         builderSingle.setNegativeButton("cancel",
@@ -121,7 +115,8 @@ public class SeanceActivity extends Activity {
                         Intent intent = new Intent(SeanceActivity.this, ExerciceActivity.class);
                         intent.putExtra("typeExercice", arrayAdapter.getItem(which));
                         intent.putExtra("seance", SeanceActivity.this.laSeance);
-                        startActivityForResult(intent,NEW_EXERCICE);
+                        //startActivityForResult(intent,NEW_EXERCICE);
+                        startActivity(intent);
                         dialog.dismiss();
                     }
                 });
@@ -132,6 +127,9 @@ public class SeanceActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
+        //on récupère ses exercices
+        this.laSeance.setExercices(this.daoExercice.getSeanceExercices(this.laSeance));
+
         //on creer le liste adapter avec les exercices
         this.seancesAdapter = new ArrayAdapter<Exercice>(this, android.R.layout.simple_list_item_1, this.laSeance.getExercices());
         ListView listExercice = (ListView) findViewById(R.id.listExerciceSeance);
@@ -140,13 +138,15 @@ public class SeanceActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                Intent intent = new Intent(SeanceActivity.this, ExerciceActivity.class);
+                intent.putExtra("exercice", SeanceActivity.this.seancesAdapter.getItem(position));
+                startActivity(intent);
             }
         });
 
     }
 
-
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case NEW_EXERCICE:
@@ -159,9 +159,8 @@ public class SeanceActivity extends Activity {
                     this.laSeance.addExercice(exercice);
                 }
                 break;
-
         }
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

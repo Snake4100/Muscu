@@ -41,8 +41,6 @@ public class Exercice implements Parcelable {
         this.id = in.readLong();
         this.seance = (Seance) (Seance) in.readValue(Seance.class.getClassLoader());
         this.typeExercice = (TypeExercice) (TypeExercice) in.readValue(TypeExercice.class.getClassLoader());
-        this.series = new ArrayList<Serie>();
-        this.series = in.readArrayList(Serie.class.getClassLoader());
         this.nbSeriesSouhaite = in.readInt();
         this.tempsRepos = in.readInt();
     }
@@ -114,7 +112,6 @@ public class Exercice implements Parcelable {
         dest.writeLong(this.id);
         dest.writeValue(this.seance);
         dest.writeValue(this.typeExercice);
-        dest.writeList(this.series);
         dest.writeInt(this.nbSeriesSouhaite);
         dest.writeInt(this.tempsRepos);
 

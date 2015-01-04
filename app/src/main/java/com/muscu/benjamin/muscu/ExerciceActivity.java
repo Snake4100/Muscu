@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.muscu.benjamin.muscu.DAO.ExerciceDAO;
+import com.muscu.benjamin.muscu.DAO.SerieDAO;
 import com.muscu.benjamin.muscu.Entity.Exercice;
 import com.muscu.benjamin.muscu.Entity.Seance;
 import com.muscu.benjamin.muscu.Entity.Serie;
@@ -37,6 +38,7 @@ public class ExerciceActivity extends Activity {
     private Exercice sonExercice;
     private ArrayAdapter<Serie> seriesAdapter;
     private ExerciceDAO daoExercice;
+    private SerieDAO daoSerie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +48,14 @@ public class ExerciceActivity extends Activity {
         //init DAOs
         this.daoExercice = new ExerciceDAO(this.getBaseContext());
         this.daoExercice.open();
+        this.daoSerie = new SerieDAO(this.getBaseContext());
+        this.daoSerie.open();
 
         TextView nomExerciceText = (TextView) findViewById(R.id.exerciceName);
 
         TypeExercice typeExercice = getIntent().getParcelableExtra("typeExercice");
         Seance laSeanceEnCours = getIntent().getParcelableExtra("seance");
-
+        this.sonExercice = getIntent().getParcelableExtra("exercice");
         //si typeExercice est différent de null, c'est qu'on crée un exercice
         if (typeExercice != null && laSeanceEnCours != null) {
 
@@ -64,7 +68,12 @@ public class ExerciceActivity extends Activity {
             this.alertConfigurationExercice(laSeanceEnCours,typeExercice);
 
 
-        } else {
+        }
+        //si on a passé un exercice en parametre, c'est une visualisation d'un exercice deja fait
+        else if(this.sonExercice != null){
+            this.sonExercice.setSeries(this.daoSerie.getSeriesExercice(this.sonExercice));
+        }
+        else {
 
             nomExerciceText.setText("Type exercice ou seance null");
         }
@@ -75,9 +84,11 @@ public class ExerciceActivity extends Activity {
             public void onClick(View v) {
 
                 //on renvoi l'exercice à la seance
-                Intent resultIntent = new Intent();
+                /*Intent resultIntent = new Intent();
                 resultIntent.putExtra("exercice", ExerciceActivity.this.sonExercice);
-                setResult(RESULT_OK, resultIntent);
+                setResult(RESULT_OK, resultIntent);*/
+
+
                 //on ferme l'actvité
                 finish();
             }
@@ -91,7 +102,6 @@ public class ExerciceActivity extends Activity {
         listSeries.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
             }
         });
 
@@ -176,7 +186,6 @@ public class ExerciceActivity extends Activity {
 
     private void startSerie(){
         //temps qu'on a pas fait le nombre de série souhaité
-        Log.e("Debug","Start serie : "+this.sonExercice.getNbSeriesSouhaite()+" != "+this.sonExercice.getSeries().size());
         if(this.sonExercice.getNbSeriesSouhaite() != this.sonExercice.getSeries().size()){
             //on affiche l'alerte pour saisir les résultats de la série
             alertResultatSerie(this.sonExercice.getSeries().size()+1);
@@ -202,7 +211,7 @@ public class ExerciceActivity extends Activity {
         }
 
         //on crée et on ajoute la série à l'exercice
-        this.seriesAdapter.add(new Serie(this.defaultPoids(), this.defaultNbRepetitions()));
+        this.seriesAdapter.add(new Serie(this.defaultPoids(), this.defaultNbRepetitions(), this.sonExercice));
 
         //on met une valeur par default le poid et le nombre de répétition
         NumberPicker numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_poids);
@@ -233,6 +242,8 @@ public class ExerciceActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ExerciceActivity.this.seriesAdapter.notifyDataSetChanged();
+                List<Serie> listSerie = ExerciceActivity.this.sonExercice.getSeries();
+                ExerciceActivity.this.daoSerie.create(listSerie.get(listSerie.size()-1));
 
 
                 //on lance la série suivante

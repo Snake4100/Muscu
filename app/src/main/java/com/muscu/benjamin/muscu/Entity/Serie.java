@@ -15,20 +15,24 @@ public class Serie implements Parcelable {
 
     //pour les exercices cardio
     private int tempsTotal;
+    private Exercice exercice;
 
     //Constructeur complet
-    public Serie(long id, int poids, int repetitions)
+    public Serie(long id, int poids, int repetitions, int tempsTotal, Exercice exercice)
     {
         this.id = id;
         this.poids = poids;
         this.repetitions = repetitions;
+        this.tempsTotal = tempsTotal;
+        this.exercice = exercice;
     }
 
     //Constructeur serie musculation
-    public Serie(int poids, int repetitions)
+    public Serie(int poids, int repetitions, Exercice exercice)
     {
         this.poids = poids;
         this.repetitions = repetitions;
+        this.exercice = exercice;
     }
 
     //Constructeur exercice cardio
@@ -82,6 +86,14 @@ public class Serie implements Parcelable {
 
     public String toString(){
         return this.repetitions+" répétitions à "+this.poids+"kg";
+    }
+
+    public Exercice getExercice() {
+        return exercice;
+    }
+
+    public void setExercice(Exercice exercice) {
+        this.exercice = exercice;
     }
 
     @Override
