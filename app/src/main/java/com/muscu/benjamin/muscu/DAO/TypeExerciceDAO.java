@@ -66,11 +66,26 @@ public class TypeExerciceDAO extends DAOBase {
 
     }
 
+    public TypeExercice selectionner(Long id)
+    {
+        Cursor c = mDb.rawQuery("select id,nom,categorie,zones,description,temps_repos " +
+                "from TypeExercice " +
+                "where id = ?",new String[]{String.valueOf(id)});
+
+        //si on a un résultat
+        if(c.moveToFirst())
+        {
+            return new TypeExercice(c.getLong(0), c.getString(1), Categorie.setCategorie(c.getString(2)), c.getString(3), c.getString(4), c.getInt(5));
+        }
+
+        return null;
+    }
+
     public static void defaultTypeExercice(SQLiteDatabase db){
         db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Pompes\",\"Musculation\",null,null,null)");
         db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Tractions\",\"Musculation\",null,null,null)");
         db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Dips\",\"Musculation\",null,null,null)");
-        //db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Développé couché\",\"Musculation\",null,null,null)");
-        //db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Course à pied\",\"Cardio\",null,null,null)");
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Développé couché\",\"Musculation\",null,null,null)");
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Course à pied\",\"Cardio\",null,null,null)");
     }
 }

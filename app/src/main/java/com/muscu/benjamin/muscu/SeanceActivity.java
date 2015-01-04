@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.muscu.benjamin.muscu.DAO.ExerciceDAO;
+import com.muscu.benjamin.muscu.DAO.SeanceDAO;
 import com.muscu.benjamin.muscu.DAO.TypeExerciceDAO;
 import com.muscu.benjamin.muscu.Entity.Exercice;
 import com.muscu.benjamin.muscu.Entity.Seance;
@@ -29,14 +31,21 @@ public class SeanceActivity extends Activity {
     private final int NEW_EXERCICE=1;
     private ArrayAdapter<Exercice> seancesAdapter;
     private TypeExerciceDAO daoTypeExercice;
+    private ExerciceDAO daoExercice;
+    private SeanceDAO daoSeance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seance);
 
+        //initialisation des DAOs
         this.daoTypeExercice = new TypeExerciceDAO(this.getBaseContext());
         this.daoTypeExercice.open();
+        this.daoExercice = new ExerciceDAO(this.getBaseContext());
+        this.daoExercice.open();
+        this.daoSeance = new SeanceDAO(this.getBaseContext());
+        this.daoSeance.open();
 
         this.laSeance = getIntent().getParcelableExtra("seance");
 
@@ -47,6 +56,9 @@ public class SeanceActivity extends Activity {
 
         //si on ouvre une seance existante
         if (this.laSeance != null) {
+
+            //on récupère ses exercices
+            this.laSeance.setExercices(this.daoExercice.getSeanceExercices(this.laSeance));
 
             //si la seance est close
             if (this.laSeance.isClose()) {
@@ -62,7 +74,7 @@ public class SeanceActivity extends Activity {
 
         //sinon, c'est qu'on la crée
         else {
-            this.laSeance = new Seance(new Date());
+            this.laSeance = this.daoSeance.create();
 
         }
 

@@ -19,12 +19,11 @@ public class Exercice implements Parcelable {
     private int nbSeriesSouhaite;
     private int tempsRepos;
 
-    //constructeur complet
-    public Exercice(long id, Seance seance, TypeExercice typeExercice, List<Serie> series, int nbSeriesSouhaite, int tempsRepos){
+    //constructeur dao
+    public Exercice(long id, Seance seance, TypeExercice typeExercice, int nbSeriesSouhaite, int tempsRepos){
         this.id = id;
         this.seance = seance;
         this.typeExercice = typeExercice;
-        this.series = series;
         this.nbSeriesSouhaite = nbSeriesSouhaite;
         this.tempsRepos = tempsRepos;
     }

@@ -31,7 +31,6 @@ public class Seance implements Parcelable {
         this.close = close;
     }
 
-
     //Constructeur date
     public Seance(Date uneDate) {
         this.setDate(uneDate);
