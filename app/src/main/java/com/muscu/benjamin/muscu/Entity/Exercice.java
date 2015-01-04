@@ -47,6 +47,14 @@ public class Exercice implements Parcelable {
         this.tempsRepos = in.readInt();
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public Seance getSeance() {
         return seance;
     }

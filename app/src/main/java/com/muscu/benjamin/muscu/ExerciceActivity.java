@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.muscu.benjamin.muscu.DAO.ExerciceDAO;
 import com.muscu.benjamin.muscu.Entity.Exercice;
 import com.muscu.benjamin.muscu.Entity.Seance;
 import com.muscu.benjamin.muscu.Entity.Serie;
@@ -35,11 +36,16 @@ public class ExerciceActivity extends Activity {
 
     private Exercice sonExercice;
     private ArrayAdapter<Serie> seriesAdapter;
+    private ExerciceDAO daoExercice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercice);
+
+        //init DAOs
+        this.daoExercice = new ExerciceDAO(this.getBaseContext());
+        this.daoExercice.open();
 
         TextView nomExerciceText = (TextView) findViewById(R.id.exerciceName);
 
@@ -50,8 +56,9 @@ public class ExerciceActivity extends Activity {
         if (typeExercice != null && laSeanceEnCours != null) {
 
             //on créer l'exercice
-            ExerciceActivity.this.sonExercice = new Exercice(laSeanceEnCours, typeExercice, this.defaultNbSeries(),  this.defaultTempsRepos());
+            this.sonExercice = new Exercice(laSeanceEnCours, typeExercice, this.defaultNbSeries(),  this.defaultTempsRepos());
             nomExerciceText.setText( ExerciceActivity.this.sonExercice.getTypeExercice().getNom());
+            this.sonExercice.setId(this.daoExercice.create(this.sonExercice));
 
             //on affiche l'alert pour configurer les temps de repos et le nombre de séries souhaité
             this.alertConfigurationExercice(laSeanceEnCours,typeExercice);

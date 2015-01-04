@@ -75,7 +75,6 @@ public class SeanceActivity extends Activity {
         //sinon, c'est qu'on la crée
         else {
             this.laSeance = this.daoSeance.create();
-
         }
 
         //on affiche le nom de la séance

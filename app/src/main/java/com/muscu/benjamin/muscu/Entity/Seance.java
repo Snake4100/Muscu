@@ -2,6 +2,7 @@ package com.muscu.benjamin.muscu.Entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -49,7 +50,7 @@ public class Seance implements Parcelable {
         this.setDate(DateConversion.stringToDate(data[1]));
 
         //on met close à jours
-        if (data[2] == "False") {
+        if (data[2].equals("False")) {
             this.close = false;
         } else {
             this.close = true;

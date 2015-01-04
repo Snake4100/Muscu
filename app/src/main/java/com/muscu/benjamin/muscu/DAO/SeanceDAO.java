@@ -3,6 +3,7 @@ package com.muscu.benjamin.muscu.DAO;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import com.muscu.benjamin.muscu.Entity.DateConversion;
 import com.muscu.benjamin.muscu.Entity.Seance;
@@ -67,6 +68,7 @@ public class SeanceDAO extends DAOBase{
         //on parcours la liste
         while(c.moveToNext()){
             //on crée le type exercice
+            //Log.e("debug","close string : "+c.getString(3)+". Close boolean : "+Boolean.valueOf(c.getString(3)));
             lesSeances.add(new Seance(c.getLong(0), DateConversion.stringToDate(c.getString(1)), c.getString(2), Boolean.valueOf(c.getString(3))));
         }
         return lesSeances;

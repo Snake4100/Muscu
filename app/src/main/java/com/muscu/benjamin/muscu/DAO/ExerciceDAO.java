@@ -1,5 +1,6 @@
 package com.muscu.benjamin.muscu.DAO;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
@@ -44,7 +45,7 @@ public class ExerciceDAO extends DAOBase {
     public List<Exercice> getSeanceExercices(Seance seance){
         List<Exercice> lesExercices = new ArrayList<Exercice>();
         Cursor c = mDb.rawQuery("select id,seance,type_exercice,nb_series_souhaites,nb_series_souhaites,temps_repos " +
-                "from Exercice" +
+                "from Exercice " +
                 "where seance = ?",new String[]{String.valueOf(seance.getId())});
 
         //on parcours la liste
@@ -56,5 +57,15 @@ public class ExerciceDAO extends DAOBase {
         }
 
         return lesExercices;
+    }
+
+    public Long create(Exercice exercice){
+        ContentValues value = new ContentValues();
+        value.put(ExerciceDAO.EXERCICE_SEANCE, exercice.getSeance().getId());
+        value.put(ExerciceDAO.EXERCICE_TYPE_EXERCICE , exercice.getTypeExercice().getId());
+        value.put(ExerciceDAO.EXERCICE_NBSERIESSOUHAITES, exercice.getNbSeriesSouhaite() );
+        value.put(ExerciceDAO.EXERCICE_TEMPSREPOS, exercice.getTempsRepos());
+
+        return mDb.insert(ExerciceDAO.EXERCICE_TABLE_NAME, null, value);
     }
 }
