@@ -7,6 +7,7 @@ import android.os.Parcelable;
  * Created by benjamin on 27/12/2014.
  */
 public class TypeExercice implements Parcelable {
+    private long id;
     private String nom;
     private Categorie categorie;
     private String zones;
@@ -22,7 +23,8 @@ public class TypeExercice implements Parcelable {
     }
 
     //Constructeur optimal
-    public TypeExercice(String nom, Categorie categorie, String zones, String description, int tempsDeRepos) {
+    public TypeExercice(long id, String nom, Categorie categorie, String zones, String description, int tempsDeRepos) {
+        this.id = id;
         this.nom = nom;
         this.categorie = categorie;
         this.zones = zones;
@@ -33,14 +35,23 @@ public class TypeExercice implements Parcelable {
     //Constructeur parcelable
     public TypeExercice(Parcel in) {
         //on récupére les données dans le tableau
-        String[] data = new String[5];
+        String[] data = new String[6];
         in.readStringArray(data);
 
-        this.nom = data[0];
-        this.categorie = Categorie.setCategorie(data[1]);
-        this.zones = data[2];
-        this.description = data[3];
-        this.tempsDeRepos = Integer.parseInt(data[4]);
+        this.id = Long.valueOf(data[0]);
+        this.nom = data[1];
+        this.categorie = Categorie.setCategorie(data[2]);
+        this.zones = data[3];
+        this.description = data[4];
+        this.tempsDeRepos = Integer.parseInt(data[5]);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getNom() {
@@ -95,7 +106,7 @@ public class TypeExercice implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{this.nom, this.categorie.toString(),this.zones, this.description, String.valueOf(this.tempsDeRepos)});
+        dest.writeStringArray(new String[]{String.valueOf(this.id), this.nom, this.categorie.toString(),this.zones, this.description, String.valueOf(this.tempsDeRepos)});
     }
 
     public static final Parcelable.Creator<TypeExercice> CREATOR = new Parcelable.Creator<TypeExercice>() {

@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.muscu.benjamin.muscu.DAO.DAOBase;
+import com.muscu.benjamin.muscu.DAO.SeanceDAO;
 import com.muscu.benjamin.muscu.Entity.*;
 
 import java.text.ParseException;
@@ -17,37 +19,44 @@ import java.util.List;
 
 public class MesSeancesActivity extends Activity {
 
-    List<Button> lesBoutonsSeance = new ArrayList<Button>();
+    private List<Button> lesBoutonsSeance = new ArrayList<Button>();
+    private SeanceDAO seanceDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mes_seances);
 
+        /* *********************** A SUPPRIMER ************************ */
+        this.getBaseContext().deleteDatabase("database.muscu");
+        /* *********************** A SUPPRIMER ************************ */
+        
+        this.seanceDAO = new SeanceDAO(this.getBaseContext());
+        this.seanceDAO.open();
+
         LinearLayout listLayout = (LinearLayout) findViewById(R.id.listButton);
 
-        try {
-            for(final Seance seance : donneesTest.getSeances()){
-                Button bouton = new Button(this);
-                bouton.setText(seance.getNom());
 
-                bouton.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        Intent intent = new Intent(MesSeancesActivity.this, com.muscu.benjamin.muscu.SeanceActivity.class);
-                        intent.putExtra("seance", seance);
-                        startActivity(intent);
-                    }
-                });
+        //for(final Seance seance : donneesTest.getSeances()){
+        for (final Seance seance : this.seanceDAO.getAll()) {
+            Button bouton = new Button(this);
+            bouton.setText(seance.getNom());
 
-                this.lesBoutonsSeance.add(bouton);
-                listLayout.addView(bouton);
+            bouton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent intent = new Intent(MesSeancesActivity.this, com.muscu.benjamin.muscu.SeanceActivity.class);
+                    intent.putExtra("seance", seance);
+                    startActivity(intent);
+                }
+            });
 
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
+            this.lesBoutonsSeance.add(bouton);
+            listLayout.addView(bouton);
+
         }
 
-        Button buttonNewSeance = (Button)findViewById(R.id.button_newSeance);
+
+        Button buttonNewSeance = (Button) findViewById(R.id.button_newSeance);
         buttonNewSeance.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MesSeancesActivity.this, com.muscu.benjamin.muscu.SeanceActivity.class);

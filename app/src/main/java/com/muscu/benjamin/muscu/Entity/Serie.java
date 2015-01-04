@@ -8,12 +8,21 @@ import android.os.Parcelable;
  */
 public class Serie implements Parcelable {
 
+    private long id;
     //pour les exercices de musculation
     private int poids;
     private int repetitions;
 
     //pour les exercices cardio
     private int tempsTotal;
+
+    //Constructeur complet
+    public Serie(long id, int poids, int repetitions)
+    {
+        this.id = id;
+        this.poids = poids;
+        this.repetitions = repetitions;
+    }
 
     //Constructeur serie musculation
     public Serie(int poids, int repetitions)
@@ -30,12 +39,29 @@ public class Serie implements Parcelable {
 
     //Constructeur Parcelable
     public Serie(Parcel source) {
-        String[] data = new String[3];
+        String[] data = new String[4];
         source.readStringArray(data);
 
-        this.poids = Integer.valueOf(data[0]);
-        this.repetitions = Integer.valueOf(data[1]);
-        this.tempsTotal = Integer.valueOf(data[2]);
+        this.id = Long.valueOf(data[0]);
+        this.poids = Integer.valueOf(data[1]);
+        this.repetitions = Integer.valueOf(data[2]);
+        this.tempsTotal = Integer.valueOf(data[3]);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public int getTempsTotal() {
+        return tempsTotal;
+    }
+
+    public void setTempsTotal(int tempsTotal) {
+        this.tempsTotal = tempsTotal;
     }
 
     public int getPoids() {
@@ -65,7 +91,7 @@ public class Serie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{String.valueOf(this.poids), String.valueOf(this.repetitions), String.valueOf(this.tempsTotal)});
+        dest.writeStringArray(new String[]{String.valueOf(this.id),String.valueOf(this.poids), String.valueOf(this.repetitions), String.valueOf(this.tempsTotal)});
 
     }
 

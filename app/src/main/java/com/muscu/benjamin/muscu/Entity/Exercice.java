@@ -11,13 +11,26 @@ import java.util.List;
  * Created by benjamin on 29/12/2014.
  */
 public class Exercice implements Parcelable {
+
+    private long id;
     private Seance seance;
     private TypeExercice typeExercice;
     private List<Serie> series;
     private int nbSeriesSouhaite;
     private int tempsRepos;
 
-    public Exercice(Seance seance, TypeExercice typeExercice,int nbSeriesSouhaite, int tempsRepos) {
+    //constructeur complet
+    public Exercice(long id, Seance seance, TypeExercice typeExercice, List<Serie> series, int nbSeriesSouhaite, int tempsRepos){
+        this.id = id;
+        this.seance = seance;
+        this.typeExercice = typeExercice;
+        this.series = series;
+        this.nbSeriesSouhaite = nbSeriesSouhaite;
+        this.tempsRepos = tempsRepos;
+    }
+
+    //Constructeur creation nouvel exercice
+    public Exercice(Seance seance, TypeExercice typeExercice, int nbSeriesSouhaite, int tempsRepos) {
         this.seance = seance;
         this.typeExercice = typeExercice;
         this.series = new ArrayList<Serie>();
@@ -26,6 +39,7 @@ public class Exercice implements Parcelable {
     }
 
     public Exercice(Parcel in){
+        this.id = in.readLong();
         this.seance = (Seance) (Seance) in.readValue(Seance.class.getClassLoader());
         this.typeExercice = (TypeExercice) (TypeExercice) in.readValue(TypeExercice.class.getClassLoader());
         this.series = new ArrayList<Serie>();
@@ -90,6 +104,7 @@ public class Exercice implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
         dest.writeValue(this.seance);
         dest.writeValue(this.typeExercice);
         dest.writeList(this.series);

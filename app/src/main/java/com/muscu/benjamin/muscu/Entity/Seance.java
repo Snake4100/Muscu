@@ -17,37 +17,55 @@ import java.util.Locale;
  */
 public class Seance implements Parcelable {
 
+    private long id;
     private Date date;
     private String nom;
     private boolean close;
     private List<Exercice> exercices = new ArrayList<Exercice>();
 
+    //constructeur complet
+    public Seance(long id, Date date, String nom, boolean close){
+        this.id = id;
+        this.date = date;
+        this.nom = nom;
+        this.close = close;
+    }
+
+
+    //Constructeur date
     public Seance(Date uneDate) {
         this.setDate(uneDate);
         this.close = false;
     }
 
+    //Constructeur parcelable
     public Seance(Parcel in) {
         //on récupére les données dans le tableau
-        String[] data = new String[2];
+        String[] data = new String[3];
         in.readStringArray(data);
 
-        //on converti la date string en type date
-        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        this.id = Long.valueOf(data[0]);
 
-        try {
-            this.setDate(format.parse(data[0]));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        //on converti la date string en type date
+        this.setDate(DateConversion.stringToDate(data[1]));
 
         //on met close à jours
-        if (data[1] == "False") {
+        if (data[2] == "False") {
             this.close = false;
         } else {
             this.close = true;
         }
 
+        this.exercices = in.readArrayList(Exercice.class.getClassLoader());
+
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getNom() {
@@ -64,10 +82,8 @@ public class Seance implements Parcelable {
 
     public void setDate(Date date) {
         this.date = date;
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        String datetext = df.format(this.date);
 
-        this.setNom(datetext);
+        this.setNom(DateConversion.dateToString(this.date));
     }
 
     public boolean isClose() {
@@ -97,16 +113,13 @@ public class Seance implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        String datetext = df.format(this.date);
-
         String isClose = "False";
 
         if (this.close)
             isClose = "True";
 
-        dest.writeStringArray(new String[]{datetext, isClose});
+        dest.writeStringArray(new String[]{String.valueOf(this.id),DateConversion.dateToString(this.date), isClose});
+        dest.writeList(this.exercices);
     }
 
     public static final Parcelable.Creator<Seance> CREATOR = new Parcelable.Creator<Seance>() {

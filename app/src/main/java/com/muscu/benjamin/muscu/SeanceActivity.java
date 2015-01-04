@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.muscu.benjamin.muscu.DAO.TypeExerciceDAO;
 import com.muscu.benjamin.muscu.Entity.Exercice;
 import com.muscu.benjamin.muscu.Entity.Seance;
 import com.muscu.benjamin.muscu.Entity.TypeExercice;
@@ -27,11 +28,15 @@ public class SeanceActivity extends Activity {
     private Seance laSeance = null;
     private final int NEW_EXERCICE=1;
     private ArrayAdapter<Exercice> seancesAdapter;
+    private TypeExerciceDAO daoTypeExercice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seance);
+
+        this.daoTypeExercice = new TypeExerciceDAO(this.getBaseContext());
+        this.daoTypeExercice.open();
 
         this.laSeance = getIntent().getParcelableExtra("seance");
 
@@ -85,7 +90,8 @@ public class SeanceActivity extends Activity {
         final ArrayAdapter<TypeExercice> arrayAdapter = new ArrayAdapter<TypeExercice>(
                 SeanceActivity.this,
                 android.R.layout.select_dialog_singlechoice);
-        arrayAdapter.addAll(donneesTest.getTypesExercices());
+        //arrayAdapter.addAll(donneesTest.getTypesExercices());
+        arrayAdapter.addAll(this.daoTypeExercice.getAll());
 
         builderSingle.setNegativeButton("cancel",
                 new DialogInterface.OnClickListener() {
