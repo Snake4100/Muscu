@@ -56,8 +56,6 @@ public class Seance implements Parcelable {
             this.close = true;
         }
 
-        this.exercices = in.readArrayList(Exercice.class.getClassLoader());
-
     }
 
     public long getId() {
@@ -119,7 +117,6 @@ public class Seance implements Parcelable {
             isClose = "True";
 
         dest.writeStringArray(new String[]{String.valueOf(this.id),DateConversion.dateToString(this.date), isClose});
-        dest.writeList(this.exercices);
     }
 
     public static final Parcelable.Creator<Seance> CREATOR = new Parcelable.Creator<Seance>() {
