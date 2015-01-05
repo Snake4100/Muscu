@@ -83,12 +83,6 @@ public class ExerciceActivity extends Activity {
         boutonClore.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                //on renvoi l'exercice à la seance
-                /*Intent resultIntent = new Intent();
-                resultIntent.putExtra("exercice", ExerciceActivity.this.sonExercice);
-                setResult(RESULT_OK, resultIntent);*/
-
-
                 //on ferme l'actvité
                 finish();
             }

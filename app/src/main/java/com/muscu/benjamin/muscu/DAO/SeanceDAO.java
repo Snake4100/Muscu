@@ -73,4 +73,8 @@ public class SeanceDAO extends DAOBase{
         }
         return lesSeances;
     }
+
+    public void supprimer(long id) {
+        mDb.delete(this.SEANCE_TABLE_NAME, this.SEANCE_KEY + " = ?", new String[] {String.valueOf(id)});
+    }
 }

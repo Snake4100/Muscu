@@ -1,7 +1,11 @@
 package com.muscu.benjamin.muscu;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +24,8 @@ import com.muscu.benjamin.muscu.Entity.*;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.widget.AdapterView.*;
 
 public class MesSeancesActivity extends Activity {
 
@@ -42,12 +48,21 @@ public class MesSeancesActivity extends Activity {
         this.seancesAdapter = new ArrayAdapter<Seance>(this, android.R.layout.simple_list_item_1, this.seanceDAO.getAll());
         ListView listSeances = (ListView) findViewById(R.id.listView_mesSeances);
         listSeances.setAdapter(this.seancesAdapter);
-        listSeances.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listSeances.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MesSeancesActivity.this, com.muscu.benjamin.muscu.SeanceActivity.class);
                 intent.putExtra("seance", MesSeancesActivity.this.seancesAdapter.getItem(position));
                 startActivity(intent);
+            }
+        });
+
+        listSeances.setOnItemLongClickListener(new OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                MesSeancesActivity.this.alertSuppressionSeance(MesSeancesActivity.this.seancesAdapter.getItem(position));
+                return true;
             }
         });
 
@@ -68,6 +83,37 @@ public class MesSeancesActivity extends Activity {
 
         this.seancesAdapter.clear();
         this.seancesAdapter.addAll(this.seanceDAO.getAll());
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void alertSuppressionSeance(final Seance laSeance){
+
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(MesSeancesActivity.this);
+        builderSingle.setIcon(R.drawable.ic_launcher);
+        builderSingle.setTitle("Suppression de la "+laSeance.getNom());
+
+        //Boutton pour annuler la suppression
+        builderSingle.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        //Boutton pour supprimer
+        builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                MesSeancesActivity.this.seanceDAO.supprimer(laSeance.getId());
+                dialog.dismiss();
+            }
+        });
+
+
+        builderSingle.show();
     }
 
     @Override

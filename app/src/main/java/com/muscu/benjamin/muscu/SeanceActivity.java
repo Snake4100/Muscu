@@ -151,22 +151,6 @@ public class SeanceActivity extends Activity {
 
     }
 
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case NEW_EXERCICE:
-                if (resultCode == RESULT_OK) {
-
-                    //read the bundle and get the country object
-                    Bundle bundle = data.getExtras();
-                    Exercice exercice = (Exercice) bundle.getParcelable("exercice");
-
-                    this.laSeance.addExercice(exercice);
-                }
-                break;
-        }
-    }*/
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
