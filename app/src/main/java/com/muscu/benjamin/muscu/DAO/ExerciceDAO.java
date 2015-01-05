@@ -30,8 +30,8 @@ public class ExerciceDAO extends DAOBase {
                     EXERCICE_TYPE_EXERCICE + " INTEGER," +
                     EXERCICE_NBSERIESSOUHAITES + " INTEGER," +
                     EXERCICE_TEMPSREPOS+ " INTEGER," +
-                    "FOREIGN KEY(seance) REFERENCES Seance(id)," +
-                    "FOREIGN KEY(type_exercice) REFERENCES TypeExercice(id));";
+                    "FOREIGN KEY(seance) REFERENCES Seance(id) ON DELETE CASCADE, " +
+                    "FOREIGN KEY(type_exercice) REFERENCES TypeExercice(id) ON DELETE CASCADE);";
 
     private TypeExerciceDAO daoTypeExercice;
 

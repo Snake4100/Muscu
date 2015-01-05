@@ -28,7 +28,7 @@ public class SerieDAO extends DAOBase {
                     SERIE_NB_REPETITIONS + " INTEGER," +
                     SERIE_TEMPS_TOTAL + " INTEGER," +
                     SERIE_EXERCICE + " INTEGER," +
-                    "FOREIGN KEY(exercice) REFERENCES Exercice(id));";
+                    "FOREIGN KEY(exercice) REFERENCES Exercice(id) ON DELETE CASCADE);";
 
     public SerieDAO(Context pContext) {
         super(pContext);

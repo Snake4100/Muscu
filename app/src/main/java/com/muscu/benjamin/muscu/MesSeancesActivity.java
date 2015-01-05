@@ -45,7 +45,7 @@ public class MesSeancesActivity extends Activity {
         this.seanceDAO.open();
 
         //on crée l'adapter de la listeview des seances
-        this.seancesAdapter = new ArrayAdapter<Seance>(this, android.R.layout.simple_list_item_1, this.seanceDAO.getAll());
+        this.seancesAdapter = new ArrayAdapter<Seance>(this, android.R.layout.simple_list_item_1, new ArrayList<Seance>());
         ListView listSeances = (ListView) findViewById(R.id.listView_mesSeances);
         listSeances.setAdapter(this.seancesAdapter);
         listSeances.setOnItemClickListener(new OnItemClickListener() {
@@ -66,7 +66,6 @@ public class MesSeancesActivity extends Activity {
             }
         });
 
-
         Button buttonNewSeance = (Button) findViewById(R.id.button_newSeance);
         buttonNewSeance.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -81,6 +80,11 @@ public class MesSeancesActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
+        this.miseAjoursListeSeances();
+    }
+
+    private void miseAjoursListeSeances()
+    {
         this.seancesAdapter.clear();
         this.seancesAdapter.addAll(this.seanceDAO.getAll());
     }
@@ -108,6 +112,7 @@ public class MesSeancesActivity extends Activity {
             public void onClick(DialogInterface dialog, int which) {
 
                 MesSeancesActivity.this.seanceDAO.supprimer(laSeance.getId());
+                MesSeancesActivity.this.miseAjoursListeSeances();
                 dialog.dismiss();
             }
         });
