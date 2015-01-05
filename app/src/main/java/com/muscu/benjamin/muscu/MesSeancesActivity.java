@@ -37,10 +37,6 @@ public class MesSeancesActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mes_seances);
 
-        /* *********************** A SUPPRIMER ************************ */
-        ///////////////this.getBaseContext().deleteDatabase("database.muscu");
-        /* *********************** A SUPPRIMER ************************ */
-
         this.seanceDAO = new SeanceDAO(this.getBaseContext());
         this.seanceDAO.open();
 
