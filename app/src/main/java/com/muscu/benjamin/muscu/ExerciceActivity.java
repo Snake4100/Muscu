@@ -107,7 +107,6 @@ public class ExerciceActivity extends Activity {
 
     }
 
-
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void alertConfigurationExercice(Seance laSeanceEnCours,TypeExercice typeExercice) {
 

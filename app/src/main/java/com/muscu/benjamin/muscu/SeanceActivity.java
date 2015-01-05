@@ -84,6 +84,20 @@ public class SeanceActivity extends Activity {
         });
 
 
+        //on creer le liste adapter avec les exercices
+        this.seancesAdapter = new ArrayAdapter<Exercice>(this, android.R.layout.simple_list_item_1, this.laSeance.getExercices());
+        ListView listExercice = (ListView) findViewById(R.id.listExerciceSeance);
+        listExercice.setAdapter(this.seancesAdapter);
+        listExercice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Intent intent = new Intent(SeanceActivity.this, ExerciceActivity.class);
+                intent.putExtra("exercice", SeanceActivity.this.seancesAdapter.getItem(position));
+                startActivity(intent);
+            }
+        });
+
     }
 
     //http://stackoverflow.com/questions/15762905/how-to-display-list-view-in-alert-dialog-in-android
@@ -130,19 +144,10 @@ public class SeanceActivity extends Activity {
         //on récupère ses exercices
         this.laSeance.setExercices(this.daoExercice.getSeanceExercices(this.laSeance));
 
-        //on creer le liste adapter avec les exercices
-        this.seancesAdapter = new ArrayAdapter<Exercice>(this, android.R.layout.simple_list_item_1, this.laSeance.getExercices());
-        ListView listExercice = (ListView) findViewById(R.id.listExerciceSeance);
-        listExercice.setAdapter(this.seancesAdapter);
-        listExercice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        this.seancesAdapter.clear();
+        this.seancesAdapter.addAll(this.laSeance.getExercices());
 
-                Intent intent = new Intent(SeanceActivity.this, ExerciceActivity.class);
-                intent.putExtra("exercice", SeanceActivity.this.seancesAdapter.getItem(position));
-                startActivity(intent);
-            }
-        });
+
 
     }
 

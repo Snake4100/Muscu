@@ -104,6 +104,11 @@ public class Seance implements Parcelable {
         this.exercices.add(exercice);
     }
 
+    public String toString()
+    {
+        return this.nom;
+    }
+
     @Override
     public int describeContents() {
         return 0;

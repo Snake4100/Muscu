@@ -84,8 +84,47 @@ public class TypeExerciceDAO extends DAOBase {
     public static void defaultTypeExercice(SQLiteDatabase db){
         db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Pompes\",\"Musculation\",null,null,null)");
         db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Tractions\",\"Musculation\",null,null,null)");
-        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Dips\",\"Musculation\",null,null,null)");
-        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Développé couché\",\"Musculation\",null,null,null)");
+
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Dips\",\"Musculation\",\"Pectoraux\",null,null)");
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Développé couché\",\"Musculation\",\"Pectoraux\",null,null)");
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Développé incliné avec haltères\",\"Musculation\",\"Pectoraux\",null,null)");
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Poulie vis à vis\",\"Musculation\",\"Pectoraux\",null,null)");
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Butterfly\",\"Musculation\",\"Pectoraux\",null,null)");
+
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Extension barre front\",\"Musculation\",\"Triceps\",null,null)");
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Extension corde poulie haute\",\"Musculation\",\"Triceps\",null,null)");
+
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Presse\",\"Musculation\",\"Cuisses\",null,null)");
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Squat\",\"Musculation\",\"Cuisses\",null,null)");
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Legs extension\",\"Musculation\",\"Cuisses\",null,null)");
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Legs curl\",\"Musculation\",\"Cuisses\",null,null)");
+
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Presse debout\",\"Musculation\",\"Mollets\",null,null)");
+
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Crunch\",\"Musculation\",\"Abdos\",null,null)");
+
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Tirage vertical devant\",\"Musculation\",\"Dos\",null,null)");
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Tirage nuque\",\"Musculation\",\"Dos\",null,null)");
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Soulevé de terre\",\"Musculation\",\"Dos\",null,null)");
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Rowing assis\",\"Musculation\",\"Dos\",null,null)");
+
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Curls barre EZ\",\"Musculation\",\"Biceps\",null,null)");
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Curls barre droite pronation\",\"Musculation\",\"Biceps\",null,null)");
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Curls alternés\",\"Musculation\",\"Biceps\",null,null)");
+
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Développé haltères\",\"Musculation\",\"Epaules\",null,null)");
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Rowing menton\",\"Musculation\",\"Epaules\",null,null)");
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Elévations latérales\",\"Musculation\",\"Epaules\",null,null)");
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Oiseau\",\"Musculation\",\"Epaules\",null,null)");
+
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Shrugs\",\"Musculation\",\"Trapèzes\",null,null)");
+
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Chaise romaine\",\"Musculation\",\"Abdos\",null,null)");
+        db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Gainage (planche)\",\"Musculation\",\"Abdos\",null,null)");
+
+
+
+
         db.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) VALUES(\"Course à pied\",\"Cardio\",null,null,null)");
     }
 }
