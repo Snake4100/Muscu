@@ -68,4 +68,8 @@ public class ExerciceDAO extends DAOBase {
 
         return mDb.insert(ExerciceDAO.EXERCICE_TABLE_NAME, null, value);
     }
+
+    public void supprimer(long id) {
+        mDb.delete(this.EXERCICE_TABLE_NAME, this.EXERCICE_KEY + " = ?", new String[] {String.valueOf(id)});
+    }
 }

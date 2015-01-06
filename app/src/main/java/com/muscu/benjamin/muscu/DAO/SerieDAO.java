@@ -61,4 +61,8 @@ public class SerieDAO extends DAOBase {
         return lesSeries;
     }
 
+    public void supprimer(long id) {
+        mDb.delete(this.SERIE_TABLE_NAME, this.SERIE_KEY + " = ?", new String[] {String.valueOf(id)});
+    }
+
 }

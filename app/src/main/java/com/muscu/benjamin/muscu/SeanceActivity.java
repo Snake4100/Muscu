@@ -20,14 +20,16 @@ import com.muscu.benjamin.muscu.DAO.SeanceDAO;
 import com.muscu.benjamin.muscu.DAO.TypeExerciceDAO;
 import com.muscu.benjamin.muscu.Entity.Exercice;
 import com.muscu.benjamin.muscu.Entity.Seance;
+import com.muscu.benjamin.muscu.Entity.Serie;
 import com.muscu.benjamin.muscu.Entity.TypeExercice;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class SeanceActivity extends Activity {
     private Seance laSeance = null;
     //private final int NEW_EXERCICE=1;
-    private ArrayAdapter<Exercice> seancesAdapter;
+    private ArrayAdapter<Exercice> exercicesAdapter;
     private TypeExerciceDAO daoTypeExercice;
     private ExerciceDAO daoExercice;
     private SeanceDAO daoSeance;
@@ -98,19 +100,59 @@ public class SeanceActivity extends Activity {
 
 
         //on creer le liste adapter avec les exercices
-        this.seancesAdapter = new ArrayAdapter<Exercice>(this, android.R.layout.simple_list_item_1, this.laSeance.getExercices());
+        this.exercicesAdapter = new ArrayAdapter<Exercice>(this, android.R.layout.simple_list_item_1, new ArrayList<Exercice>());
         ListView listExercice = (ListView) findViewById(R.id.listExerciceSeance);
-        listExercice.setAdapter(this.seancesAdapter);
+        listExercice.setAdapter(this.exercicesAdapter);
         listExercice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent intent = new Intent(SeanceActivity.this, ExerciceActivity.class);
-                intent.putExtra("exercice", SeanceActivity.this.seancesAdapter.getItem(position));
+                intent.putExtra("exercice", SeanceActivity.this.exercicesAdapter.getItem(position));
                 startActivity(intent);
             }
         });
 
+        listExercice.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                SeanceActivity.this.alertSuppressionExercice(SeanceActivity.this.exercicesAdapter.getItem(position));
+                SeanceActivity.this.miseAjoursListeExercice();
+                return true;
+            }
+        });
+
+    }
+
+    private void alertSuppressionExercice(final Exercice exercice){
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(SeanceActivity.this);
+        builderSingle.setIcon(R.drawable.ic_launcher);
+        builderSingle.setTitle("Suppression de la "+exercice.toString());
+
+        //Boutton pour annuler la suppression
+        builderSingle.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        //Boutton pour supprimer
+        builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                SeanceActivity.this.daoExercice.supprimer(exercice.getId());
+                SeanceActivity.this.miseAjoursListeExercice();
+                dialog.dismiss();
+            }
+        });
+
+
+        builderSingle.show();
     }
 
     //http://stackoverflow.com/questions/15762905/how-to-display-list-view-in-alert-dialog-in-android
@@ -157,11 +199,14 @@ public class SeanceActivity extends Activity {
         //on récupère ses exercices
         this.laSeance.setExercices(this.daoExercice.getSeanceExercices(this.laSeance));
 
-        this.seancesAdapter.clear();
-        this.seancesAdapter.addAll(this.laSeance.getExercices());
+        this.miseAjoursListeExercice();
 
+    }
 
-
+    private void miseAjoursListeExercice(){
+        this.exercicesAdapter.clear();
+        this.laSeance.setExercices(this.daoExercice.getSeanceExercices(this.laSeance));
+        this.exercicesAdapter.addAll(this.laSeance.getExercices());
     }
 
     @Override
