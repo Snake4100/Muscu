@@ -83,6 +83,19 @@ public class SeanceActivity extends Activity {
             }
         });
 
+        boutonCloreSeance.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                //on clos la seance
+                SeanceActivity.this.laSeance.setClose(true);
+                SeanceActivity.this.daoSeance.mofidier(SeanceActivity.this.laSeance);
+
+                finish();
+
+            }
+        });
+
 
         //on creer le liste adapter avec les exercices
         this.seancesAdapter = new ArrayAdapter<Exercice>(this, android.R.layout.simple_list_item_1, this.laSeance.getExercices());

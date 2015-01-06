@@ -54,10 +54,22 @@ public class SeanceDAO extends DAOBase{
         //si on a un résultat
         if(c.moveToFirst())
         {
-            return new Seance(c.getLong(0), DateConversion.stringToDate(c.getString(1)), c.getString(2), Boolean.valueOf(c.getString(3)));
+            boolean isClose = false;
+            if (c.getString(3).equals("1"))
+                isClose = true;
+
+            return new Seance(c.getLong(0), DateConversion.stringToDate(c.getString(1)), c.getString(2), isClose);
         }
 
         return null;
+    }
+
+    public void mofidier (Seance laSeance){
+        ContentValues value = new ContentValues();
+        value.put(this.SEANCE_DATE, DateConversion.dateToString(laSeance.getDate()));
+        value.put(this.SEANCE_NOM, laSeance.getNom());
+        value.put(this.SEANCE_CLOSE, laSeance.isClose());
+        mDb.update(this.SEANCE_TABLE_NAME, value, this.SEANCE_KEY  + " = ?", new String[] {String.valueOf(laSeance.getId())});
     }
 
     public List<Seance> getAll(){
@@ -68,8 +80,11 @@ public class SeanceDAO extends DAOBase{
         //on parcours la liste
         while(c.moveToNext()){
             //on crée le type exercice
-            //Log.e("debug","close string : "+c.getString(3)+". Close boolean : "+Boolean.valueOf(c.getString(3)));
-            lesSeances.add(new Seance(c.getLong(0), DateConversion.stringToDate(c.getString(1)), c.getString(2), Boolean.valueOf(c.getString(3))));
+            boolean isClose = false;
+            if (c.getString(3).equals("1"))
+                isClose = true;
+
+            lesSeances.add(new Seance(c.getLong(0), DateConversion.stringToDate(c.getString(1)), c.getString(2), isClose));
         }
         return lesSeances;
     }
