@@ -1,6 +1,7 @@
 package com.muscu.benjamin.muscu;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,7 +37,9 @@ public class LesTypesExercicesActivity extends Activity {
         listExercices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Intent intent = new Intent(LesTypesExercicesActivity.this, TypeExerciceActivity.class);
+                intent.putExtra("typeExercice",LesTypesExercicesActivity.this.typeExerciceArrayAdapter.getItem(position));
+                startActivity(intent);
             }
         });
 

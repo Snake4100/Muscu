@@ -6,7 +6,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name="com.muscu.benjamin.muscu.AcceuilActivity"
             android:label="@string/app_name" >
@@ -22,19 +22,23 @@
         </activity>
         <activity
             android:name="com.muscu.benjamin.muscu.SeanceActivity"
-            android:label="@string/title_activity_seance"
             android:configChanges="orientation"
+            android:label="@string/title_activity_seance"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".LesTypesExercicesActivity"
+            android:name="com.muscu.benjamin.muscu.LesTypesExercicesActivity"
             android:label="@string/title_activity_exercices" >
         </activity>
         <activity
             android:name="com.muscu.benjamin.muscu.ExerciceActivity"
-            android:label="@string/title_activity_exercice"
             android:configChanges="orientation"
+            android:label="@string/title_activity_exercice"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".TypeExerciceActivity"
+            android:label="@string/title_activity_type_exercice" >
         </activity>
     </application>
 
