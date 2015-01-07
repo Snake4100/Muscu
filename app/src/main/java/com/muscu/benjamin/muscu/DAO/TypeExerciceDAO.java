@@ -39,7 +39,7 @@ public class TypeExerciceDAO extends DAOBase {
     public List<TypeExercice> getAll(){
         List<TypeExercice> lesExercices = new ArrayList<TypeExercice>();
 
-        Cursor c = mDb.rawQuery("select id,nom,categorie,zones,description,temps_repos from TypeExercice",new String[]{});
+        Cursor c = mDb.rawQuery("select id,nom,categorie,zones,description,temps_repos from TypeExercice order by nom",new String[]{});
 
 
         //on parcours la liste

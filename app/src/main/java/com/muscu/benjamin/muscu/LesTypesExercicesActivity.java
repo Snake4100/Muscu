@@ -5,43 +5,54 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
+import com.muscu.benjamin.muscu.DAO.TypeExerciceDAO;
 import com.muscu.benjamin.muscu.Entity.TypeExercice;
+
+import java.util.ArrayList;
 
 
 public class LesTypesExercicesActivity extends Activity {
+    ArrayAdapter<TypeExercice> typeExerciceArrayAdapter;
+    TypeExerciceDAO daoTypeExercice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_les_types_exercices);
 
-        TableLayout tableLayout = (TableLayout) findViewById(R.id.TableListeExercice);
-        for (final TypeExercice exercice : donneesTest.getTypesExercices()) {
-            Button bouton = new Button(this);
-            bouton.setText(exercice.getNom());
+        this.daoTypeExercice = new TypeExerciceDAO(this.getBaseContext());
+        this.daoTypeExercice.open();
 
+        ListView listExercices = (ListView) findViewById(R.id.listView_exercices);
+        this.typeExerciceArrayAdapter = new ArrayAdapter<TypeExercice>(this, android.R.layout.simple_list_item_1, new ArrayList<TypeExercice>());
+        listExercices.setAdapter(this.typeExerciceArrayAdapter);
+        listExercices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            bouton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    /*Intent intent = new Intent(LesExercicesActivity.this, com.muscu.benjamin.muscu.ExerciceActivity.class);
-                    startActivity(intent);*/
-                    finish();
-                }
-            });
+            }
+        });
 
-            //on crée la ligne
-            TableRow ligne = new TableRow(this);
-            //on ajoute le bouton à la ligne
-            ligne.addView(bouton);
-            //on ajoute la ligne au tableau
-            tableLayout.addView(ligne);
+    }
 
-        }
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+        this.miseAjoursListeTypeExercice();
+    }
+
+    private void miseAjoursListeTypeExercice()
+    {
+        this.typeExerciceArrayAdapter.clear();
+        this.typeExerciceArrayAdapter.addAll(this.daoTypeExercice.getAll());
     }
 
 

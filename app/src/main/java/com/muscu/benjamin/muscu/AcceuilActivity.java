@@ -17,10 +17,18 @@ public class AcceuilActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acceuil);
 
-        final Button button = (Button) findViewById(R.id.button_mesSeances);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button button_mesSeances = (Button) findViewById(R.id.button_mesSeances);
+        button_mesSeances.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(AcceuilActivity.this, com.muscu.benjamin.muscu.MesSeancesActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button button_exercices = (Button) findViewById(R.id.button_exercices);
+        button_exercices.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(AcceuilActivity.this, LesTypesExercicesActivity.class);
                 startActivity(intent);
             }
         });
