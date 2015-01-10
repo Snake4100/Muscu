@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -316,16 +317,47 @@ public class ExerciceActivity extends Activity {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void alertTimerRepos(){
-
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(ExerciceActivity.this);
         builderSingle.setIcon(R.drawable.ic_launcher);
         builderSingle.setTitle("Repos");
 
 
-        //on crée le chronometre
-        Chronometer chronometer = new Chronometer(this);
-        builderSingle.setView(chronometer);
-        chronometer.start();
+        final LinearLayout layout = (LinearLayout) LinearLayout.inflate(this, R.layout.timer, null);
+        try{
+            builderSingle.setView(R.layout.resultat_serie);
+
+        }catch (NoSuchMethodError e) {
+            Log.e("Debug", "Older SDK, using old Builder");
+            builderSingle.setView(layout);
+        }
+
+        //on crée le timer
+        new CountDownTimer(this.sonExercice.getTempsRepos()*1000, 1000) {
+
+            TextView timer = (TextView)layout.findViewById(R.id.textView_timer);
+
+            public void onTick(long millisUntilFinished) {
+                long secondesUntilFinished = millisUntilFinished/1000;
+                long minutes = secondesUntilFinished/60;
+                long secondes = secondesUntilFinished%60;
+
+                String stringMinutes = String.valueOf(minutes);
+                String stringSecondes = String.valueOf(secondes);
+
+                if(minutes<10){
+                    stringMinutes = "0"+stringMinutes;
+                }
+                if(secondes<10){
+                    stringSecondes = "0"+stringSecondes;
+                }
+
+                timer.setText(stringMinutes+":"+stringSecondes);
+            }
+
+            public void onFinish() {
+
+            }
+        }.start();
 
         builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
