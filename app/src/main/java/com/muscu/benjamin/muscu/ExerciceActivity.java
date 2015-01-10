@@ -355,7 +355,7 @@ public class ExerciceActivity extends Activity {
             }
 
             public void onFinish() {
-
+                timer.setText("00:00");
             }
         }.start();
 
