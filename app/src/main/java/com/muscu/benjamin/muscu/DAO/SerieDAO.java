@@ -65,4 +65,11 @@ public class SerieDAO extends DAOBase {
         mDb.delete(this.SERIE_TABLE_NAME, this.SERIE_KEY + " = ?", new String[] {String.valueOf(id)});
     }
 
+    public void modifier(Serie serie) {
+        ContentValues value = new ContentValues();
+        value.put(SerieDAO.SERIE_POIDS, serie.getPoids());
+        value.put(SerieDAO.SERIE_NB_REPETITIONS, serie.getRepetitions());
+        value.put(SerieDAO.SERIE_TEMPS_TOTAL, serie.getTempsTotal());
+        mDb.update(this.SERIE_TABLE_NAME, value, this.SERIE_KEY  + " = ?", new String[] {String.valueOf(serie.getId())});
+    }
 }

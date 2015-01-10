@@ -96,6 +96,7 @@ public class ExerciceActivity extends Activity {
         listSeries.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ExerciceActivity.this.alertModificationResultatSerie(ExerciceActivity.this.seriesAdapter.getItem(position));
             }
         });
 
@@ -243,6 +244,60 @@ public class ExerciceActivity extends Activity {
 
                 //on lance le chrono
                 ExerciceActivity.this.alertTimerRepos();
+
+                dialog.dismiss();
+            }
+        });
+
+        builderSingle.show();
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void alertModificationResultatSerie(final Serie serie){
+        LinearLayout layout = (LinearLayout) LinearLayout.inflate(this, R.layout.resultat_serie, null);
+
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(ExerciceActivity.this);
+        builderSingle.setIcon(R.drawable.ic_launcher);
+        builderSingle.setTitle("Modification série");
+
+
+        //on crée la liste view qui va contenir les éléments de l'alert
+        try{
+            builderSingle.setView(R.layout.resultat_serie);
+
+        }catch (NoSuchMethodError e) {
+            Log.e("Debug", "Older SDK, using old Builder");
+            builderSingle.setView(layout);
+        }
+
+        //on met une valeur par default le poid et le nombre de répétition
+        NumberPicker numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_poids);
+        numberPicker.setOnValueChangedListener( new NumberPicker.OnValueChangeListener() {
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                Log.e("debug","picker poids : "+picker.getValue());
+                serie.setPoids(picker.getValue());
+            }
+        });
+        numberPicker.setMinValue(0);
+        numberPicker.setMaxValue(10000);
+        numberPicker.setValue(serie.getPoids());
+
+        numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_repetitions);
+        numberPicker.setOnValueChangedListener( new NumberPicker.OnValueChangeListener() {
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                Log.e("debug","picker nbrepetitions : "+picker.getValue());
+                serie.setRepetitions(picker.getValue());
+            }
+        });
+        numberPicker.setMinValue(0);
+        numberPicker.setMaxValue(10000);
+        numberPicker.setValue(serie.getRepetitions());
+
+        builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ExerciceActivity.this.seriesAdapter.notifyDataSetChanged();
+                ExerciceActivity.this.daoSerie.modifier(serie);
 
                 dialog.dismiss();
             }
