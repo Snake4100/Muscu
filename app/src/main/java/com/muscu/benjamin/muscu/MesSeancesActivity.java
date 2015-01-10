@@ -37,6 +37,8 @@ public class MesSeancesActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mes_seances);
 
+        this.setTitle(R.string.mesSeances_text);
+
         this.seanceDAO = new SeanceDAO(this.getBaseContext());
         this.seanceDAO.open();
 

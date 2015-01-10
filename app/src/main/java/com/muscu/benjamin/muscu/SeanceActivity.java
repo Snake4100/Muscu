@@ -74,9 +74,7 @@ public class SeanceActivity extends Activity {
             this.laSeance = this.daoSeance.create();
         }
 
-        //on affiche le nom de la séance
-        TextView nomSeanceText = (TextView) findViewById(R.id.nomSeance_text);
-        nomSeanceText.setText(this.laSeance.getNom());
+        this.setTitle(this.laSeance.getNom());
 
         //on crée les actions sur les boutons
         boutonNouvelExercice.setOnClickListener(new View.OnClickListener() {

@@ -51,8 +51,6 @@ public class ExerciceActivity extends Activity {
         this.daoSerie = new SerieDAO(this.getBaseContext());
         this.daoSerie.open();
 
-        TextView nomExerciceText = (TextView) findViewById(R.id.exerciceName);
-
         TypeExercice typeExercice = getIntent().getParcelableExtra("typeExercice");
         Seance laSeanceEnCours = getIntent().getParcelableExtra("seance");
         this.sonExercice = getIntent().getParcelableExtra("exercice");
@@ -61,7 +59,6 @@ public class ExerciceActivity extends Activity {
 
             //on créer l'exercice
             this.sonExercice = new Exercice(laSeanceEnCours, typeExercice, this.defaultNbSeries(),  this.defaultTempsRepos());
-            nomExerciceText.setText( ExerciceActivity.this.sonExercice.getTypeExercice().getNom());
             this.sonExercice.setId(this.daoExercice.create(this.sonExercice));
 
             //on affiche l'alert pour configurer les temps de repos et le nombre de séries souhaité
@@ -75,8 +72,10 @@ public class ExerciceActivity extends Activity {
         }
         else {
 
-            nomExerciceText.setText("Type exercice ou seance null");
+            this.setTitle("Type exercice ou seance null");
         }
+
+        this.setTitle(this.sonExercice.getTypeExercice().getNom());
 
         //bouton pour clore l'exercice
         Button boutonClore = (Button) findViewById(R.id.button_cloreExercice);

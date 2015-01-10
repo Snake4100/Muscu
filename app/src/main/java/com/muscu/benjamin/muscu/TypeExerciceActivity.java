@@ -37,6 +37,8 @@ public class TypeExerciceActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_type_exercice);
 
+        this.setTitle("Modification exercice");
+        
         this.leTypeExercice = getIntent().getParcelableExtra("typeExercice");
 
         //on crée et on ajoute la ligne qui contiendra le bouton de validation

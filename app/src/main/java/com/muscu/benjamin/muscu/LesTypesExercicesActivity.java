@@ -28,6 +28,8 @@ public class LesTypesExercicesActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_les_types_exercices);
 
+        this.setTitle(R.string.exercices_text);
+
         this.daoTypeExercice = new TypeExerciceDAO(this.getBaseContext());
         this.daoTypeExercice.open();
 
