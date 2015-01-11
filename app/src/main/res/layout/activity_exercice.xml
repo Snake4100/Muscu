@@ -12,13 +12,13 @@
         android:id="@+id/listView_series"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_above="@+id/button_cloreExercice" />
+        android:layout_above="@+id/button_ajouterSerie" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/cloreExercice_button"
-        android:id="@+id/button_cloreExercice"
+        android:text="@string/ajouterSerie_button"
+        android:id="@+id/button_ajouterSerie"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 

@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -15,13 +14,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Chronometer;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.muscu.benjamin.muscu.DAO.ExerciceDAO;
 import com.muscu.benjamin.muscu.DAO.SerieDAO;
@@ -30,7 +26,6 @@ import com.muscu.benjamin.muscu.Entity.Seance;
 import com.muscu.benjamin.muscu.Entity.Serie;
 import com.muscu.benjamin.muscu.Entity.TypeExercice;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -79,12 +74,11 @@ public class ExerciceActivity extends Activity {
         this.setTitle(this.sonExercice.getTypeExercice().getNom());
 
         //bouton pour clore l'exercice
-        Button boutonClore = (Button) findViewById(R.id.button_cloreExercice);
-        boutonClore.setOnClickListener(new View.OnClickListener() {
+        Button boutonAjouter = (Button) findViewById(R.id.button_ajouterSerie);
+        boutonAjouter.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                //on ferme l'actvité
-                finish();
+                alertResultatSerie(ExerciceActivity.this.sonExercice.getSeries().size()+1);
             }
         });
 
@@ -183,7 +177,7 @@ public class ExerciceActivity extends Activity {
 
     private void startSerie(){
         //temps qu'on a pas fait le nombre de série souhaité
-        if(this.sonExercice.getNbSeriesSouhaite() != this.sonExercice.getSeries().size()){
+        if(this.sonExercice.getNbSeriesSouhaite() > this.sonExercice.getSeries().size()){
             //on affiche l'alerte pour saisir les résultats de la série
             alertResultatSerie(this.sonExercice.getSeries().size()+1);
         }

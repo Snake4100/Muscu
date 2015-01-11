@@ -17,7 +17,7 @@
     <string name="title_activity_exercices">ExercicesActivity</string>
     <string name="creerExercice_button">Créer</string>
     <string name="title_activity_exercice">ExerciceActivity</string>
-    <string name="cloreExercice_button">Clore exercice</string>
+    <string name="ajouterSerie_button">Ajouter série</string>
     <string name="title_activity_type_exercice">TypeExerciceActivity</string>
 
 </resources>
