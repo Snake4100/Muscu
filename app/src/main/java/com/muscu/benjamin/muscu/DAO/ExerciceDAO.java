@@ -3,6 +3,7 @@ package com.muscu.benjamin.muscu.DAO;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import com.muscu.benjamin.muscu.Entity.DateConversion;
 import com.muscu.benjamin.muscu.Entity.Exercice;
@@ -44,7 +45,7 @@ public class ExerciceDAO extends DAOBase {
 
     public List<Exercice> getSeanceExercices(Seance seance){
         List<Exercice> lesExercices = new ArrayList<Exercice>();
-        Cursor c = mDb.rawQuery("select id,seance,type_exercice,nb_series_souhaites,nb_series_souhaites,temps_repos " +
+        Cursor c = mDb.rawQuery("select id,seance,type_exercice,nb_series_souhaites,temps_repos " +
                 "from Exercice " +
                 "where seance = ?",new String[]{String.valueOf(seance.getId())});
 
