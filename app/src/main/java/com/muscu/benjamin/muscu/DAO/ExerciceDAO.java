@@ -73,4 +73,13 @@ public class ExerciceDAO extends DAOBase {
     public void supprimer(long id) {
         mDb.delete(this.EXERCICE_TABLE_NAME, this.EXERCICE_KEY + " = ?", new String[] {String.valueOf(id)});
     }
+
+    public void modifier(Exercice sonExercice) {
+        ContentValues value = new ContentValues();
+        value.put(ExerciceDAO.EXERCICE_SEANCE, sonExercice.getSeance().getId());
+        value.put(ExerciceDAO.EXERCICE_TYPE_EXERCICE , sonExercice.getTypeExercice().getId());
+        value.put(ExerciceDAO.EXERCICE_NBSERIESSOUHAITES, sonExercice.getNbSeriesSouhaite() );
+        value.put(ExerciceDAO.EXERCICE_TEMPSREPOS, sonExercice.getTempsRepos());
+        mDb.update(ExerciceDAO.EXERCICE_TABLE_NAME, value, this.EXERCICE_KEY  + " = ?", new String[] {String.valueOf(sonExercice.getId())});
+    }
 }

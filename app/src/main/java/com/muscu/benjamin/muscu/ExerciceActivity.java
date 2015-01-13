@@ -52,7 +52,6 @@ public class ExerciceActivity extends Activity {
         this.sonExercice = getIntent().getParcelableExtra("exercice");
         //si typeExercice est différent de null, c'est qu'on crée un exercice
         if (typeExercice != null && laSeanceEnCours != null) {
-
             //on créer l'exercice
             this.sonExercice = new Exercice(laSeanceEnCours, typeExercice, this.defaultNbSeries(),  this.defaultTempsRepos());
             this.sonExercice.setId(this.daoExercice.create(this.sonExercice));
@@ -153,8 +152,9 @@ public class ExerciceActivity extends Activity {
         builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                LinearLayout layout = (LinearLayout) LinearLayout.inflate(ExerciceActivity.this, R.layout.configuration_exercice, null);
 
+                //LinearLayout layout = (LinearLayout) LinearLayout.inflate(ExerciceActivity.this, R.layout.configuration_exercice, null);
+                ExerciceActivity.this.daoExercice.modifier(ExerciceActivity.this.sonExercice);
                 //on lance les series
                 ExerciceActivity.this.startSerie();
 
