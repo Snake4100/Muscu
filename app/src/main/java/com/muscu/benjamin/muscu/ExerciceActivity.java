@@ -35,6 +35,8 @@ public class ExerciceActivity extends Activity {
     private ArrayAdapter<Serie> seriesAdapter;
     private ExerciceDAO daoExercice;
     private SerieDAO daoSerie;
+    private TextView timer;
+    private CountDownTimer countDown = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,8 @@ public class ExerciceActivity extends Activity {
         this.daoExercice.open();
         this.daoSerie = new SerieDAO(this.getBaseContext());
         this.daoSerie.open();
+
+        this.timer = (TextView) findViewById(R.id.textView_chrono);
 
         TypeExercice typeExercice = getIntent().getParcelableExtra("typeExercice");
         Seance laSeanceEnCours = getIntent().getParcelableExtra("seance");
@@ -81,6 +85,32 @@ public class ExerciceActivity extends Activity {
             }
         });
 
+        //bouton démarer timer
+        Button boutonDemarrer = (Button) findViewById(R.id.button_demarrerChrono);
+        boutonDemarrer.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                //s'il y avait deja un timer on l'arréte
+                if(ExerciceActivity.this.countDown != null){
+                    ExerciceActivity.this.countDown.cancel();
+                }
+
+                //on crée le timer
+                ExerciceActivity.this.countDown = new CountDownTimer(ExerciceActivity.this.sonExercice.getTempsRepos()*1000, 1000) {
+
+                    public void onTick(long millisUntilFinished) {
+                        long secondesUntilFinished = millisUntilFinished / 1000;
+                        ExerciceActivity.this.setTime(secondesUntilFinished);
+                    }
+
+                    public void onFinish() {
+                        ExerciceActivity.this.setTime(0);
+                    }
+                }.start();
+            }
+        });
+
+
 
         //on crée l'adapter de la listeview des series
         this.seriesAdapter = new ArrayAdapter<Serie>(this, android.R.layout.simple_list_item_1, this.sonExercice.getSeries());
@@ -93,11 +123,24 @@ public class ExerciceActivity extends Activity {
             }
         });
 
-
-
     }
 
-    
+    private void setTime(long secondesUntilFinished){
+        long minutes = secondesUntilFinished / 60;
+        long secondes = secondesUntilFinished % 60;
+
+        String stringMinutes = String.valueOf(minutes);
+        String stringSecondes = String.valueOf(secondes);
+
+        if (minutes < 10) {
+            stringMinutes = "0" + stringMinutes;
+        }
+        if (secondes < 10) {
+            stringSecondes = "0" + stringSecondes;
+        }
+
+        this.timer.setText(stringMinutes + ":" + stringSecondes);
+    }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void alertConfigurationExercice(Seance laSeanceEnCours,TypeExercice typeExercice) {
@@ -155,8 +198,9 @@ public class ExerciceActivity extends Activity {
 
                 //LinearLayout layout = (LinearLayout) LinearLayout.inflate(ExerciceActivity.this, R.layout.configuration_exercice, null);
                 ExerciceActivity.this.daoExercice.modifier(ExerciceActivity.this.sonExercice);
-                //on lance les series
-                ExerciceActivity.this.startSerie();
+
+                //on initialise le timer
+                ExerciceActivity.this.setTime(ExerciceActivity.this.sonExercice.getTempsRepos());
 
                 //on ferme la fenetre
                 dialog.dismiss();
@@ -173,14 +217,6 @@ public class ExerciceActivity extends Activity {
 
     private int defaultTempsRepos(){
         return 60;
-    }
-
-    private void startSerie(){
-        //temps qu'on a pas fait le nombre de série souhaité
-        if(this.sonExercice.getNbSeriesSouhaite() > this.sonExercice.getSeries().size()){
-            //on affiche l'alerte pour saisir les résultats de la série
-            alertResultatSerie(this.sonExercice.getSeries().size()+1);
-        }
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -235,9 +271,6 @@ public class ExerciceActivity extends Activity {
                 ExerciceActivity.this.seriesAdapter.notifyDataSetChanged();
                 List<Serie> listSerie = ExerciceActivity.this.sonExercice.getSeries();
                 ExerciceActivity.this.daoSerie.create(listSerie.get(listSerie.size()-1));
-
-                //on lance le chrono
-                ExerciceActivity.this.alertTimerRepos();
 
                 dialog.dismiss();
             }
@@ -307,64 +340,6 @@ public class ExerciceActivity extends Activity {
 
     private int defaultNbRepetitions(){
         return 0;
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void alertTimerRepos(){
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(ExerciceActivity.this);
-        builderSingle.setIcon(R.drawable.ic_launcher);
-        builderSingle.setTitle("Repos");
-
-
-        final LinearLayout layout = (LinearLayout) LinearLayout.inflate(this, R.layout.timer, null);
-        try{
-            builderSingle.setView(R.layout.resultat_serie);
-
-        }catch (NoSuchMethodError e) {
-            Log.e("Debug", "Older SDK, using old Builder");
-            builderSingle.setView(layout);
-        }
-
-        //on crée le timer
-        new CountDownTimer(this.sonExercice.getTempsRepos()*1000, 1000) {
-
-            TextView timer = (TextView)layout.findViewById(R.id.textView_timer);
-
-            public void onTick(long millisUntilFinished) {
-                long secondesUntilFinished = millisUntilFinished/1000;
-                long minutes = secondesUntilFinished/60;
-                long secondes = secondesUntilFinished%60;
-
-                String stringMinutes = String.valueOf(minutes);
-                String stringSecondes = String.valueOf(secondes);
-
-                if(minutes<10){
-                    stringMinutes = "0"+stringMinutes;
-                }
-                if(secondes<10){
-                    stringSecondes = "0"+stringSecondes;
-                }
-
-                timer.setText(stringMinutes+":"+stringSecondes);
-            }
-
-            public void onFinish() {
-                timer.setText("00:00");
-            }
-        }.start();
-
-        builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                //on lance la série suivante
-                ExerciceActivity.this.startSerie();
-                dialog.dismiss();
-            }
-        });
-
-
-        builderSingle.show();
     }
 
     @Override

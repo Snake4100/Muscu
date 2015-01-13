@@ -15,13 +15,35 @@
         android:layout_above="@+id/button_ajouterSerie" />
 
     <Button
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:text="+"
+        android:id="@+id/button_ajouterSerie"
+        android:layout_above="@+id/textView_chrono"
+        android:layout_alignRight="@+id/listView_series"
+        android:layout_alignEnd="@+id/listView_series" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/ajouterSerie_button"
-        android:id="@+id/button_ajouterSerie"
-        android:layout_alignParentBottom="true"
+        android:text="00:00"
+        android:id="@+id/textView_chrono"
+        android:textSize="36dp"
+        android:layout_above="@+id/button_demarrerChrono"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        android:id="@+id/button_demarrerChrono"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Démarrer"
+        android:layout_toStartOf="@+id/button_ajouterSerie"
+        android:layout_gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/button_ajouterSerie"
+        android:layout_alignEnd="@+id/button_ajouterSerie" />
 
 
 </RelativeLayout>
