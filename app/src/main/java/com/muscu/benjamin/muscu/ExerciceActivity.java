@@ -72,7 +72,7 @@ public class ExerciceActivity extends Activity {
 
         this.setTitle(this.sonExercice.getTypeExercice().getNom());
 
-        //bouton pour clore l'exercice
+        //bouton pour ajouter série
         Button boutonAjouter = (Button) findViewById(R.id.button_ajouterSerie);
         boutonAjouter.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
