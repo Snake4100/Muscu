@@ -51,10 +51,12 @@ public class ExerciceActivity extends Activity {
 
         this.timer = (TextView) findViewById(R.id.textView_chrono);
 
+        //On récupére le type d'éxercice, la séance et l'exercice s'ils ont été passé en paramétre
         TypeExercice typeExercice = getIntent().getParcelableExtra("typeExercice");
         Seance laSeanceEnCours = getIntent().getParcelableExtra("seance");
         this.sonExercice = getIntent().getParcelableExtra("exercice");
-        //si typeExercice est différent de null, c'est qu'on crée un exercice
+
+        //si typeExercice et laSeanceEnCours est différent de null, c'est qu'on crée un exercice
         if (typeExercice != null && laSeanceEnCours != null) {
             //on créer l'exercice
             this.sonExercice = new Exercice(laSeanceEnCours, typeExercice, this.defaultNbSeries(),  this.defaultTempsRepos());
@@ -65,6 +67,7 @@ public class ExerciceActivity extends Activity {
 
 
         }
+
         //si on a passé un exercice en parametre, c'est une visualisation d'un exercice deja fait
         else if(this.sonExercice != null){
             this.sonExercice.setSeries(this.daoSerie.getSeriesExercice(this.sonExercice));
@@ -81,7 +84,7 @@ public class ExerciceActivity extends Activity {
         boutonAjouter.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                alertResultatSerie(ExerciceActivity.this.sonExercice.getSeries().size()+1);
+                alertResultatSerie(ExerciceActivity.this.sonExercice.getSeries().size() + 1);
             }
         });
 
@@ -228,7 +231,7 @@ public class ExerciceActivity extends Activity {
         builderSingle.setTitle("Série "+numeroSerie);
 
 
-        //on crée la liste view qui va contenir les éléments de l'alert
+        //on ajoute le layout resultat_serie à l'alert
         try{
             builderSingle.setView(R.layout.resultat_serie);
 
@@ -237,16 +240,14 @@ public class ExerciceActivity extends Activity {
             builderSingle.setView(layout);
         }
 
-        //on crée et on ajoute la série à l'exercice
-        this.seriesAdapter.add(new Serie(this.defaultPoids(), this.defaultNbRepetitions(), this.sonExercice));
+        //on crée la série
+        final Serie serie = new Serie(this.defaultPoids(), this.defaultNbRepetitions(), this.sonExercice);
 
         //on met une valeur par default le poid et le nombre de répétition
         NumberPicker numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_poids);
         numberPicker.setOnValueChangedListener( new NumberPicker.OnValueChangeListener() {
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                Log.e("debug","picker poids : "+picker.getValue());
-                List<Serie> listSerie = ExerciceActivity.this.sonExercice.getSeries();
-                listSerie.get(listSerie.size()-1).setPoids(picker.getValue());
+                serie.setPoids(picker.getValue());
             }
         });
         numberPicker.setMinValue(0);
@@ -256,9 +257,7 @@ public class ExerciceActivity extends Activity {
         numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_repetitions);
         numberPicker.setOnValueChangedListener( new NumberPicker.OnValueChangeListener() {
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                Log.e("debug","picker nbrepetitions : "+picker.getValue());
-                List<Serie> listSerie = ExerciceActivity.this.sonExercice.getSeries();
-                listSerie.get(listSerie.size()-1).setRepetitions(picker.getValue());
+                serie.setRepetitions(picker.getValue());
             }
         });
         numberPicker.setMinValue(0);
@@ -268,9 +267,12 @@ public class ExerciceActivity extends Activity {
         builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                //on ajoute la série à l'adapter
+                ExerciceActivity.this.seriesAdapter.add(serie);
+                //on prévient l'adapter que les données ont changées
                 ExerciceActivity.this.seriesAdapter.notifyDataSetChanged();
-                List<Serie> listSerie = ExerciceActivity.this.sonExercice.getSeries();
-                ExerciceActivity.this.daoSerie.create(listSerie.get(listSerie.size()-1));
+                //on ajoute la série à la bd
+                ExerciceActivity.this.daoSerie.create(serie);
 
                 dialog.dismiss();
             }
