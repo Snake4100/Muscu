@@ -20,7 +20,6 @@ public class ExerciceDAO extends DAOBase {
     public static final String EXERCICE_KEY = "id";
     public static final String EXERCICE_SEANCE = "seance";
     public static final String EXERCICE_TYPE_EXERCICE = "type_exercice";
-    public static final String EXERCICE_NBSERIESSOUHAITES = "nb_series_souhaites";
     public static final String EXERCICE_TEMPSREPOS = "temps_repos";
 
     public static final String EXERCICE_TABLE_NAME = "Exercice";
@@ -29,7 +28,6 @@ public class ExerciceDAO extends DAOBase {
                     EXERCICE_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     EXERCICE_SEANCE + " INTEGER, " +
                     EXERCICE_TYPE_EXERCICE + " INTEGER," +
-                    EXERCICE_NBSERIESSOUHAITES + " INTEGER," +
                     EXERCICE_TEMPSREPOS+ " INTEGER," +
                     "FOREIGN KEY(seance) REFERENCES Seance(id) ON DELETE CASCADE, " +
                     "FOREIGN KEY(type_exercice) REFERENCES TypeExercice(id) ON DELETE CASCADE);";
@@ -45,7 +43,7 @@ public class ExerciceDAO extends DAOBase {
 
     public List<Exercice> getSeanceExercices(Seance seance){
         List<Exercice> lesExercices = new ArrayList<Exercice>();
-        Cursor c = mDb.rawQuery("select id,seance,type_exercice,nb_series_souhaites,temps_repos " +
+        Cursor c = mDb.rawQuery("select id,seance,type_exercice,temps_repos " +
                 "from Exercice " +
                 "where seance = ?",new String[]{String.valueOf(seance.getId())});
 
@@ -54,7 +52,7 @@ public class ExerciceDAO extends DAOBase {
             TypeExercice typeExercice = this.daoTypeExercice.selectionner(c.getLong(2));
 
             //on crée le type exercice
-            lesExercices.add(new Exercice(c.getLong(0), seance, typeExercice, c.getInt(3),c.getInt(4)));
+            lesExercices.add(new Exercice(c.getLong(0), seance, typeExercice,c.getInt(3)));
         }
 
         return lesExercices;
@@ -64,7 +62,6 @@ public class ExerciceDAO extends DAOBase {
         ContentValues value = new ContentValues();
         value.put(ExerciceDAO.EXERCICE_SEANCE, exercice.getSeance().getId());
         value.put(ExerciceDAO.EXERCICE_TYPE_EXERCICE , exercice.getTypeExercice().getId());
-        value.put(ExerciceDAO.EXERCICE_NBSERIESSOUHAITES, exercice.getNbSeriesSouhaite() );
         value.put(ExerciceDAO.EXERCICE_TEMPSREPOS, exercice.getTempsRepos());
 
         return mDb.insert(ExerciceDAO.EXERCICE_TABLE_NAME, null, value);
@@ -78,7 +75,6 @@ public class ExerciceDAO extends DAOBase {
         ContentValues value = new ContentValues();
         value.put(ExerciceDAO.EXERCICE_SEANCE, sonExercice.getSeance().getId());
         value.put(ExerciceDAO.EXERCICE_TYPE_EXERCICE , sonExercice.getTypeExercice().getId());
-        value.put(ExerciceDAO.EXERCICE_NBSERIESSOUHAITES, sonExercice.getNbSeriesSouhaite() );
         value.put(ExerciceDAO.EXERCICE_TEMPSREPOS, sonExercice.getTempsRepos());
         mDb.update(ExerciceDAO.EXERCICE_TABLE_NAME, value, this.EXERCICE_KEY  + " = ?", new String[] {String.valueOf(sonExercice.getId())});
     }

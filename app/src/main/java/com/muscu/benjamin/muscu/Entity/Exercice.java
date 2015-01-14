@@ -16,24 +16,21 @@ public class Exercice implements Parcelable {
     private Seance seance;
     private TypeExercice typeExercice;
     private List<Serie> series;
-    private int nbSeriesSouhaite;
     private int tempsRepos;
 
     //constructeur dao
-    public Exercice(long id, Seance seance, TypeExercice typeExercice, int nbSeriesSouhaite, int tempsRepos){
+    public Exercice(long id, Seance seance, TypeExercice typeExercice, int tempsRepos){
         this.id = id;
         this.seance = seance;
         this.typeExercice = typeExercice;
-        this.nbSeriesSouhaite = nbSeriesSouhaite;
         this.tempsRepos = tempsRepos;
     }
 
     //Constructeur creation nouvel exercice
-    public Exercice(Seance seance, TypeExercice typeExercice, int nbSeriesSouhaite, int tempsRepos) {
+    public Exercice(Seance seance, TypeExercice typeExercice, int tempsRepos) {
         this.seance = seance;
         this.typeExercice = typeExercice;
         this.series = new ArrayList<Serie>();
-        this.nbSeriesSouhaite = nbSeriesSouhaite;
         this.tempsRepos = tempsRepos;
     }
 
@@ -41,7 +38,6 @@ public class Exercice implements Parcelable {
         this.id = in.readLong();
         this.seance = (Seance) (Seance) in.readValue(Seance.class.getClassLoader());
         this.typeExercice = (TypeExercice) (TypeExercice) in.readValue(TypeExercice.class.getClassLoader());
-        this.nbSeriesSouhaite = in.readInt();
         this.tempsRepos = in.readInt();
     }
 
@@ -81,14 +77,6 @@ public class Exercice implements Parcelable {
         this.series.add(uneSerie);
     }
 
-    public int getNbSeriesSouhaite() {
-        return nbSeriesSouhaite;
-    }
-
-    public void setNbSeriesSouhaite(int nbSeriesSouhaite) {
-        this.nbSeriesSouhaite = nbSeriesSouhaite;
-    }
-
     public int getTempsRepos() {
         return tempsRepos;
     }
@@ -112,7 +100,6 @@ public class Exercice implements Parcelable {
         dest.writeLong(this.id);
         dest.writeValue(this.seance);
         dest.writeValue(this.typeExercice);
-        dest.writeInt(this.nbSeriesSouhaite);
         dest.writeInt(this.tempsRepos);
 
     }

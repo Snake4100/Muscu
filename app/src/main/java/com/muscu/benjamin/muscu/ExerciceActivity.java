@@ -59,7 +59,7 @@ public class ExerciceActivity extends Activity {
         //si typeExercice et laSeanceEnCours est différent de null, c'est qu'on crée un exercice
         if (typeExercice != null && laSeanceEnCours != null) {
             //on créer l'exercice
-            this.sonExercice = new Exercice(laSeanceEnCours, typeExercice, this.defaultNbSeries(),  this.defaultTempsRepos());
+            this.sonExercice = new Exercice(laSeanceEnCours, typeExercice, this.defaultTempsRepos());
             this.sonExercice.setId(this.daoExercice.create(this.sonExercice));
 
             //on affiche l'alert pour configurer les temps de repos et le nombre de séries souhaité
@@ -203,10 +203,6 @@ public class ExerciceActivity extends Activity {
 
 
         builderSingle.show();
-    }
-
-    private int defaultNbSeries(){
-        return 4;
     }
 
     private int defaultTempsRepos(){
