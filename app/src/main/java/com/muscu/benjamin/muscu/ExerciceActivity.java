@@ -71,6 +71,7 @@ public class ExerciceActivity extends Activity {
         //si on a passé un exercice en parametre, c'est une visualisation d'un exercice deja fait
         else if(this.sonExercice != null){
             this.sonExercice.setSeries(this.daoSerie.getSeriesExercice(this.sonExercice));
+            this.setTime(this.sonExercice.getTempsRepos());
         }
         else {
 
@@ -170,20 +171,10 @@ public class ExerciceActivity extends Activity {
         }
 
 
-        //on met une valeur par default le nombre de série et le temps de repos
-        NumberPicker numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_nbSerie);
-        numberPicker.setOnValueChangedListener(( new NumberPicker.
-                OnValueChangeListener() {
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                Log.e("Debug","NB série récupéré : "+picker.getValue());
-                ExerciceActivity.this.sonExercice.setNbSeriesSouhaite(picker.getValue());
-            }
-        }));
-        numberPicker.setMinValue(1);
-        numberPicker.setMaxValue(100);
-        numberPicker.setValue(this.defaultNbSeries());
 
-        numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_tempsRepos);
+
+        //Parametrage du numberPicker pour le temps de repos
+        NumberPicker numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_tempsRepos);
         numberPicker.setOnValueChangedListener(( new NumberPicker.
                 OnValueChangeListener() {
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
