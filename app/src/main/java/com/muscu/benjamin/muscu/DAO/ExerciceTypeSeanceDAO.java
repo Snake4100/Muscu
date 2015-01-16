@@ -53,7 +53,7 @@ public class ExerciceTypeSeanceDAO extends DAOBase {
         //on parcours la liste
         while(c.moveToNext()){
             //on crée le type exercice
-            lesExercices.add(new ExerciceTypeSeance(c.getLong(0), c.getLong(1), this.daoTypeExerice.selectionner(c.getLong(3)), typeSeance, c.getString(4)));
+            lesExercices.add(new ExerciceTypeSeance(c.getLong(0), c.getLong(1), this.daoTypeExerice.selectionner(c.getLong(2)), typeSeance, c.getString(4)));
         }
 
         return lesExercices;

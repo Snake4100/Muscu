@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.muscu.benjamin.muscu.Entity.ExerciceTypeSeance;
 import com.muscu.benjamin.muscu.Entity.TypeSeance;
 
 import java.util.ArrayList;
@@ -14,6 +15,8 @@ import java.util.List;
  * Created by benjamin on 15/01/2015.
  */
 public class TypeSeanceDAO extends DAOBase {
+    private ExerciceTypeSeanceDAO daoExerciceTypeSeance;
+
     public static final String TYPESEANCE_KEY = "id";
     public static final String TYPESEANCE_NOM = "nom";
 
@@ -27,14 +30,23 @@ public class TypeSeanceDAO extends DAOBase {
 
     public TypeSeanceDAO(Context pContext) {
         super(pContext);
+        this.daoExerciceTypeSeance = new ExerciceTypeSeanceDAO(pContext);
+        this.daoExerciceTypeSeance.open();
     }
 
     public long create(TypeSeance typeSeance){
-        Log.e("debug","Create typeSeance");
-
         ContentValues value = new ContentValues();
         value.put(TYPESEANCE_NOM, typeSeance.getNom());
-        return mDb.insert(TYPESEANCE_TABLE_NAME, null, value);
+
+        //on execute la requete et on récupére l'id
+        typeSeance.setId(mDb.insert(TYPESEANCE_TABLE_NAME, null, value));
+
+        //on sauvegarde les exercices
+        for(ExerciceTypeSeance exercice : typeSeance.getListExercices()){
+            this.daoExerciceTypeSeance.create(exercice);
+        }
+
+        return typeSeance.getId();
     }
 
     public List<TypeSeance> getAll(){

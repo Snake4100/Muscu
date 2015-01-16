@@ -3,6 +3,7 @@ package com.muscu.benjamin.muscu.Entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +17,7 @@ public class TypeSeance implements Parcelable {
     public TypeSeance(long id, String nom) {
         this.id = id;
         this.nom = nom;
+        this.listExercices = new ArrayList<ExerciceTypeSeance>();
     }
 
     public TypeSeance(Parcel source) {
@@ -47,6 +49,11 @@ public class TypeSeance implements Parcelable {
         this.listExercices = listExercices;
     }
 
+    public void addExercice(ExerciceTypeSeance exercice) {
+        exercice.setTypeSeance(this);
+        this.listExercices.add(exercice);
+    }
+
     public String toString(){
         return this.nom;
     }
@@ -74,4 +81,6 @@ public class TypeSeance implements Parcelable {
             return new TypeSeance[size];
         }
     };
+
+
 }

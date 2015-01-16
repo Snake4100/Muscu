@@ -50,6 +50,10 @@ public class TypeSeanceActivity extends Activity {
 
         //si on ouvre un type de séance existant
         if(this.typeSeance != null){
+            //on récupére ses exercices
+            this.typeSeance.setListExercices(this.daoExericeTypeSeance.getExerciceFromTypeSeance(this.typeSeance));
+
+
             EditText editText_nom = (EditText) findViewById(R.id.editText_nomTypeSeance);
             editText_nom.setText(this.typeSeance.getNom());
             this.setTitle("Séance type");
@@ -106,14 +110,7 @@ public class TypeSeanceActivity extends Activity {
         bouton_ajouterExerciceTypeSeance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                * Attendre une réponse (un exercice)
-                * lorsque l'on validera la séance on stockera tous en base
-                *
-                */
-
                 Intent intent = new Intent(TypeSeanceActivity.this, ExerciceTypeSeanceActivity.class);
-                intent.putExtra("TypeSeance", TypeSeanceActivity.this.typeSeance);
                 intent.putExtra("numeroExercice",TypeSeanceActivity.this.exercicesAdapter.getCount()+1);
                 startActivityForResult(intent,RESULT_EXERCICE);
             }
@@ -125,7 +122,7 @@ public class TypeSeanceActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-        //updateListExercicesTypeSeance();
+        updateListExercicesTypeSeance();
 
     }
 
@@ -139,8 +136,10 @@ public class TypeSeanceActivity extends Activity {
         if (requestCode ==  RESULT_EXERCICE ) {
             if(resultCode == RESULT_OK){
                 //on récupére et on ajoute la séance
-                this.exercicesAdapter.add((ExerciceTypeSeance)data.getParcelableExtra("Exercice"));
-                this.exercicesAdapter.notifyDataSetChanged();
+                ExerciceTypeSeance exercice = (ExerciceTypeSeance)data.getParcelableExtra("Exercice");
+                this.typeSeance.addExercice(exercice);
+
+                //updateListExercicesTypeSeance();
             }
         }
     }
