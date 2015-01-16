@@ -3,6 +3,9 @@ package com.muscu.benjamin.muscu.DAO;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import com.muscu.benjamin.muscu.Entity.TypeSeance;
 
 /**
  * Created by benjamin on 03/01/2015.
@@ -19,6 +22,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(SeanceDAO.SEANCE_TABLE_CREATE);
         db.execSQL(ExerciceDAO.EXERCICE_TABLE_CREATE);
         db.execSQL(SerieDAO.SERIE_TABLE_CREATE);
+        db.execSQL(TypeSeanceDAO.TYPESEANCE_TABLE_CREATE);
+        db.execSQL(ExerciceTypeSeanceDAO.EXERCICETYPESEANCE_TABLE_CREATE);
 
         //on insére les exercices par défaults
         TypeExerciceDAO.defaultTypeExercice(db);
@@ -31,6 +36,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             // Enable foreign key constraints
             db.execSQL("PRAGMA foreign_keys=ON;");
         }
+
+        this.udpateDB(db);
+    }
+
+    private void udpateDB(SQLiteDatabase db){
+        Log.e("debug", "udptate database");
+
+        //db.execSQL("ALTER TABLE "+ ExerciceDAO.EXERCICE_TABLE_NAME+" DROP COLUMN nb_series_souhaites");
+
+        db.execSQL(TypeSeanceDAO.TYPESEANCE_TABLE_CREATE);
+        db.execSQL(ExerciceTypeSeanceDAO.EXERCICETYPESEANCE_TABLE_CREATE);
+
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.muscu.benjamin.muscu.DAO;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 /**
  * Created by benjamin on 03/01/2015.
@@ -22,6 +23,7 @@ public class DAOBase {
     public SQLiteDatabase open() {
         // Pas besoin de fermer la dernière base puisque getWritableDatabase s'en charge
         mDb = mHandler.getWritableDatabase();
+
         return mDb;
     }
 

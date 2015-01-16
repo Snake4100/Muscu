@@ -22,7 +22,7 @@ public class SerieDAO extends DAOBase {
 
     public static final String SERIE_TABLE_NAME = "Serie";
     public static final String SERIE_TABLE_CREATE =
-            "CREATE TABLE " + SERIE_TABLE_NAME + " (" +
+            "CREATE TABLE IF NOT EXISTS " + SERIE_TABLE_NAME + " (" +
                     SERIE_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     SERIE_POIDS + " INTEGER, " +
                     SERIE_NB_REPETITIONS + " INTEGER," +

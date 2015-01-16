@@ -37,8 +37,20 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".TypeExerciceActivity"
+            android:name="com.muscu.benjamin.muscu.TypeExerciceActivity"
             android:label="@string/title_activity_type_exercice" >
+        </activity>
+        <activity
+            android:name="com.muscu.benjamin.muscu.TypesSeancesActivity"
+            android:label="@string/title_activity_types_seances" >
+        </activity>
+        <activity
+            android:name="com.muscu.benjamin.muscu.TypeSeanceActivity"
+            android:label="@string/title_activity_type_seance" >
+        </activity>
+        <activity
+            android:name="com.muscu.benjamin.muscu.ExerciceTypeSeanceActivity"
+            android:label="@string/title_activity_exercice_type_seance" >
         </activity>
     </application>
 

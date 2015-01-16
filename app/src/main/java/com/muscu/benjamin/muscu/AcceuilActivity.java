@@ -16,11 +16,19 @@ public class AcceuilActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acceuil);
-
+        Log.e("debug","Acceuil");
         Button button_mesSeances = (Button) findViewById(R.id.button_mesSeances);
         button_mesSeances.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(AcceuilActivity.this, com.muscu.benjamin.muscu.MesSeancesActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button button_typesSeances = (Button) findViewById(R.id.button_typesSeances);
+        button_typesSeances.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(AcceuilActivity.this, TypesSeancesActivity.class);
                 startActivity(intent);
             }
         });

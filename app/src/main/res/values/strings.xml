@@ -19,5 +19,8 @@
     <string name="title_activity_exercice">ExerciceActivity</string>
     <string name="ajouterSerie_button">Ajouter série</string>
     <string name="title_activity_type_exercice">TypeExerciceActivity</string>
+    <string name="title_activity_types_seances">TypesSeancesActivity</string>
+    <string name="title_activity_type_seance">TypeSeanceActivity</string>
+    <string name="title_activity_exercice_type_seance">ExerciceTypeSeanceActivity</string>
 
 </resources>

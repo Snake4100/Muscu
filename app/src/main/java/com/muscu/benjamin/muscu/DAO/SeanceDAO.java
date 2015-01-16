@@ -24,7 +24,7 @@ public class SeanceDAO extends DAOBase{
 
     public static final String SEANCE_TABLE_NAME = "Seance";
     public static final String SEANCE_TABLE_CREATE =
-            "CREATE TABLE " + SEANCE_TABLE_NAME + " (" +
+            "CREATE TABLE IF NOT EXISTS " + SEANCE_TABLE_NAME + " (" +
                     SEANCE_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     SEANCE_DATE + " TEXT, " +
                     SEANCE_NOM + " TEXT," +

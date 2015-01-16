@@ -23,7 +23,7 @@ public class TypeExerciceDAO extends DAOBase {
 
     public static final String TYPE_EXERCICE_TABLE_NAME = "TypeExercice";
     public static final String TYPE_EXERCICE_TABLE_CREATE =
-            "CREATE TABLE " + TYPE_EXERCICE_TABLE_NAME + " (" +
+            "CREATE TABLE IF NOT EXISTS " + TYPE_EXERCICE_TABLE_NAME + " (" +
                     TYPE_EXERCICE_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     TYPE_EXERCICE_NOM + " TEXT, " +
                     TYPE_EXERCICE_CATEGORIE + " TEXT," +
