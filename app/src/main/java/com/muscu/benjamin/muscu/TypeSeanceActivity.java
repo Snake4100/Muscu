@@ -1,7 +1,11 @@
 package com.muscu.benjamin.muscu;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +24,8 @@ import com.muscu.benjamin.muscu.Entity.ExerciceTypeSeance;
 import com.muscu.benjamin.muscu.Entity.TypeSeance;
 
 import java.util.ArrayList;
+
+import static android.view.View.*;
 
 
 public class TypeSeanceActivity extends Activity {
@@ -60,7 +66,7 @@ public class TypeSeanceActivity extends Activity {
             this.setTitle("Séance type");
             boutonConfirmer.setText("Enregistrer");
 
-            boutonConfirmer.setOnClickListener(new View.OnClickListener() {
+            boutonConfirmer.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //on récupére le nom
@@ -84,7 +90,7 @@ public class TypeSeanceActivity extends Activity {
 
             this.typeSeance = new TypeSeance(0,"");
 
-            boutonConfirmer.setOnClickListener(new View.OnClickListener() {
+            boutonConfirmer.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //on récupére le nom
@@ -117,7 +123,7 @@ public class TypeSeanceActivity extends Activity {
 
 
         Button bouton_ajouterExerciceTypeSeance = (Button) findViewById(R.id.button_ajoutExerciceTypeSeance);
-        bouton_ajouterExerciceTypeSeance.setOnClickListener(new View.OnClickListener() {
+        bouton_ajouterExerciceTypeSeance.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TypeSeanceActivity.this, ExerciceTypeSeanceActivity.class);
@@ -148,11 +154,25 @@ public class TypeSeanceActivity extends Activity {
                 //on récupére et on ajoute la séance
                 ExerciceTypeSeance exercice = (ExerciceTypeSeance)data.getParcelableExtra("Exercice");
                 Log.e("debug","Indications reçus : "+exercice.getIndications());
-                this.typeSeance.addExercice(exercice);
-
                 //updateListExercicesTypeSeance();
             }
         }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Really Exit?")
+                .setMessage("Are you sure you want to exit?")
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        TypeSeanceActivity.super.onBackPressed();
+                    }
+                }).create().show();
     }
 
     @Override
