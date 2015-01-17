@@ -1,7 +1,11 @@
 package com.muscu.benjamin.muscu;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,6 +46,13 @@ public class TypesSeancesActivity extends Activity {
                 startActivity(intent);
             }
         });
+        listTypesSeances.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                TypesSeancesActivity.this.alertSuppressionTypeSeance(TypesSeancesActivity.this.typesSeancesAdapter.getItem(position));
+                return true;
+            }
+        });
 
         Button bouton_ajoutSeanceType = (Button)findViewById(R.id.button_ajouterTypeSeance);
         bouton_ajoutSeanceType.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +76,38 @@ public class TypesSeancesActivity extends Activity {
     private void updateListTypesSeances(){
         this.typesSeancesAdapter.clear();
         this.typesSeancesAdapter.addAll(this.daoTypeSeance.getAll());
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void alertSuppressionTypeSeance(final TypeSeance laSeance){
+
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(TypesSeancesActivity.this);
+        builderSingle.setIcon(R.drawable.ic_launcher);
+        builderSingle.setTitle("Suppression de la séance : "+laSeance.getNom());
+
+        //Boutton pour annuler la suppression
+        builderSingle.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        //Boutton pour supprimer
+        builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                TypesSeancesActivity.this.daoTypeSeance.supprimer(laSeance.getId());
+                TypesSeancesActivity.this.updateListTypesSeances();
+                dialog.dismiss();
+            }
+        });
+
+
+        builderSingle.show();
     }
 
     @Override

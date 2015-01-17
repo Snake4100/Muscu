@@ -11,15 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TableRow;
-import android.widget.TextView;
 
 import com.muscu.benjamin.muscu.Entity.Categorie;
 import com.muscu.benjamin.muscu.Entity.TypeExercice;
-import com.muscu.benjamin.muscu.R;
 
-import java.lang.reflect.Type;
 import java.util.Arrays;
 
 public class TypeExerciceActivity extends Activity {
@@ -51,7 +47,7 @@ public class TypeExerciceActivity extends Activity {
         //on récupérer les elements de la vue
         this.editTextNom = (EditText)findViewById(R.id.editText_nomTypeExercice);
         this.editTextZones = (EditText)findViewById(R.id.editText_zonesTypeExercice);
-        this.editTextDescription = (EditText)findViewById(R.id.editText_descriptionTypeExercice);
+        this.editTextDescription = (EditText)findViewById(R.id.editText_indicationsTypeExercice);
         this.spinnerCategorie = (Spinner)findViewById(R.id.spinner_categorieTypeExercice);
         this.categorieSpinnerAdapter = new ArrayAdapter<Categorie>(this, android.R.layout.simple_spinner_item, Arrays.asList(Categorie.values()));
         this.spinnerCategorie.setAdapter(this.categorieSpinnerAdapter);

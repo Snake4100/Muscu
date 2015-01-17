@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -104,6 +105,15 @@ public class TypeSeanceActivity extends Activity {
         this.exercicesAdapter = new ArrayAdapter<ExerciceTypeSeance>(this, android.R.layout.simple_list_item_1, new ArrayList<ExerciceTypeSeance>());
         ListView listExercice = (ListView) findViewById(R.id.listView_exerciceTypeSeance);
         listExercice.setAdapter(this.exercicesAdapter);
+        listExercice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(TypeSeanceActivity.this, ExerciceTypeSeanceActivity.class);
+                intent.putExtra("Exercice",TypeSeanceActivity.this.exercicesAdapter.getItem(position));
+                startActivityForResult(intent,RESULT_EXERCICE);
+            }
+        });
+
 
 
         Button bouton_ajouterExerciceTypeSeance = (Button) findViewById(R.id.button_ajoutExerciceTypeSeance);

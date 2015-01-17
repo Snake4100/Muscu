@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.muscu.benjamin.muscu.DAO.TypeExerciceDAO;
@@ -24,6 +25,7 @@ public class ExerciceTypeSeanceActivity extends Activity {
     private ExerciceTypeSeance exercice;
     private ArrayAdapter<TypeExercice> typeExerciceArrayAdapter;
     private TypeExerciceDAO daoTypeExercice;
+    private EditText editTextIndications;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,21 +37,7 @@ public class ExerciceTypeSeanceActivity extends Activity {
         this.daoTypeExercice = new TypeExerciceDAO(this.getBaseContext());
         this.daoTypeExercice.open();
 
-        //on crée l'exercice
-        this.exercice = new ExerciceTypeSeance(0, getIntent().getIntExtra("numeroExercice",0), null, null, "");
-
-        Button bouton_validerExerciceTypeSeance = (Button) findViewById(R.id.button_valierExerciceTypeSeance);
-        bouton_validerExerciceTypeSeance.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("Exercice",ExerciceTypeSeanceActivity.this.exercice);
-                setResult(RESULT_OK,returnIntent);
-                finish();
-            }
-        });
-
-        //initialisation du spinner
+        //initialisation du spinner type exercice
         this.spinnerTypeExercice = (Spinner)findViewById(R.id.spinner_typeExercice);
         this.typeExerciceArrayAdapter = new ArrayAdapter<TypeExercice>(this, android.R.layout.simple_spinner_item, this.daoTypeExercice.getAll());
         this.spinnerTypeExercice.setAdapter(this.typeExerciceArrayAdapter);
@@ -63,11 +51,60 @@ public class ExerciceTypeSeanceActivity extends Activity {
             public void onNothingSelected(AdapterView<?> parentView) {
                 // your code here
             }
-
         });
+
+        //on récupére l'edit text qui contiendra les indicaitons pour l'exercice
+        this.editTextIndications = (EditText)findViewById(R.id.editText_indicationsTypeExercice);
+
+        //on essaye de récupérer l'exercice si on en a passé un
+        this.exercice = getIntent().getParcelableExtra("Exercice");
+
+        //si on a pas récupérer d'exercice, c'est une création
+        if(this.exercice == null){
+            //on crée l'exercice
+            this.exercice = new ExerciceTypeSeance(0, getIntent().getIntExtra("numeroExercice",0), null, null, "");
+        }
+
+        //sinon, on initialise la vue avec les bonnes infirmations
+        else{
+
+            //on itinitailise le spinner avec la bonne valeur
+            for(int i=0; i<this.typeExerciceArrayAdapter.getCount(); i++)
+            {
+                if(this.typeExerciceArrayAdapter.getItem(i).getId() == this.exercice.getTypeExercice().getId()){
+                    this.spinnerTypeExercice.setSelection(i);
+                    break;
+                }
+            }
+
+            //on initialise l'edit text
+            this.editTextIndications.setText(this.exercice.getIndications());
+
+            // on récupére les séries
+
+        }
+
+        Button bouton_validerExerciceTypeSeance = (Button) findViewById(R.id.button_valierExerciceTypeSeance);
+        bouton_validerExerciceTypeSeance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //on récupére les valeurs
+                ExerciceTypeSeanceActivity.this.getValues();
+
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("Exercice",ExerciceTypeSeanceActivity.this.exercice);
+                setResult(RESULT_OK,returnIntent);
+                finish();
+            }
+        });
+
+
 
     }
 
+    private void getValues(){
+        this.exercice.setIndications(this.editTextIndications.getText().toString());
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

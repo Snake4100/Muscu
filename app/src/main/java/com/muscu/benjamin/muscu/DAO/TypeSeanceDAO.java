@@ -67,4 +67,8 @@ public class TypeSeanceDAO extends DAOBase {
         value.put(this.TYPESEANCE_NOM, typeSeance.getNom());
         mDb.update(TYPESEANCE_TABLE_NAME, value, this.TYPESEANCE_KEY  + " = ?", new String[] {String.valueOf(typeSeance.getId())});
     }
+
+    public void supprimer(long id) {
+        mDb.delete(this.TYPESEANCE_TABLE_NAME, this.TYPESEANCE_KEY + " = ?", new String[] {String.valueOf(id)});
+    }
 }
