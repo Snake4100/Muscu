@@ -66,6 +66,17 @@ public class TypeSeanceDAO extends DAOBase {
         ContentValues value = new ContentValues();
         value.put(this.TYPESEANCE_NOM, typeSeance.getNom());
         mDb.update(TYPESEANCE_TABLE_NAME, value, this.TYPESEANCE_KEY  + " = ?", new String[] {String.valueOf(typeSeance.getId())});
+
+        //on sauvegarde les exercices
+        for(ExerciceTypeSeance exercice : typeSeance.getListExercices()){
+            //si c'est un exercice crée
+            if(exercice.getId()==-1)
+                this.daoExerciceTypeSeance.create(exercice);
+
+            else{
+                this.daoExerciceTypeSeance.modifier(exercice);
+            }
+        }
     }
 
     public void supprimer(long id) {

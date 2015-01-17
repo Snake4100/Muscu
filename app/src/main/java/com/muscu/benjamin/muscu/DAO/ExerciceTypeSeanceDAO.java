@@ -68,4 +68,14 @@ public class ExerciceTypeSeanceDAO extends DAOBase {
 
         return mDb.insert(EXERCICETYPESEANCE_TABLE_NAME, null, value);
     }
+
+    public void modifier(ExerciceTypeSeance exercice) {
+        ContentValues value = new ContentValues();
+        value.put(this.EXERCICETYPESEANCE_NUMERO_EXERCICE, exercice.getNumeroExercice());
+        value.put(this.EXERCICETYPESEANCE_INDICATIONS, exercice.getIndications());
+        value.put(this.EXERCICETYPESEANCE_TYPE_SEANCE, exercice.getTypeSeance().getId());
+        value.put(this.EXERCICETYPESEANCE_TYPE_EXERCICE, exercice.getTypeExercice().getId());
+
+        mDb.update(this.EXERCICETYPESEANCE_TABLE_NAME, value, this.EXERCICETYPESEANCE_KEY  + " = ?", new String[] {String.valueOf(exercice.getId())});
+    }
 }

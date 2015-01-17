@@ -24,6 +24,7 @@ import com.muscu.benjamin.muscu.Entity.ExerciceTypeSeance;
 import com.muscu.benjamin.muscu.Entity.TypeSeance;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.view.View.*;
 
@@ -34,7 +35,8 @@ public class TypeSeanceActivity extends Activity {
     private ExerciceTypeSeanceDAO daoExericeTypeSeance;
     private ArrayAdapter<ExerciceTypeSeance> exercicesAdapter;
 
-    final int RESULT_EXERCICE = 1;
+    final int RESULT_CREATION_EXERCICE = 1;
+    final int RESULT_MODIFICATION_EXERCICE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +118,7 @@ public class TypeSeanceActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(TypeSeanceActivity.this, ExerciceTypeSeanceActivity.class);
                 intent.putExtra("Exercice",TypeSeanceActivity.this.exercicesAdapter.getItem(position));
-                startActivityForResult(intent,RESULT_EXERCICE);
+                startActivityForResult(intent,RESULT_MODIFICATION_EXERCICE);
             }
         });
 
@@ -128,7 +130,7 @@ public class TypeSeanceActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(TypeSeanceActivity.this, ExerciceTypeSeanceActivity.class);
                 intent.putExtra("numeroExercice",TypeSeanceActivity.this.exercicesAdapter.getCount()+1);
-                startActivityForResult(intent,RESULT_EXERCICE);
+                startActivityForResult(intent,RESULT_CREATION_EXERCICE);
             }
         });
 
@@ -149,12 +151,32 @@ public class TypeSeanceActivity extends Activity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode ==  RESULT_EXERCICE ) {
+        if (requestCode ==  RESULT_CREATION_EXERCICE ) {
             if(resultCode == RESULT_OK){
                 //on récupére et on ajoute la séance
                 ExerciceTypeSeance exercice = (ExerciceTypeSeance)data.getParcelableExtra("Exercice");
                 Log.e("debug","Indications reçus : "+exercice.getIndications());
                 this.typeSeance.addExercice(exercice);
+            }
+        }
+
+        else if(requestCode == RESULT_MODIFICATION_EXERCICE){
+            Log.e("debug", "Result modif exercice");
+            //on récupére l'exercice
+            ExerciceTypeSeance exercice = (ExerciceTypeSeance)data.getParcelableExtra("Exercice");
+
+            //on récupére la liste des exercices
+            List<ExerciceTypeSeance> listExerice = this.typeSeance.getListExercices();
+            //on remplace l'exercice par le nouveau
+
+            //on recherche et on rempalce l'exercice
+            for(int i=0; i<listExerice.size(); i++){
+                ExerciceTypeSeance ex = listExerice.get(i);
+                Log.e("debug",ex.getId()+" == "+exercice.getId());
+                if(ex.getId() == exercice.getId()){
+                    Log.e("debug","true");
+                    listExerice.set(i,exercice);
+                }
             }
         }
     }
