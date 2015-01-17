@@ -63,7 +63,7 @@ public class ExerciceTypeSeanceActivity extends Activity {
         //si on a pas récupérer d'exercice, c'est une création
         if(this.exercice == null){
             //on crée l'exercice
-            this.exercice = new ExerciceTypeSeance(0, getIntent().getIntExtra("numeroExercice",0), null, null, "");
+            this.exercice = new ExerciceTypeSeance(getIntent().getIntExtra("numeroExercice",0));
         }
 
         //sinon, on initialise la vue avec les bonnes infirmations

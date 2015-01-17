@@ -18,6 +18,7 @@ public class ExerciceTypeSeance implements Parcelable {
     private List<TypeSeanceSerie> listSeries;
     private String indications;
 
+    //constructeur complet
     public ExerciceTypeSeance(long id, long numeroExercice, TypeExercice typeExercice, TypeSeance typeSeance, String indications) {
         this.id = id;
         this.numeroExercice = numeroExercice;
@@ -26,6 +27,18 @@ public class ExerciceTypeSeance implements Parcelable {
         this.indications = indications;
         this.listSeries = new ArrayList<TypeSeanceSerie>();
     }
+
+    //constructeur numero exerice
+    public ExerciceTypeSeance(long numeroExercice){
+        this.id = -1;
+        this.numeroExercice = numeroExercice;
+        this.typeExercice = null;
+        this.typeSeance = null;
+        this.indications = "";
+        this.listSeries = new ArrayList<TypeSeanceSerie>();
+    }
+
+
 
     public ExerciceTypeSeance(Parcel source) {
         this.id = source.readLong();

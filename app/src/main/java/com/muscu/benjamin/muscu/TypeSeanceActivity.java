@@ -154,7 +154,7 @@ public class TypeSeanceActivity extends Activity {
                 //on récupére et on ajoute la séance
                 ExerciceTypeSeance exercice = (ExerciceTypeSeance)data.getParcelableExtra("Exercice");
                 Log.e("debug","Indications reçus : "+exercice.getIndications());
-                //updateListExercicesTypeSeance();
+                this.typeSeance.addExercice(exercice);
             }
         }
     }
