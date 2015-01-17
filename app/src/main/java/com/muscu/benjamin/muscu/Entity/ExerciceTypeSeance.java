@@ -110,7 +110,7 @@ public class ExerciceTypeSeance implements Parcelable {
         dest.writeValue(this.typeExercice);
         dest.writeValue(this.typeSeance);
         dest.writeArray(this.listSeries.toArray());
-        dest.writeValue(this.indications);
+        dest.writeString(this.indications);
     }
 
     public static final Parcelable.Creator<ExerciceTypeSeance> CREATOR = new Parcelable.Creator<ExerciceTypeSeance>() {

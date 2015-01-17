@@ -3,6 +3,7 @@ package com.muscu.benjamin.muscu;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -104,6 +105,7 @@ public class ExerciceTypeSeanceActivity extends Activity {
 
     private void getValues(){
         this.exercice.setIndications(this.editTextIndications.getText().toString());
+        Log.e("debug","Indications envoyés : "+this.exercice.getIndications());
     }
 
     @Override
