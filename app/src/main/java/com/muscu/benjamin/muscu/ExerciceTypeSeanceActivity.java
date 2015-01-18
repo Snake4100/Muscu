@@ -91,11 +91,8 @@ public class ExerciceTypeSeanceActivity extends Activity {
                     break;
                 }
             }
-
             //on initialise l'edit text
             this.editTextIndications.setText(this.exercice.getIndications());
-
-            // on récupére les séries
 
         }
 
@@ -163,7 +160,7 @@ public class ExerciceTypeSeanceActivity extends Activity {
         }
 
         //on crée la série
-        final TypeSeanceSerie serie = new TypeSeanceSerie(numeroSerie, this.exercice);
+        final TypeSeanceSerie serie = new TypeSeanceSerie(numeroSerie);
 
         //on met une valeur par default le poid et le nombre de répétition
         NumberPicker numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_serieNbRepetitions);

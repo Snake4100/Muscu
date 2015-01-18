@@ -49,7 +49,7 @@ public class ExerciceTypeSeance implements Parcelable {
         this.listSeries =new ArrayList<TypeSeanceSerie>();
         for(Parcelable obj : source.readParcelableArray(TypeSeanceSerie.class.getClassLoader()))
         {
-            this.listSeries.add((TypeSeanceSerie)obj);
+            this.addSerie((TypeSeanceSerie)obj);
         }
 
         this.indications = source.readString();
@@ -96,6 +96,7 @@ public class ExerciceTypeSeance implements Parcelable {
     }
 
     public void addSerie(TypeSeanceSerie serie){
+        serie.setExercice(this);
         this.listSeries.add(serie);
     }
 
@@ -122,7 +123,8 @@ public class ExerciceTypeSeance implements Parcelable {
         dest.writeLong(this.numeroExercice);
         dest.writeValue(this.typeExercice);
         dest.writeValue(this.typeSeance);
-        dest.writeArray(this.listSeries.toArray());
+        dest.writeParcelableArray(this.listSeries.toArray(new Parcelable[]{}), flags);
+
         dest.writeString(this.indications);
     }
 

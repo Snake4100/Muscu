@@ -7,6 +7,7 @@ import android.database.Cursor;
 import com.muscu.benjamin.muscu.Entity.ExerciceTypeSeance;
 import com.muscu.benjamin.muscu.Entity.TypeExercice;
 import com.muscu.benjamin.muscu.Entity.TypeSeance;
+import com.muscu.benjamin.muscu.Entity.TypeSeanceSerie;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
  */
 public class ExerciceTypeSeanceDAO extends DAOBase {
     private TypeExerciceDAO daoTypeExerice;
+    private TypeSeanceSerieDAO daoTypeSeanceSerie;
 
     public static final String EXERCICETYPESEANCE_KEY = "id";
     public static final String EXERCICETYPESEANCE_NUMERO_EXERCICE = "numero_exercice";
@@ -39,6 +41,9 @@ public class ExerciceTypeSeanceDAO extends DAOBase {
 
         this.daoTypeExerice = new TypeExerciceDAO(pContext);
         this.daoTypeExerice.open();
+
+        this.daoTypeSeanceSerie = new TypeSeanceSerieDAO(pContext);
+        this.daoTypeSeanceSerie.open();
     }
 
     public List<ExerciceTypeSeance> getExerciceFromTypeSeance(TypeSeance typeSeance){
@@ -53,20 +58,27 @@ public class ExerciceTypeSeanceDAO extends DAOBase {
         //on parcours la liste
         while(c.moveToNext()){
             //on crée le type exercice
-            lesExercices.add(new ExerciceTypeSeance(c.getLong(0), c.getLong(1), this.daoTypeExerice.selectionner(c.getLong(2)), typeSeance, c.getString(4)));
+            ExerciceTypeSeance exercice = new ExerciceTypeSeance(c.getLong(0), c.getLong(1), this.daoTypeExerice.selectionner(c.getLong(2)), typeSeance, c.getString(4));
+            exercice.setListSeries(this.daoTypeSeanceSerie.getSerieFromExerciceTypeSeance(exercice));
+
+            lesExercices.add(exercice);
+
         }
 
         return lesExercices;
     }
 
-    public long create(ExerciceTypeSeance exercice){
+    public void create(ExerciceTypeSeance exercice){
         ContentValues value = new ContentValues();
         value.put(EXERCICETYPESEANCE_NUMERO_EXERCICE, exercice.getNumeroExercice());
         value.put(EXERCICETYPESEANCE_TYPE_EXERCICE, exercice.getTypeExercice().getId());
         value.put(EXERCICETYPESEANCE_TYPE_SEANCE, exercice.getTypeSeance().getId());
         value.put(EXERCICETYPESEANCE_INDICATIONS, exercice.getIndications());
 
-        return mDb.insert(EXERCICETYPESEANCE_TABLE_NAME, null, value);
+        exercice.setId(mDb.insert(EXERCICETYPESEANCE_TABLE_NAME, null, value));
+
+        this.persistSeries(exercice);
+
     }
 
     public void modifier(ExerciceTypeSeance exercice) {
@@ -77,11 +89,25 @@ public class ExerciceTypeSeanceDAO extends DAOBase {
         value.put(this.EXERCICETYPESEANCE_TYPE_EXERCICE, exercice.getTypeExercice().getId());
 
         mDb.update(this.EXERCICETYPESEANCE_TABLE_NAME, value, this.EXERCICETYPESEANCE_KEY  + " = ?", new String[] {String.valueOf(exercice.getId())});
+
+        this.persistSeries(exercice);
     }
 
     public void deleteList(ArrayList<ExerciceTypeSeance> listExerciceSupp) {
         for(ExerciceTypeSeance exerciceTypeSeance : listExerciceSupp){
             mDb.delete(this.EXERCICETYPESEANCE_TABLE_NAME, this.EXERCICETYPESEANCE_KEY + " = ?", new String[] {String.valueOf(exerciceTypeSeance.getId())});
+        }
+    }
+
+    private void persistSeries(ExerciceTypeSeance exercice){
+        for(TypeSeanceSerie serie : exercice.getListSeries()){
+            //si la série n'existait pas en base
+            if(serie.getId() == -1){
+                this.daoTypeSeanceSerie.create(serie);
+            }
+            else{
+                this.daoTypeSeanceSerie.modifier(serie);
+            }
         }
     }
 }
