@@ -24,6 +24,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(SerieDAO.SERIE_TABLE_CREATE);
         db.execSQL(TypeSeanceDAO.TYPESEANCE_TABLE_CREATE);
         db.execSQL(ExerciceTypeSeanceDAO.EXERCICETYPESEANCE_TABLE_CREATE);
+        db.execSQL(TypeSeanceSerieDAO.TYPESEANCESERIE_TABLE_CREATE);
 
         //on insére les exercices par défaults
         TypeExerciceDAO.defaultTypeExercice(db);
@@ -47,6 +48,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         db.execSQL(TypeSeanceDAO.TYPESEANCE_TABLE_CREATE);
         db.execSQL(ExerciceTypeSeanceDAO.EXERCICETYPESEANCE_TABLE_CREATE);
+        db.execSQL(TypeSeanceSerieDAO.TYPESEANCESERIE_TABLE_CREATE);
 
     }
 
