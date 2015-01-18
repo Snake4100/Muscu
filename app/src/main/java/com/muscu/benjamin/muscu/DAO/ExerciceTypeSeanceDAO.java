@@ -78,4 +78,10 @@ public class ExerciceTypeSeanceDAO extends DAOBase {
 
         mDb.update(this.EXERCICETYPESEANCE_TABLE_NAME, value, this.EXERCICETYPESEANCE_KEY  + " = ?", new String[] {String.valueOf(exercice.getId())});
     }
+
+    public void deleteList(ArrayList<ExerciceTypeSeance> listExerciceSupp) {
+        for(ExerciceTypeSeance exerciceTypeSeance : listExerciceSupp){
+            mDb.delete(this.EXERCICETYPESEANCE_TABLE_NAME, this.EXERCICETYPESEANCE_KEY + " = ?", new String[] {String.valueOf(exerciceTypeSeance.getId())});
+        }
+    }
 }

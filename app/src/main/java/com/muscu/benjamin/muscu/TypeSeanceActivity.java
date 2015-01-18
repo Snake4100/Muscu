@@ -34,6 +34,7 @@ public class TypeSeanceActivity extends Activity {
     private TypeSeanceDAO daoTypeSeance;
     private ExerciceTypeSeanceDAO daoExericeTypeSeance;
     private ArrayAdapter<ExerciceTypeSeance> exercicesAdapter;
+    private ArrayList<ExerciceTypeSeance> listExerciceSupp;
 
     final int RESULT_CREATION_EXERCICE = 1;
     final int RESULT_MODIFICATION_EXERCICE = 2;
@@ -51,7 +52,6 @@ public class TypeSeanceActivity extends Activity {
         this.daoExericeTypeSeance = new ExerciceTypeSeanceDAO(this.getBaseContext());
         this.daoExericeTypeSeance.open();
 
-
         //on récupére la séance type
         this.typeSeance = getIntent().getParcelableExtra("TypeSeance");
 
@@ -62,12 +62,12 @@ public class TypeSeanceActivity extends Activity {
             //on récupére ses exercices
             this.typeSeance.setListExercices(this.daoExericeTypeSeance.getExerciceFromTypeSeance(this.typeSeance));
 
-
             EditText editText_nom = (EditText) findViewById(R.id.editText_nomTypeSeance);
             editText_nom.setText(this.typeSeance.getNom());
             this.setTitle("Séance type");
-            boutonConfirmer.setText("Enregistrer");
 
+            //on initialise le bouton de confirmation
+            boutonConfirmer.setText("Enregistrer");
             boutonConfirmer.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -78,10 +78,15 @@ public class TypeSeanceActivity extends Activity {
                     //on crée en base
                     TypeSeanceActivity.this.daoTypeSeance.modifier(TypeSeanceActivity.this.typeSeance);
 
+                    TypeSeanceActivity.this.daoExericeTypeSeance.deleteList(TypeSeanceActivity.this.listExerciceSupp);
+
                     finish();
 
                 }
             });
+
+            //on initialise la liste des exercices  supprimer
+            this.listExerciceSupp = new ArrayList<ExerciceTypeSeance>();
 
         }
 
@@ -107,7 +112,9 @@ public class TypeSeanceActivity extends Activity {
                 }
             });
 
+
         }
+
 
         //on initialise l'adapter de la liste des exercices
         this.exercicesAdapter = new ArrayAdapter<ExerciceTypeSeance>(this, android.R.layout.simple_list_item_1, new ArrayList<ExerciceTypeSeance>());
@@ -122,6 +129,31 @@ public class TypeSeanceActivity extends Activity {
             }
         });
 
+        //on initilise l'action de click long sur un exercice
+        listExercice.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final ExerciceTypeSeance exercice = TypeSeanceActivity.this.exercicesAdapter.getItem(position);
+                new AlertDialog.Builder(TypeSeanceActivity.this)
+                        .setTitle("Suppression")
+                        .setMessage("Voulez-vous vraiment supprimer l'exercice "+exercice.toString()+"?")
+                        .setNegativeButton(android.R.string.no, null)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //on le supprrime de la liste
+                                TypeSeanceActivity.this.typeSeance.getListExercices().remove(exercice);
+                                //s'il a un id != -1 c'est qu'il est en base. donc on le met dans la liste des exercices à supprimer en base
+                                if(exercice.getId()!=-1)
+                                    TypeSeanceActivity.this.listExerciceSupp.add(exercice);
+
+                                TypeSeanceActivity.this.updateListExercicesTypeSeance();
+                            }
+                        }).create().show();
+
+                return true;
+            }
+        });
 
 
         Button bouton_ajouterExerciceTypeSeance = (Button) findViewById(R.id.button_ajoutExerciceTypeSeance);
@@ -175,7 +207,7 @@ public class TypeSeanceActivity extends Activity {
                 Log.e("debug",ex.getId()+" == "+exercice.getId());
                 if(ex.getId() == exercice.getId()){
                     Log.e("debug","true");
-                    listExerice.set(i,exercice);
+                    listExerice.set(i, exercice);
                 }
             }
         }
