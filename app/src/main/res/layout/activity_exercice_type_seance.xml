@@ -4,71 +4,82 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.muscu.benjamin.muscu.ExerciceTypeSeanceActivity">
+    tools:context="com.muscu.benjamin.muscu.ExerciceTypeSeanceActivity"
+    android:windowSoftInputMode="stateHidden" >
 
-    <TableRow
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tableRow">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/LinearLayout_TypeSeance"
+        android:weightSum="1"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tableRow">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Exercice :"
+                android:id="@+id/textView11"
+                android:layout_marginTop="9dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <Spinner
+                android:layout_width="271dp"
+                android:layout_height="37dp"
+                android:id="@+id/spinner_typeExercice" />
+        </TableRow>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Exercice :"
-            android:id="@+id/textView11"
+            android:text="Indications executions :"
+            android:id="@+id/textView12"
+            android:layout_below="@+id/tableRow"
             android:layout_marginTop="15dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
-        <Spinner
-            android:layout_width="271dp"
-            android:layout_height="37dp"
-            android:id="@+id/spinner_typeExercice" />
-    </TableRow>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:id="@+id/editText_indicationsTypeExercice"
+            android:layout_below="@+id/textView12" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Indications executions :"
-        android:id="@+id/textView12"
-        android:layout_below="@+id/tableRow"
-        android:layout_marginTop="15dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Séries :"
+            android:id="@+id/textView13"
+            android:layout_below="@+id/editText_indicationsTypeExercice"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/editText_indicationsTypeExercice"
-        android:layout_below="@+id/textView12" />
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="193dp"
+            android:id="@+id/listView_typeSeanceSeries"
+            android:layout_below="@+id/textView13"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_above="@+id/button_valierExerciceTypeSeance"
+            android:layout_weight="0.96" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Séries :"
-        android:id="@+id/textView13"
-        android:layout_below="@+id/editText_indicationsTypeExercice"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/listView_typeSeanceSeries"
-        android:layout_below="@+id/textView13"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/button_valierExerciceTypeSeance" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Valider"
-        android:id="@+id/button_valierExerciceTypeSeance"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="31dp" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Valider"
+            android:id="@+id/button_valierExerciceTypeSeance"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="0dp"/>
+    </LinearLayout>
 
 </RelativeLayout>
