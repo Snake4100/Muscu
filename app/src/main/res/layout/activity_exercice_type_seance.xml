@@ -70,8 +70,17 @@
             android:layout_below="@+id/textView13"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_above="@+id/button_valierExerciceTypeSeance"
+            android:layout_above="@+id/button_ajouterTypeSeanceSerie"
             android:layout_weight="0.96" />
+
+        <Button
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:text="+"
+            android:id="@+id/button_ajouterTypeSeanceSerie"
+            android:layout_above="@+id/button_valierExerciceTypeSeance"
+            android:layout_marginBottom="0dp"
+            android:layout_gravity="right" />
 
         <Button
             android:layout_width="wrap_content"

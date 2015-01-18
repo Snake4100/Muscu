@@ -1,7 +1,11 @@
 package com.muscu.benjamin.muscu;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,13 +15,19 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 
 import com.muscu.benjamin.muscu.DAO.TypeExerciceDAO;
+import com.muscu.benjamin.muscu.DAO.TypeSeanceSerieDAO;
 import com.muscu.benjamin.muscu.Entity.ExerciceTypeSeance;
 import com.muscu.benjamin.muscu.Entity.TypeExercice;
 import com.muscu.benjamin.muscu.Entity.TypeSeance;
+import com.muscu.benjamin.muscu.Entity.TypeSeanceSerie;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -25,8 +35,10 @@ public class ExerciceTypeSeanceActivity extends Activity {
     private Spinner spinnerTypeExercice;
     private ExerciceTypeSeance exercice;
     private ArrayAdapter<TypeExercice> typeExerciceArrayAdapter;
-    private TypeExerciceDAO daoTypeExercice;
     private EditText editTextIndications;
+    private ArrayAdapter<TypeSeanceSerie> typeSeanceSerieArrayAdapter;
+    private TypeExerciceDAO daoTypeExercice;
+    private TypeSeanceSerieDAO daoTypeSeanceSerie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +49,8 @@ public class ExerciceTypeSeanceActivity extends Activity {
         //init DAOs
         this.daoTypeExercice = new TypeExerciceDAO(this.getBaseContext());
         this.daoTypeExercice.open();
+        this.daoTypeSeanceSerie = new TypeSeanceSerieDAO(this.getBaseContext());
+        this.daoTypeSeanceSerie.open();
 
         //initialisation du spinner type exercice
         this.spinnerTypeExercice = (Spinner)findViewById(R.id.spinner_typeExercice);
@@ -85,6 +99,15 @@ public class ExerciceTypeSeanceActivity extends Activity {
 
         }
 
+        Button bouton_ajouterTypeSeanceSerie = (Button) findViewById(R.id.button_ajouterTypeSeanceSerie);
+        bouton_ajouterTypeSeanceSerie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExerciceTypeSeanceActivity.this.alertCreerSerie();
+            }
+        });
+
+
         Button bouton_validerExerciceTypeSeance = (Button) findViewById(R.id.button_valierExerciceTypeSeance);
         bouton_validerExerciceTypeSeance.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,13 +122,72 @@ public class ExerciceTypeSeanceActivity extends Activity {
             }
         });
 
+        //on initialise la listview des séries
+        ListView listViewSeries = (ListView)findViewById(R.id.listView_typeSeanceSeries);
+        this.typeSeanceSerieArrayAdapter = new ArrayAdapter<TypeSeanceSerie>(this, android.R.layout.simple_spinner_item, new ArrayList<TypeSeanceSerie>());
+        listViewSeries.setAdapter(this.typeSeanceSerieArrayAdapter);
 
+        //on met à jours la liste des series
+        updateListSeries();
+    }
 
+    private void updateListSeries()
+    {
+        this.typeSeanceSerieArrayAdapter.clear();
+        this.typeSeanceSerieArrayAdapter.addAll(this.exercice.getListSeries());
     }
 
     private void getValues(){
         this.exercice.setIndications(this.editTextIndications.getText().toString());
         Log.e("debug","Indications envoyés : "+this.exercice.getIndications());
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void alertCreerSerie(){
+        int numeroSerie = this.exercice.getListSeries().size()+1;
+
+        LinearLayout layout = (LinearLayout) LinearLayout.inflate(this, R.layout.type_seance_serie, null);
+
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(ExerciceTypeSeanceActivity.this);
+        builderSingle.setIcon(R.drawable.ic_launcher);
+        builderSingle.setTitle("Série "+numeroSerie);
+
+
+        //on ajoute le layout resultat_serie à l'alert
+        try{
+            builderSingle.setView(R.layout.resultat_serie);
+
+        }catch (NoSuchMethodError e) {
+            Log.e("Debug", "Older SDK, using old Builder");
+            builderSingle.setView(layout);
+        }
+
+        //on crée la série
+        final TypeSeanceSerie serie = new TypeSeanceSerie(numeroSerie, this.exercice);
+
+        //on met une valeur par default le poid et le nombre de répétition
+        NumberPicker numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_serieNbRepetitions);
+        numberPicker.setOnValueChangedListener( new NumberPicker.OnValueChangeListener() {
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                serie.setNbRepetition(picker.getValue());
+            }
+        });
+        numberPicker.setMinValue(0);
+        numberPicker.setMaxValue(10000);
+        numberPicker.setValue(0);
+
+        builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //on ajoute la série à la liste
+                ExerciceTypeSeanceActivity.this.exercice.addSerie(serie);
+                ExerciceTypeSeanceActivity.this.updateListSeries();
+
+                dialog.dismiss();
+            }
+        });
+
+        builderSingle.show();
     }
 
     @Override

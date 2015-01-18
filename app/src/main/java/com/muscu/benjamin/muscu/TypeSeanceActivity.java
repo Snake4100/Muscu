@@ -193,21 +193,23 @@ public class TypeSeanceActivity extends Activity {
         }
 
         else if(requestCode == RESULT_MODIFICATION_EXERCICE){
-            Log.e("debug", "Result modif exercice");
-            //on récupére l'exercice
-            ExerciceTypeSeance exercice = (ExerciceTypeSeance)data.getParcelableExtra("Exercice");
+            if(resultCode == RESULT_OK) {
+                Log.e("debug", "Result modif exercice");
+                //on récupére l'exercice
+                ExerciceTypeSeance exercice = (ExerciceTypeSeance) data.getParcelableExtra("Exercice");
 
-            //on récupére la liste des exercices
-            List<ExerciceTypeSeance> listExerice = this.typeSeance.getListExercices();
-            //on remplace l'exercice par le nouveau
+                //on récupére la liste des exercices
+                List<ExerciceTypeSeance> listExerice = this.typeSeance.getListExercices();
+                //on remplace l'exercice par le nouveau
 
-            //on recherche et on rempalce l'exercice
-            for(int i=0; i<listExerice.size(); i++){
-                ExerciceTypeSeance ex = listExerice.get(i);
-                Log.e("debug",ex.getId()+" == "+exercice.getId());
-                if(ex.getId() == exercice.getId()){
-                    Log.e("debug","true");
-                    listExerice.set(i, exercice);
+                //on recherche et on rempalce l'exercice
+                for (int i = 0; i < listExerice.size(); i++) {
+                    ExerciceTypeSeance ex = listExerice.get(i);
+                    Log.e("debug", ex.getId() + " == " + exercice.getId());
+                    if (ex.getId() == exercice.getId()) {
+                        Log.e("debug", "true");
+                        listExerice.set(i, exercice);
+                    }
                 }
             }
         }

@@ -16,6 +16,14 @@ public class TypeSeanceSerie {
         this.exercice = exercice;
     }
 
+    //constructeur minimal
+    public TypeSeanceSerie(long numeroSerie, ExerciceTypeSeance exercice){
+        this.numeroSerie = numeroSerie;
+        this.id = -1;
+        this.nbRepetition = 0;
+        this.exercice = exercice;
+    }
+
     public long getId() {
         return id;
     }
@@ -46,5 +54,9 @@ public class TypeSeanceSerie {
 
     public void setExercice(ExerciceTypeSeance exercice) {
         this.exercice = exercice;
+    }
+
+    public String toString(){
+        return this.nbRepetition+" répétitions";
     }
 }

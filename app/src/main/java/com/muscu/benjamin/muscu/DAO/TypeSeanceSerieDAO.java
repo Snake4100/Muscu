@@ -16,9 +16,9 @@ public class TypeSeanceSerieDAO extends DAOBase {
     public static final String TYPESEANCESERIE_TABLE_CREATE =
             "CREATE TABLE IF NOT EXISTS " + TYPESEANCESERIE_TABLE_NAME + " (" +
                     TYPESEANCESERIE_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    TYPESEANCESERIE_NUMEROSERIE + " INTEGER " +
-                    TYPESEANCESERIE_NBREPETITIONS + " INTEGER " +
-                    TYPESEANCESERIE_EXERCICE + " INTEGER " +
+                    TYPESEANCESERIE_NUMEROSERIE + " INTEGER, " +
+                    TYPESEANCESERIE_NBREPETITIONS + " INTEGER, " +
+                    TYPESEANCESERIE_EXERCICE + " INTEGER, " +
                     "FOREIGN KEY("+TYPESEANCESERIE_EXERCICE+") REFERENCES "+ExerciceTypeSeanceDAO.EXERCICETYPESEANCE_TABLE_NAME+"("+ExerciceTypeSeanceDAO.EXERCICETYPESEANCE_KEY+") ON DELETE CASCADE " +
                     ");";
 
