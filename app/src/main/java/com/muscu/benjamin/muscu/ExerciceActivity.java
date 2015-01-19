@@ -25,6 +25,9 @@ import com.muscu.benjamin.muscu.Entity.Exercice;
 import com.muscu.benjamin.muscu.Entity.Seance;
 import com.muscu.benjamin.muscu.Entity.Serie;
 import com.muscu.benjamin.muscu.Entity.TypeExercice;
+import com.muscu.benjamin.muscu.Entity.TypeSeanceSerie;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -331,6 +334,68 @@ public class ExerciceActivity extends Activity {
         return 0;
     }
 
+    private void alertInfos(){
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(
+                ExerciceActivity.this);
+
+        LinearLayout layout = (LinearLayout) LinearLayout.inflate(this, R.layout.infos_exercice, null);
+
+        try{
+            builderSingle.setView(R.layout.infos_exercice);
+
+        }catch (NoSuchMethodError e) {
+            Log.e("Debug", "Older SDK, using old Builder");
+            builderSingle.setView(layout);
+        }
+
+        builderSingle.setIcon(R.drawable.ic_launcher);
+        builderSingle.setTitle("Infos.");
+
+        TextView textView_series = (TextView)layout.findViewById(R.id.textView_series);
+        ListView listView_series = (ListView)layout.findViewById(R.id.listView_typeSeanceSeries);
+
+        //si l'exercice est associé à une instance de TypeSeanceExercice
+        if(this.sonExercice. != null)
+        {
+            final ArrayAdapter<TypeSeanceSerie> arrayAdapter = new ArrayAdapter<TypeSeanceSerie>(
+                    ExerciceActivity.this,
+                    android.R.layout.select_dialog_singlechoice);
+            arrayAdapter.addAll(this.sonExercice.);
+        }
+
+        else{
+            textView_series.setVisibility(View.INVISIBLE);
+            listView_series.setVisibility(View.INVISIBLE);
+        }
+
+
+        TextView text = new TextView(this);
+        text.setText("Cliquez sur annulez si vous le voulez pas choisir de séance type");
+
+        builderSingle.setView(text);
+
+        builderSingle.setNegativeButton("cancel",
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        builderSingle.setAdapter(arrayAdapter,
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SeanceActivity.this.laSeance.setTypeSeance(arrayAdapter.getItem(which));
+                        SeanceActivity.this.daoSeance.mofidier(SeanceActivity.this.laSeance);
+                        SeanceActivity.this.createExercices();
+                    }
+                });
+        builderSingle.show();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -346,7 +411,8 @@ public class ExerciceActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_infos) {
+            this.alertInfos();
             return true;
         }
 
