@@ -36,6 +36,7 @@ public class ExerciceTypeSeanceActivity extends Activity {
     private ExerciceTypeSeance exercice;
     private ArrayAdapter<TypeExercice> typeExerciceArrayAdapter;
     private EditText editTextIndications;
+    private EditText editTextTempsRepos;
     private ArrayAdapter<TypeSeanceSerie> typeSeanceSerieArrayAdapter;
     private TypeExerciceDAO daoTypeExercice;
     private TypeSeanceSerieDAO daoTypeSeanceSerie;
@@ -71,6 +72,9 @@ public class ExerciceTypeSeanceActivity extends Activity {
         //on récupére l'edit text qui contiendra les indicaitons pour l'exercice
         this.editTextIndications = (EditText)findViewById(R.id.editText_indicationsTypeExercice);
 
+        //on récupére l'édit text pour le temps de repos
+        this.editTextTempsRepos =(EditText)findViewById(R.id.editText_tempsReposExerciceTypeSeance);
+
         //on essaye de récupérer l'exercice si on en a passé un
         this.exercice = getIntent().getParcelableExtra("Exercice");
 
@@ -93,6 +97,7 @@ public class ExerciceTypeSeanceActivity extends Activity {
             }
             //on initialise l'edit text
             this.editTextIndications.setText(this.exercice.getIndications());
+            this.editTextTempsRepos.setText(String.valueOf(this.exercice.getTempsRepos()));
 
         }
 
@@ -136,6 +141,7 @@ public class ExerciceTypeSeanceActivity extends Activity {
 
     private void getValues(){
         this.exercice.setIndications(this.editTextIndications.getText().toString());
+        this.exercice.setTempsRepos(Integer.valueOf(this.editTextTempsRepos.getText().toString()));
         Log.e("debug","Indications envoyés : "+this.exercice.getIndications());
     }
 
