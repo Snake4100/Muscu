@@ -82,4 +82,19 @@ public class TypeSeanceDAO extends DAOBase {
     public void supprimer(long id) {
         mDb.delete(this.TYPESEANCE_TABLE_NAME, this.TYPESEANCE_KEY + " = ?", new String[] {String.valueOf(id)});
     }
+
+    public TypeSeance selectionner(Long id){
+        Cursor c = mDb.rawQuery("select "+this.TYPESEANCE_KEY+","+this.TYPESEANCE_NOM+" " +
+                "from "+this.TYPESEANCE_TABLE_NAME+" "+
+                "where "+this.TYPESEANCE_KEY+" = ?",new String[]{String.valueOf(id)});
+
+        //si on a un résultat
+        if(c.moveToFirst())
+        {
+
+            return new TypeSeance(c.getLong(0), c.getString(1));
+        }
+
+        return null;
+    }
 }

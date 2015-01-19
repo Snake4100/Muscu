@@ -1,9 +1,11 @@
 package com.muscu.benjamin.muscu;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -12,16 +14,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.muscu.benjamin.muscu.DAO.ExerciceDAO;
 import com.muscu.benjamin.muscu.DAO.SeanceDAO;
 import com.muscu.benjamin.muscu.DAO.TypeExerciceDAO;
+import com.muscu.benjamin.muscu.DAO.TypeSeanceDAO;
 import com.muscu.benjamin.muscu.Entity.Exercice;
 import com.muscu.benjamin.muscu.Entity.Seance;
 import com.muscu.benjamin.muscu.Entity.Serie;
 import com.muscu.benjamin.muscu.Entity.TypeExercice;
+import com.muscu.benjamin.muscu.Entity.TypeSeance;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,6 +39,7 @@ public class SeanceActivity extends Activity {
     private TypeExerciceDAO daoTypeExercice;
     private ExerciceDAO daoExercice;
     private SeanceDAO daoSeance;
+    private TypeSeanceDAO daoTypeSeance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +53,9 @@ public class SeanceActivity extends Activity {
         this.daoExercice.open();
         this.daoSeance = new SeanceDAO(this.getBaseContext());
         this.daoSeance.open();
-
         this.laSeance = getIntent().getParcelableExtra("seance");
+        this.daoTypeSeance = new TypeSeanceDAO(this.getBaseContext());
+        this.daoTypeSeance.open();
 
         //on récupére les boutons
         Button boutonNouvelExercice = (Button) findViewById(R.id.button_nouvelExercice);
@@ -72,6 +80,7 @@ public class SeanceActivity extends Activity {
         //sinon, c'est qu'on la crée
         else {
             this.laSeance = this.daoSeance.create();
+            this.alertConfigurationSeance();
         }
 
         this.setTitle(this.laSeance.getNom());
@@ -185,6 +194,43 @@ public class SeanceActivity extends Activity {
                         //startActivityForResult(intent,NEW_EXERCICE);
                         startActivity(intent);
                         dialog.dismiss();
+                    }
+                });
+        builderSingle.show();
+    }
+
+    private void alertConfigurationSeance()
+    {
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(
+                SeanceActivity.this);
+        builderSingle.setIcon(R.drawable.ic_launcher);
+        builderSingle.setTitle("Choisissez un Type de séance.");
+        final ArrayAdapter<TypeSeance> arrayAdapter = new ArrayAdapter<TypeSeance>(
+                SeanceActivity.this,
+                android.R.layout.select_dialog_singlechoice);
+        arrayAdapter.addAll(this.daoTypeSeance.getAll());
+
+        TextView text = new TextView(this);
+        text.setText("Cliquez sur annulez si vous le voulez pas choisir de séance type");
+
+        builderSingle.setView(text);
+
+        builderSingle.setNegativeButton("cancel",
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        builderSingle.setAdapter(arrayAdapter,
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SeanceActivity.this.laSeance.setTypeSeance(arrayAdapter.getItem(which));
+                        SeanceActivity.this.daoSeance.mofidier(SeanceActivity.this.laSeance);
                     }
                 });
         builderSingle.show();

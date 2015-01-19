@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.muscu.benjamin.muscu.Entity.Seance;
 import com.muscu.benjamin.muscu.Entity.TypeSeance;
 
 /**
@@ -49,6 +50,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(TypeSeanceDAO.TYPESEANCE_TABLE_CREATE);
         db.execSQL(ExerciceTypeSeanceDAO.EXERCICETYPESEANCE_TABLE_CREATE);
         db.execSQL(TypeSeanceSerieDAO.TYPESEANCESERIE_TABLE_CREATE);
+
+
+        //db.execSQL("ALTER TABLE "+ SeanceDAO.SEANCE_TABLE_NAME+" ADD COLUMN "+SeanceDAO.SEANCE_TYPESEANCE +" INTEGER REFERENCES "+TypeSeanceDAO.TYPESEANCE_TABLE_NAME+"("+TypeSeanceDAO.TYPESEANCE_KEY+");");
+
+
 
     }
 

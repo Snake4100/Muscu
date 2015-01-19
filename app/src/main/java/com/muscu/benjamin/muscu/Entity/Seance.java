@@ -23,13 +23,15 @@ public class Seance implements Parcelable {
     private String nom;
     private boolean close;
     private List<Exercice> exercices = new ArrayList<Exercice>();
+    private TypeSeance typeSeance;
 
     //constructeur complet
-    public Seance(long id, Date date, String nom, boolean close){
+    public Seance(long id, Date date, String nom, boolean close, TypeSeance typeSeance){
         this.id = id;
         this.date = date;
         this.nom = nom;
         this.close = close;
+        this.typeSeance = typeSeance;
     }
 
     //Constructeur date
@@ -102,6 +104,14 @@ public class Seance implements Parcelable {
 
     public void addExercice(Exercice exercice){
         this.exercices.add(exercice);
+    }
+
+    public TypeSeance getTypeSeance() {
+        return typeSeance;
+    }
+
+    public void setTypeSeance(TypeSeance typeSeance) {
+        this.typeSeance = typeSeance;
     }
 
     public String toString()
