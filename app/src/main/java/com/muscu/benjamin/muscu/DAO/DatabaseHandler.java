@@ -53,6 +53,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 
         //db.execSQL("ALTER TABLE "+ SeanceDAO.SEANCE_TABLE_NAME+" ADD COLUMN "+SeanceDAO.SEANCE_TYPESEANCE +" INTEGER REFERENCES "+TypeSeanceDAO.TYPESEANCE_TABLE_NAME+"("+TypeSeanceDAO.TYPESEANCE_KEY+");");
+        /*db.execSQL("ALTER TABLE "+ ExerciceTypeSeanceDAO.EXERCICETYPESEANCE_TABLE_NAME+" " +
+                "ADD COLUMN "+ExerciceTypeSeanceDAO.EXERCICETYPESEANCE_TEMPSREPOS +" INTEGER;");*/
 
 
 

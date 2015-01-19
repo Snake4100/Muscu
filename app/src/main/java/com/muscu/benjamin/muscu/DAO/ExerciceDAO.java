@@ -58,13 +58,13 @@ public class ExerciceDAO extends DAOBase {
         return lesExercices;
     }
 
-    public Long create(Exercice exercice){
+    public void create(Exercice exercice){
         ContentValues value = new ContentValues();
         value.put(ExerciceDAO.EXERCICE_SEANCE, exercice.getSeance().getId());
         value.put(ExerciceDAO.EXERCICE_TYPE_EXERCICE , exercice.getTypeExercice().getId());
         value.put(ExerciceDAO.EXERCICE_TEMPSREPOS, exercice.getTempsRepos());
 
-        return mDb.insert(ExerciceDAO.EXERCICE_TABLE_NAME, null, value);
+        exercice.setId(mDb.insert(ExerciceDAO.EXERCICE_TABLE_NAME, null, value));
     }
 
     public void supprimer(long id) {

@@ -17,15 +17,17 @@ public class ExerciceTypeSeance implements Parcelable {
     private TypeSeance typeSeance;
     private List<TypeSeanceSerie> listSeries;
     private String indications;
+    private int tempsRepos;
 
     //constructeur complet
-    public ExerciceTypeSeance(long id, long numeroExercice, TypeExercice typeExercice, TypeSeance typeSeance, String indications) {
+    public ExerciceTypeSeance(long id, long numeroExercice, TypeExercice typeExercice, TypeSeance typeSeance, String indications, int tempsRepos) {
         this.id = id;
         this.numeroExercice = numeroExercice;
         this.typeExercice = typeExercice;
         this.typeSeance = typeSeance;
         this.indications = indications;
         this.listSeries = new ArrayList<TypeSeanceSerie>();
+        this.tempsRepos = tempsRepos;
     }
 
     //constructeur numero exerice
@@ -36,6 +38,7 @@ public class ExerciceTypeSeance implements Parcelable {
         this.typeSeance = null;
         this.indications = "";
         this.listSeries = new ArrayList<TypeSeanceSerie>();
+        this.tempsRepos = 0;
     }
 
 
@@ -53,6 +56,7 @@ public class ExerciceTypeSeance implements Parcelable {
         }
 
         this.indications = source.readString();
+        this.tempsRepos = source.readInt();
     }
 
     public long getId() {
@@ -108,6 +112,14 @@ public class ExerciceTypeSeance implements Parcelable {
         this.indications = indications;
     }
 
+    public int getTempsRepos() {
+        return tempsRepos;
+    }
+
+    public void setTempsRepos(int tempsRepos) {
+        this.tempsRepos = tempsRepos;
+    }
+
     public String toString(){
         return this.typeExercice.toString();
     }
@@ -126,6 +138,7 @@ public class ExerciceTypeSeance implements Parcelable {
         dest.writeParcelableArray(this.listSeries.toArray(new Parcelable[]{}), flags);
 
         dest.writeString(this.indications);
+        dest.writeInt(this.tempsRepos);
     }
 
     public static final Parcelable.Creator<ExerciceTypeSeance> CREATOR = new Parcelable.Creator<ExerciceTypeSeance>() {

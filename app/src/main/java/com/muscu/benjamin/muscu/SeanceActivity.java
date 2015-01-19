@@ -20,10 +20,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.muscu.benjamin.muscu.DAO.ExerciceDAO;
+import com.muscu.benjamin.muscu.DAO.ExerciceTypeSeanceDAO;
 import com.muscu.benjamin.muscu.DAO.SeanceDAO;
 import com.muscu.benjamin.muscu.DAO.TypeExerciceDAO;
 import com.muscu.benjamin.muscu.DAO.TypeSeanceDAO;
 import com.muscu.benjamin.muscu.Entity.Exercice;
+import com.muscu.benjamin.muscu.Entity.ExerciceTypeSeance;
 import com.muscu.benjamin.muscu.Entity.Seance;
 import com.muscu.benjamin.muscu.Entity.Serie;
 import com.muscu.benjamin.muscu.Entity.TypeExercice;
@@ -38,6 +40,7 @@ public class SeanceActivity extends Activity {
     private ArrayAdapter<Exercice> exercicesAdapter;
     private TypeExerciceDAO daoTypeExercice;
     private ExerciceDAO daoExercice;
+    private ExerciceTypeSeanceDAO daoExerciceTypeSeance;
     private SeanceDAO daoSeance;
     private TypeSeanceDAO daoTypeSeance;
 
@@ -56,6 +59,8 @@ public class SeanceActivity extends Activity {
         this.laSeance = getIntent().getParcelableExtra("seance");
         this.daoTypeSeance = new TypeSeanceDAO(this.getBaseContext());
         this.daoTypeSeance.open();
+        this.daoExerciceTypeSeance = new ExerciceTypeSeanceDAO(this.getBaseContext());
+        this.daoExerciceTypeSeance.open();
 
         //on récupére les boutons
         Button boutonNouvelExercice = (Button) findViewById(R.id.button_nouvelExercice);
@@ -231,9 +236,23 @@ public class SeanceActivity extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         SeanceActivity.this.laSeance.setTypeSeance(arrayAdapter.getItem(which));
                         SeanceActivity.this.daoSeance.mofidier(SeanceActivity.this.laSeance);
+                        SeanceActivity.this.createExercices();
                     }
                 });
         builderSingle.show();
+    }
+
+    private void createExercices(){
+        //on récupére les exercices de la séance
+        TypeSeance typeSeance = this.laSeance.getTypeSeance();
+        typeSeance.setListExercices(this.daoExerciceTypeSeance.getExerciceFromTypeSeance(typeSeance));
+
+        for(ExerciceTypeSeance exericeTypeSeance : typeSeance.getListExercices()){
+            Exercice exercice = new Exercice(this.laSeance,exericeTypeSeance.getTypeExercice(),exericeTypeSeance.getTempsRepos());
+            this.daoExercice.create(exercice);
+        }
+
+        this.miseAjoursListeExercice();
     }
 
     @Override

@@ -24,6 +24,7 @@ public class ExerciceTypeSeanceDAO extends DAOBase {
     public static final String EXERCICETYPESEANCE_TYPE_EXERCICE = "type_exercice";
     public static final String EXERCICETYPESEANCE_TYPE_SEANCE = "type_seance";
     public static final String EXERCICETYPESEANCE_INDICATIONS = "indications";
+    public static final String EXERCICETYPESEANCE_TEMPSREPOS = "temps_repos";
 
     public static final String EXERCICETYPESEANCE_TABLE_NAME = "ExerciceTypeSeance";
     public static final String EXERCICETYPESEANCE_TABLE_CREATE =
@@ -33,6 +34,7 @@ public class ExerciceTypeSeanceDAO extends DAOBase {
                     EXERCICETYPESEANCE_TYPE_EXERCICE + " INTEGER, " +
                     EXERCICETYPESEANCE_TYPE_SEANCE + " INTEGER, " +
                     EXERCICETYPESEANCE_INDICATIONS + " TEXT, " +
+                    EXERCICETYPESEANCE_TEMPSREPOS + " INTEGER, " +
                     "FOREIGN KEY("+EXERCICETYPESEANCE_TYPE_EXERCICE+") REFERENCES "+TypeExerciceDAO.TYPE_EXERCICE_TABLE_NAME+"("+TypeExerciceDAO.TYPE_EXERCICE_KEY+") ON DELETE CASCADE, " +
                     "FOREIGN KEY("+EXERCICETYPESEANCE_TYPE_SEANCE+") REFERENCES "+TypeSeanceDAO.TYPESEANCE_TABLE_NAME+"("+TypeSeanceDAO.TYPESEANCE_KEY+") ON DELETE CASCADE);";
 
@@ -49,7 +51,7 @@ public class ExerciceTypeSeanceDAO extends DAOBase {
     public List<ExerciceTypeSeance> getExerciceFromTypeSeance(TypeSeance typeSeance){
         List<ExerciceTypeSeance> lesExercices = new ArrayList<ExerciceTypeSeance>();
 
-        Cursor c = mDb.rawQuery("select "+EXERCICETYPESEANCE_KEY+", "+EXERCICETYPESEANCE_NUMERO_EXERCICE+", "+EXERCICETYPESEANCE_TYPE_EXERCICE+", "+EXERCICETYPESEANCE_TYPE_SEANCE+", "+EXERCICETYPESEANCE_INDICATIONS+" "+
+        Cursor c = mDb.rawQuery("select "+EXERCICETYPESEANCE_KEY+", "+EXERCICETYPESEANCE_NUMERO_EXERCICE+", "+EXERCICETYPESEANCE_TYPE_EXERCICE+", "+EXERCICETYPESEANCE_TYPE_SEANCE+", "+EXERCICETYPESEANCE_INDICATIONS+", "+EXERCICETYPESEANCE_TEMPSREPOS+" "+
                 "from "+EXERCICETYPESEANCE_TABLE_NAME+" " +
                 "where "+EXERCICETYPESEANCE_TYPE_SEANCE+" = ? " +
                 "order by "+EXERCICETYPESEANCE_NUMERO_EXERCICE,new String[]{String.valueOf(typeSeance.getId())});
@@ -58,7 +60,7 @@ public class ExerciceTypeSeanceDAO extends DAOBase {
         //on parcours la liste
         while(c.moveToNext()){
             //on crée le type exercice
-            ExerciceTypeSeance exercice = new ExerciceTypeSeance(c.getLong(0), c.getLong(1), this.daoTypeExerice.selectionner(c.getLong(2)), typeSeance, c.getString(4));
+            ExerciceTypeSeance exercice = new ExerciceTypeSeance(c.getLong(0), c.getLong(1), this.daoTypeExerice.selectionner(c.getLong(2)), typeSeance, c.getString(4), c.getInt(5));
             exercice.setListSeries(this.daoTypeSeanceSerie.getSerieFromExerciceTypeSeance(exercice));
 
             lesExercices.add(exercice);
@@ -74,6 +76,7 @@ public class ExerciceTypeSeanceDAO extends DAOBase {
         value.put(EXERCICETYPESEANCE_TYPE_EXERCICE, exercice.getTypeExercice().getId());
         value.put(EXERCICETYPESEANCE_TYPE_SEANCE, exercice.getTypeSeance().getId());
         value.put(EXERCICETYPESEANCE_INDICATIONS, exercice.getIndications());
+        value.put(EXERCICETYPESEANCE_TEMPSREPOS, exercice.getTempsRepos());
 
         exercice.setId(mDb.insert(EXERCICETYPESEANCE_TABLE_NAME, null, value));
 
@@ -87,6 +90,7 @@ public class ExerciceTypeSeanceDAO extends DAOBase {
         value.put(this.EXERCICETYPESEANCE_INDICATIONS, exercice.getIndications());
         value.put(this.EXERCICETYPESEANCE_TYPE_SEANCE, exercice.getTypeSeance().getId());
         value.put(this.EXERCICETYPESEANCE_TYPE_EXERCICE, exercice.getTypeExercice().getId());
+        value.put(EXERCICETYPESEANCE_TEMPSREPOS, exercice.getTempsRepos());
 
         mDb.update(this.EXERCICETYPESEANCE_TABLE_NAME, value, this.EXERCICETYPESEANCE_KEY  + " = ?", new String[] {String.valueOf(exercice.getId())});
 
