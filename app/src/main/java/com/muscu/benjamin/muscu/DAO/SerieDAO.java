@@ -34,14 +34,14 @@ public class SerieDAO extends DAOBase {
         super(pContext);
     }
 
-    public long create(Serie serie){
+    public void create(Serie serie){
         ContentValues value = new ContentValues();
         value.put(SerieDAO.SERIE_POIDS, serie.getPoids());
         value.put(SerieDAO.SERIE_NB_REPETITIONS, serie.getRepetitions());
         value.put(SerieDAO.SERIE_TEMPS_TOTAL, serie.getTempsTotal());
         value.put(SerieDAO.SERIE_EXERCICE, serie.getExercice().getId());
 
-        return mDb.insert(SerieDAO.SERIE_TABLE_NAME, null, value);
+        serie.setId(mDb.insert(SerieDAO.SERIE_TABLE_NAME, null, value));
     }
 
     public List<Serie> getSeriesExercice(Exercice exercice){
