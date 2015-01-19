@@ -248,7 +248,7 @@ public class SeanceActivity extends Activity {
         typeSeance.setListExercices(this.daoExerciceTypeSeance.getExerciceFromTypeSeance(typeSeance));
 
         for(ExerciceTypeSeance exericeTypeSeance : typeSeance.getListExercices()){
-            Exercice exercice = new Exercice(this.laSeance,exericeTypeSeance.getTypeExercice(),exericeTypeSeance.getTempsRepos());
+            Exercice exercice = new Exercice(this.laSeance,exericeTypeSeance.getTypeExercice(),exericeTypeSeance.getTempsRepos(),exericeTypeSeance);
             this.daoExercice.create(exercice);
         }
 

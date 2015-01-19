@@ -17,11 +17,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.muscu.benjamin.muscu.DAO.ExerciceDAO;
 import com.muscu.benjamin.muscu.DAO.SerieDAO;
 import com.muscu.benjamin.muscu.Entity.Exercice;
+import com.muscu.benjamin.muscu.Entity.ExerciceTypeSeance;
 import com.muscu.benjamin.muscu.Entity.Seance;
 import com.muscu.benjamin.muscu.Entity.Serie;
 import com.muscu.benjamin.muscu.Entity.TypeExercice;
@@ -62,7 +64,7 @@ public class ExerciceActivity extends Activity {
         //si typeExercice et laSeanceEnCours est différent de null, c'est qu'on crée un exercice
         if (typeExercice != null && laSeanceEnCours != null) {
             //on créer l'exercice
-            this.sonExercice = new Exercice(laSeanceEnCours, typeExercice, this.defaultTempsRepos());
+            this.sonExercice = new Exercice(laSeanceEnCours, typeExercice, this.defaultTempsRepos(), null);
             this.daoExercice.create(this.sonExercice);
 
             //on affiche l'alert pour configurer les temps de repos et le nombre de séries souhaité
@@ -334,11 +336,12 @@ public class ExerciceActivity extends Activity {
         return 0;
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void alertInfos(){
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(
                 ExerciceActivity.this);
 
-        LinearLayout layout = (LinearLayout) LinearLayout.inflate(this, R.layout.infos_exercice, null);
+        ScrollView layout = (ScrollView) LinearLayout.inflate(this, R.layout.infos_exercice, null);
 
         try{
             builderSingle.setView(R.layout.infos_exercice);
@@ -354,27 +357,31 @@ public class ExerciceActivity extends Activity {
         TextView textView_series = (TextView)layout.findViewById(R.id.textView_series);
         ListView listView_series = (ListView)layout.findViewById(R.id.listView_typeSeanceSeries);
 
-        //si l'exercice est associé à une instance de TypeSeanceExercice
-        if(this.sonExercice. != null)
+        //si l'exercice est associé à une instance de Exercice Type Seance
+        if(this.sonExercice.getExerciceTypeSeance() != null)
         {
+            ExerciceTypeSeance exercice = null;
+
             final ArrayAdapter<TypeSeanceSerie> arrayAdapter = new ArrayAdapter<TypeSeanceSerie>(
                     ExerciceActivity.this,
-                    android.R.layout.select_dialog_singlechoice);
-            arrayAdapter.addAll(this.sonExercice.);
-        }
+                    android.R.layout.simple_list_item_1);
+            arrayAdapter.addAll(this.sonExercice.getExerciceTypeSeance().getListSeries());
 
+            builderSingle.setAdapter(arrayAdapter,
+                    new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+        }
+        //sinon on masque les séries à effectuer
         else{
             textView_series.setVisibility(View.INVISIBLE);
             listView_series.setVisibility(View.INVISIBLE);
         }
 
-
-        TextView text = new TextView(this);
-        text.setText("Cliquez sur annulez si vous le voulez pas choisir de séance type");
-
-        builderSingle.setView(text);
-
-        builderSingle.setNegativeButton("cancel",
+        builderSingle.setPositiveButton("OK",
                 new DialogInterface.OnClickListener() {
 
                     @Override
@@ -383,16 +390,7 @@ public class ExerciceActivity extends Activity {
                     }
                 });
 
-        builderSingle.setAdapter(arrayAdapter,
-                new DialogInterface.OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        SeanceActivity.this.laSeance.setTypeSeance(arrayAdapter.getItem(which));
-                        SeanceActivity.this.daoSeance.mofidier(SeanceActivity.this.laSeance);
-                        SeanceActivity.this.createExercices();
-                    }
-                });
         builderSingle.show();
     }
 

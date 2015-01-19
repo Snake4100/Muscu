@@ -3,8 +3,10 @@ package com.muscu.benjamin.muscu.DAO;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import com.muscu.benjamin.muscu.Entity.ExerciceTypeSeance;
+import com.muscu.benjamin.muscu.Entity.Seance;
 import com.muscu.benjamin.muscu.Entity.TypeExercice;
 import com.muscu.benjamin.muscu.Entity.TypeSeance;
 import com.muscu.benjamin.muscu.Entity.TypeSeanceSerie;
@@ -113,5 +115,29 @@ public class ExerciceTypeSeanceDAO extends DAOBase {
                 this.daoTypeSeanceSerie.modifier(serie);
             }
         }
+    }
+
+    public ExerciceTypeSeance selection(TypeSeance typeSeance, TypeExercice typeExercice) {
+
+        if(typeSeance != null && typeExercice != null)
+        {
+            Cursor c = mDb.rawQuery("select "+EXERCICETYPESEANCE_KEY+", "+EXERCICETYPESEANCE_NUMERO_EXERCICE+", "+EXERCICETYPESEANCE_TYPE_EXERCICE+", "+EXERCICETYPESEANCE_TYPE_SEANCE+", "+EXERCICETYPESEANCE_INDICATIONS+", "+EXERCICETYPESEANCE_TEMPSREPOS+" "+
+                    "from "+EXERCICETYPESEANCE_TABLE_NAME+" " +
+                    "where "+EXERCICETYPESEANCE_TYPE_SEANCE+" = ? " +
+                    "and "+EXERCICETYPESEANCE_TYPE_EXERCICE+" = ? ",new String[]{String.valueOf(typeSeance.getId()),String.valueOf(typeExercice.getId())});
+
+
+            //s'il y a un résultat
+            if(c.moveToNext()){
+                //on crée le type exercice
+                ExerciceTypeSeance exercice = new ExerciceTypeSeance(c.getLong(0), c.getLong(1), typeExercice, typeSeance, c.getString(4), c.getInt(5));
+                exercice.setListSeries(this.daoTypeSeanceSerie.getSerieFromExerciceTypeSeance(exercice));
+
+                return exercice;
+
+            }
+        }
+
+        return null;
     }
 }

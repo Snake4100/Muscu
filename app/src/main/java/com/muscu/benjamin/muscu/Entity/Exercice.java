@@ -17,21 +17,24 @@ public class Exercice implements Parcelable {
     private TypeExercice typeExercice;
     private List<Serie> series;
     private int tempsRepos;
+    private ExerciceTypeSeance exerciceTypeSeance;
 
     //constructeur dao
-    public Exercice(long id, Seance seance, TypeExercice typeExercice, int tempsRepos){
+    public Exercice(long id, Seance seance, TypeExercice typeExercice, int tempsRepos, ExerciceTypeSeance exerciceTypeSeance){
         this.id = id;
         this.seance = seance;
         this.typeExercice = typeExercice;
         this.tempsRepos = tempsRepos;
+        this.exerciceTypeSeance = exerciceTypeSeance;
     }
 
     //Constructeur creation nouvel exercice
-    public Exercice(Seance seance, TypeExercice typeExercice, int tempsRepos) {
+    public Exercice(Seance seance, TypeExercice typeExercice, int tempsRepos, ExerciceTypeSeance exerciceTypeSeance) {
         this.seance = seance;
         this.typeExercice = typeExercice;
         this.series = new ArrayList<Serie>();
         this.tempsRepos = tempsRepos;
+        this.exerciceTypeSeance = exerciceTypeSeance;
     }
 
     public Exercice(Parcel in){
@@ -39,6 +42,7 @@ public class Exercice implements Parcelable {
         this.seance = (Seance) (Seance) in.readValue(Seance.class.getClassLoader());
         this.typeExercice = (TypeExercice) (TypeExercice) in.readValue(TypeExercice.class.getClassLoader());
         this.tempsRepos = in.readInt();
+        this.exerciceTypeSeance = (ExerciceTypeSeance)in.readValue(ExerciceTypeSeance.class.getClassLoader());
     }
 
     public long getId() {
@@ -85,6 +89,14 @@ public class Exercice implements Parcelable {
         this.tempsRepos = tempsRepos;
     }
 
+    public ExerciceTypeSeance getExerciceTypeSeance() {
+        return exerciceTypeSeance;
+    }
+
+    public void setExerciceTypeSeance(ExerciceTypeSeance exerciceTypeSeance) {
+        this.exerciceTypeSeance = exerciceTypeSeance;
+    }
+
     public String toString()
     {
         return this.typeExercice.getNom();
@@ -101,6 +113,7 @@ public class Exercice implements Parcelable {
         dest.writeValue(this.seance);
         dest.writeValue(this.typeExercice);
         dest.writeInt(this.tempsRepos);
+        dest.writeValue(this.exerciceTypeSeance);
 
     }
 

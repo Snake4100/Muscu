@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.muscu.benjamin.muscu.Entity.DateConversion;
 import com.muscu.benjamin.muscu.Entity.Exercice;
+import com.muscu.benjamin.muscu.Entity.ExerciceTypeSeance;
 import com.muscu.benjamin.muscu.Entity.Seance;
 import com.muscu.benjamin.muscu.Entity.TypeExercice;
 
@@ -33,12 +34,16 @@ public class ExerciceDAO extends DAOBase {
                     "FOREIGN KEY(type_exercice) REFERENCES TypeExercice(id) ON DELETE CASCADE);";
 
     private TypeExerciceDAO daoTypeExercice;
+    private ExerciceTypeSeanceDAO daoExerciceTypeSeance;
 
     public ExerciceDAO(Context pContext) {
         super(pContext);
 
         this.daoTypeExercice = new TypeExerciceDAO(pContext);
         this.daoTypeExercice.open();
+
+        this.daoExerciceTypeSeance = new ExerciceTypeSeanceDAO(pContext);
+        this.daoExerciceTypeSeance.open();
     }
 
     public List<Exercice> getSeanceExercices(Seance seance){
@@ -51,8 +56,9 @@ public class ExerciceDAO extends DAOBase {
         while(c.moveToNext()){
             TypeExercice typeExercice = this.daoTypeExercice.selectionner(c.getLong(2));
 
+
             //on crée le type exercice
-            lesExercices.add(new Exercice(c.getLong(0), seance, typeExercice,c.getInt(3)));
+            lesExercices.add(new Exercice(c.getLong(0), seance, typeExercice,c.getInt(3),this.daoExerciceTypeSeance.selection(seance.getTypeSeance(), typeExercice)));
         }
 
         return lesExercices;

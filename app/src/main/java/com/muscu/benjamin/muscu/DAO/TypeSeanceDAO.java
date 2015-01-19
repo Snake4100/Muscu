@@ -91,7 +91,6 @@ public class TypeSeanceDAO extends DAOBase {
         //si on a un résultat
         if(c.moveToFirst())
         {
-
             return new TypeSeance(c.getLong(0), c.getString(1));
         }
 
