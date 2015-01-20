@@ -133,6 +133,13 @@ public class ExerciceActivity extends Activity {
                 ExerciceActivity.this.alertModificationResultatSerie(ExerciceActivity.this.seriesAdapter.getItem(position));
             }
         });
+        listSeries.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                ExerciceActivity.this.alertSuppressionSerie(ExerciceActivity.this.seriesAdapter.getItem(position));
+                return true;
+            }
+        });
 
     }
 
@@ -414,6 +421,39 @@ public class ExerciceActivity extends Activity {
                         dialog.dismiss();
                     }
                 });
+
+
+        builderSingle.show();
+    }
+
+    private void alertSuppressionSerie(final Serie serie){
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(ExerciceActivity.this);
+        builderSingle.setIcon(R.drawable.ic_launcher);
+        builderSingle.setTitle("Suppression de la série.");
+
+        //Boutton pour annuler la suppression
+        builderSingle.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        //Boutton pour supprimer
+        builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                ExerciceActivity.this.daoSerie.supprimer(serie.getId());
+
+                ExerciceActivity.this.seriesAdapter.remove(serie);
+                //on prévient l'adapter que les données ont changées
+                ExerciceActivity.this.seriesAdapter.notifyDataSetChanged();
+                dialog.dismiss();
+            }
+        });
 
 
         builderSingle.show();
