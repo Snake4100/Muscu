@@ -9,6 +9,7 @@ import com.muscu.benjamin.muscu.Entity.DateConversion;
 import com.muscu.benjamin.muscu.Entity.Exercice;
 import com.muscu.benjamin.muscu.Entity.ExerciceTypeSeance;
 import com.muscu.benjamin.muscu.Entity.Seance;
+import com.muscu.benjamin.muscu.Entity.Serie;
 import com.muscu.benjamin.muscu.Entity.TypeExercice;
 
 import java.util.ArrayList;
@@ -35,6 +36,8 @@ public class ExerciceDAO extends DAOBase {
 
     private TypeExerciceDAO daoTypeExercice;
     private ExerciceTypeSeanceDAO daoExerciceTypeSeance;
+    private SeanceDAO daoSeance;
+    private SerieDAO daoSerie;
 
     public ExerciceDAO(Context pContext) {
         super(pContext);
@@ -44,13 +47,39 @@ public class ExerciceDAO extends DAOBase {
 
         this.daoExerciceTypeSeance = new ExerciceTypeSeanceDAO(pContext);
         this.daoExerciceTypeSeance.open();
+
+        this.daoSeance = new SeanceDAO(pContext);
+        this.daoSeance.open();
+
+        this.daoSerie = new SerieDAO(pContext);
+        this.daoSerie.open();
+    }
+
+    public List<Exercice> getExercicesOfTypeExercice(TypeExercice typeExercice){
+        List<Exercice> lesExercices = new ArrayList<Exercice>();
+        Cursor c = mDb.rawQuery("select "+EXERCICE_KEY+","+EXERCICE_SEANCE+","+EXERCICE_TYPE_EXERCICE+","+EXERCICE_TEMPSREPOS+" " +
+                "from "+EXERCICE_TABLE_NAME+" " +
+                "where "+EXERCICE_TYPE_EXERCICE+" = ? " +
+                "order by "+EXERCICE_KEY,new String[]{String.valueOf(typeExercice.getId())});
+
+        //on parcours la liste
+        while(c.moveToNext()){
+            Seance seance = this.daoSeance.selectionner(c.getLong(1));
+
+            Exercice exercice = new Exercice(c.getLong(0), seance, typeExercice,c.getInt(3),this.daoExerciceTypeSeance.selection(seance.getTypeSeance(), typeExercice));
+            exercice.setSeries(this.daoSerie.getSeriesExercice(exercice));
+            //on crée le type exercice
+            lesExercices.add(exercice);
+        }
+
+        return lesExercices;
     }
 
     public List<Exercice> getSeanceExercices(Seance seance){
         List<Exercice> lesExercices = new ArrayList<Exercice>();
-        Cursor c = mDb.rawQuery("select id,seance,type_exercice,temps_repos " +
-                "from Exercice " +
-                "where seance = ?",new String[]{String.valueOf(seance.getId())});
+        Cursor c = mDb.rawQuery("select "+EXERCICE_KEY+","+EXERCICE_SEANCE+","+EXERCICE_TYPE_EXERCICE+","+EXERCICE_TEMPSREPOS+" " +
+                "from "+EXERCICE_TABLE_NAME+" " +
+                "where "+EXERCICE_SEANCE+" = ?",new String[]{String.valueOf(seance.getId())});
 
         //on parcours la liste
         while(c.moveToNext()){

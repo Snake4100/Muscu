@@ -32,9 +32,12 @@
             android:text="Historique :"
             android:layout_marginTop="10dp"/>
 
-        <ListView
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></ListView>
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayout_historique"></LinearLayout>
+
     </LinearLayout>
 
 </ScrollView>

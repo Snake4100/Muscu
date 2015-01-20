@@ -31,6 +31,8 @@ import com.muscu.benjamin.muscu.Entity.TypeSeanceSerie;
 
 import org.w3c.dom.Text;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -378,6 +380,30 @@ public class ExerciceActivity extends Activity {
         else{
             textView_series.setVisibility(View.INVISIBLE);
             textView_typeSeanceSerie.setVisibility(View.INVISIBLE);
+        }
+
+        LinearLayout layoutHistorique = (LinearLayout)layout.findViewById(R.id.linearLayout_historique);
+
+        //on crée l'historique
+        List<Exercice> listExercice = this.daoExercice.getExercicesOfTypeExercice(this.sonExercice.getTypeExercice());
+        Collections.reverse(listExercice);
+
+        for(Exercice exercice : listExercice){
+            TextView textView = new TextView(this);
+
+            String text = "";
+            List<Serie> listSeries = exercice.getSeries();
+            for(Serie serie : listSeries){
+                text+=serie.getRepetitions()+" * "+serie.getPoids()+"kg";
+
+                if(listSeries.indexOf(serie) != listSeries.size()-1){
+                    text+=" - ";
+                }
+            }
+
+            textView.setText(text);
+
+            layoutHistorique.addView(textView);
         }
 
         builderSingle.setPositiveButton("OK",
