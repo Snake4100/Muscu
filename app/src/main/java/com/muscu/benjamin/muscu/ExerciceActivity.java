@@ -355,30 +355,29 @@ public class ExerciceActivity extends Activity {
         builderSingle.setTitle("Infos.");
 
         TextView textView_series = (TextView)layout.findViewById(R.id.textView_series);
-        ListView listView_series = (ListView)layout.findViewById(R.id.listView_typeSeanceSeries);
+        TextView textView_typeSeanceSerie = (TextView)layout.findViewById(R.id.textView_typeSeanceSerie);
+
 
         //si l'exercice est associé à une instance de Exercice Type Seance
         if(this.sonExercice.getExerciceTypeSeance() != null)
         {
-            ExerciceTypeSeance exercice = null;
+            String repetitions = "";
+            List<TypeSeanceSerie> listSeries = this.sonExercice.getExerciceTypeSeance().getListSeries();
+            for(TypeSeanceSerie serie : listSeries){
+                repetitions+=String.valueOf(serie.getNbRepetition());
 
-            final ArrayAdapter<TypeSeanceSerie> arrayAdapter = new ArrayAdapter<TypeSeanceSerie>(
-                    ExerciceActivity.this,
-                    android.R.layout.simple_list_item_1);
-            arrayAdapter.addAll(this.sonExercice.getExerciceTypeSeance().getListSeries());
+                if(listSeries.indexOf(serie) != listSeries.size()-1){
+                    repetitions+=" - ";
+                }
+            }
 
-            builderSingle.setAdapter(arrayAdapter,
-                    new DialogInterface.OnClickListener() {
+            textView_typeSeanceSerie.setText(repetitions);
 
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
         }
         //sinon on masque les séries à effectuer
         else{
             textView_series.setVisibility(View.INVISIBLE);
-            listView_series.setVisibility(View.INVISIBLE);
+            textView_typeSeanceSerie.setVisibility(View.INVISIBLE);
         }
 
         builderSingle.setPositiveButton("OK",
