@@ -141,8 +141,9 @@ public class ExerciceTypeSeanceActivity extends Activity {
 
     private void getValues(){
         this.exercice.setIndications(this.editTextIndications.getText().toString());
-        this.exercice.setTempsRepos(Integer.valueOf(this.editTextTempsRepos.getText().toString()));
-        Log.e("debug","Indications envoyés : "+this.exercice.getIndications());
+        String tempsRepos = this.editTextTempsRepos.getText().toString();
+        if(tempsRepos.length() != 0)
+            this.exercice.setTempsRepos(Integer.valueOf(tempsRepos));
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
