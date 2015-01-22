@@ -196,7 +196,7 @@ public class TypeSeanceActivity extends Activity {
             if(resultCode == RESULT_OK) {
                 Log.e("debug", "Result modif exercice");
                 //on récupére l'exercice
-                ExerciceTypeSeance exercice = (ExerciceTypeSeance) data.getParcelableExtra("Exercice");
+                ExerciceTypeSeance exerciceModifie = (ExerciceTypeSeance) data.getParcelableExtra("Exercice");
 
                 //on récupére la liste des exercices
                 List<ExerciceTypeSeance> listExerice = this.typeSeance.getListExercices();
@@ -205,10 +205,10 @@ public class TypeSeanceActivity extends Activity {
                 //on recherche et on rempalce l'exercice
                 for (int i = 0; i < listExerice.size(); i++) {
                     ExerciceTypeSeance ex = listExerice.get(i);
-                    Log.e("debug", ex.getId() + " == " + exercice.getId());
-                    if (ex.getId() == exercice.getId()) {
+                    Log.e("debug", ex.getId() + " == " + exerciceModifie.getId());
+                    if (ex.getId() == exerciceModifie.getId()) {
                         Log.e("debug", "true");
-                        listExerice.set(i, exercice);
+                        ex = exerciceModifie;
                     }
                 }
             }
