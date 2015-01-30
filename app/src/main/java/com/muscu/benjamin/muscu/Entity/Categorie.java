@@ -9,8 +9,8 @@ import java.util.List;
  * Created by benjamin on 27/12/2014.
  */
 public enum Categorie {
-    Musculation("Musculation"),
-    Cardio("Cardio");
+    Repetition("Repetition"),
+    Chronometre("Chronometre");
 
     private String nom;
 
@@ -24,14 +24,14 @@ public enum Categorie {
     }
 
     public static Categorie setCategorie(String categorie){
-        if(categorie.equals(Categorie.Musculation.toString()))
-            return Categorie.Musculation;
+        if(categorie.equals(Categorie.Repetition.toString()))
+            return Categorie.Repetition;
 
-        else if (categorie.equals(Categorie.Cardio.toString()))
-            return Categorie.Cardio;
+        else if (categorie.equals(Categorie.Chronometre.toString()))
+            return Categorie.Chronometre;
 
         else
-            return Categorie.Musculation;
+            return Categorie.Repetition;
     }
 
 

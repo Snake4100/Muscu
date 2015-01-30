@@ -1,10 +1,12 @@
 package com.muscu.benjamin.muscu.DAO;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.muscu.benjamin.muscu.Entity.Categorie;
 import com.muscu.benjamin.muscu.Entity.Seance;
 import com.muscu.benjamin.muscu.Entity.TypeSeance;
 
@@ -45,17 +47,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private void udpateDB(SQLiteDatabase db){
         Log.e("debug", "udptate database");
 
-        //db.execSQL("ALTER TABLE "+ ExerciceDAO.EXERCICE_TABLE_NAME+" DROP COLUMN nb_series_souhaites");
+        /*ContentValues value = new ContentValues();
+        value.put(TypeExerciceDAO.TYPE_EXERCICE_CATEGORIE, Categorie.Repetition.toString());
+        db.update(TypeExerciceDAO.TYPE_EXERCICE_TABLE_NAME, value, null, new String[]{});
 
-        db.execSQL(TypeSeanceDAO.TYPESEANCE_TABLE_CREATE);
-        db.execSQL(ExerciceTypeSeanceDAO.EXERCICETYPESEANCE_TABLE_CREATE);
-        db.execSQL(TypeSeanceSerieDAO.TYPESEANCESERIE_TABLE_CREATE);
+        value = new ContentValues();
+        value.put(TypeExerciceDAO.TYPE_EXERCICE_CATEGORIE, Categorie.Chronometre.toString());
+        db.update(TypeExerciceDAO.TYPE_EXERCICE_TABLE_NAME, value, TypeExerciceDAO.TYPE_EXERCICE_NOM  + " = ? ", new String[]{"Gainage (planche)"});
 
-
-        //db.execSQL("ALTER TABLE "+ SeanceDAO.SEANCE_TABLE_NAME+" ADD COLUMN "+SeanceDAO.SEANCE_TYPESEANCE +" INTEGER REFERENCES "+TypeSeanceDAO.TYPESEANCE_TABLE_NAME+"("+TypeSeanceDAO.TYPESEANCE_KEY+");");
-        /*db.execSQL("ALTER TABLE "+ ExerciceTypeSeanceDAO.EXERCICETYPESEANCE_TABLE_NAME+" " +
-                "ADD COLUMN "+ExerciceTypeSeanceDAO.EXERCICETYPESEANCE_TEMPSREPOS +" INTEGER;");*/
-
+        value = new ContentValues();
+        value.put(TypeExerciceDAO.TYPE_EXERCICE_CATEGORIE, Categorie.Chronometre.toString());
+        db.update(TypeExerciceDAO.TYPE_EXERCICE_TABLE_NAME, value, TypeExerciceDAO.TYPE_EXERCICE_NOM  + " = ? ", new String[]{"Course à pied"});
+        */
 
 
     }
