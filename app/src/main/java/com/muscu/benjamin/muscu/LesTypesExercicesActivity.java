@@ -1,7 +1,11 @@
 package com.muscu.benjamin.muscu;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,6 +50,14 @@ public class LesTypesExercicesActivity extends Activity {
             }
         });
 
+        listExercices.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                LesTypesExercicesActivity.this.alertSuppressionTypeExercice(LesTypesExercicesActivity.this.typeExerciceArrayAdapter.getItem(position));
+                return true;
+            }
+        });
+
         //On initialise le bouton de création
         Button bouton_creer = (Button) findViewById(R.id.button_creerTypeExercice);
         bouton_creer.setOnClickListener(new View.OnClickListener() {
@@ -69,6 +81,38 @@ public class LesTypesExercicesActivity extends Activity {
     {
         this.typeExerciceArrayAdapter.clear();
         this.typeExerciceArrayAdapter.addAll(this.daoTypeExercice.getAll());
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void alertSuppressionTypeExercice(final TypeExercice typeExercice){
+
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(LesTypesExercicesActivity.this);
+        builderSingle.setIcon(R.drawable.ic_launcher);
+        builderSingle.setTitle("Suppression de l'exercice "+typeExercice.getNom());
+
+        //Boutton pour annuler la suppression
+        builderSingle.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        //Boutton pour supprimer
+        builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                LesTypesExercicesActivity.this.daoTypeExercice.supprimer(typeExercice.getId());
+                LesTypesExercicesActivity.this.miseAjoursListeTypeExercice();
+                dialog.dismiss();
+            }
+        });
+
+
+        builderSingle.show();
     }
 
 

@@ -60,7 +60,7 @@ public class TypeExerciceDAO extends DAOBase {
     }
 
     public void supprimer(long id){
-
+        mDb.delete(this.TYPE_EXERCICE_TABLE_NAME, this.TYPE_EXERCICE_KEY + " = ?", new String[] {String.valueOf(id)});
     }
 
     public void modifier(TypeExercice typeExercice){
