@@ -1,5 +1,6 @@
 package com.muscu.benjamin.muscu.DAO;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -52,7 +53,7 @@ public class TypeExerciceDAO extends DAOBase {
     }
 
 
-    public void ajouter(TypeExercice typeExercice){
+    public void create(TypeExercice typeExercice){
         this.mDb.execSQL("INSERT INTO TypeExercice(nom,categorie,zones,description,temps_repos) " +
                 "VALUES(\""+typeExercice.getNom()+"\",\""+typeExercice.getCategorie()+"\"," +
                 "\""+typeExercice.getZones()+"\",\""+typeExercice.getDescription()+"\",\""+typeExercice.getTempsDeRepos()+"\")");
@@ -63,7 +64,14 @@ public class TypeExerciceDAO extends DAOBase {
     }
 
     public void modifier(TypeExercice typeExercice){
+        ContentValues value = new ContentValues();
+        value.put( this.TYPE_EXERCICE_NOM, typeExercice.getNom());
+        value.put( this.TYPE_EXERCICE_CATEGORIE, typeExercice.getCategorie().toString());
+        value.put( this.TYPE_EXERCICE_ZONES, typeExercice.getZones());
+        value.put( this.TYPE_EXERCICE_DESCRIPTION, typeExercice.getDescription());
+        value.put( this.TYPE_EXERCICE_TEMPS_DE_REPOS, typeExercice.getTempsDeRepos());
 
+        mDb.update(this.TYPE_EXERCICE_TABLE_NAME, value, this.TYPE_EXERCICE_KEY  + " = ?", new String[] {String.valueOf(typeExercice.getId())});
     }
 
     public TypeExercice selectionner(Long id)

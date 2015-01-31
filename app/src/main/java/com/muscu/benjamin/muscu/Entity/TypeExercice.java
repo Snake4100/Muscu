@@ -15,7 +15,9 @@ public class TypeExercice implements Parcelable {
     //private String photo;
     private int tempsDeRepos;
 
-    //Constructeur minimal
+    public TypeExercice(){}
+
+    //Constructeur
     public TypeExercice(String nom, Categorie categorie)
     {
         this.nom=nom;

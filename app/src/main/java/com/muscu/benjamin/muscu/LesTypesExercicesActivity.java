@@ -33,6 +33,7 @@ public class LesTypesExercicesActivity extends Activity {
         this.daoTypeExercice = new TypeExerciceDAO(this.getBaseContext());
         this.daoTypeExercice.open();
 
+        //on initilisale la list des types d'exercice
         ListView listExercices = (ListView) findViewById(R.id.listView_exercices);
         this.typeExerciceArrayAdapter = new ArrayAdapter<TypeExercice>(this, android.R.layout.simple_list_item_1, new ArrayList<TypeExercice>());
         listExercices.setAdapter(this.typeExerciceArrayAdapter);
@@ -41,6 +42,16 @@ public class LesTypesExercicesActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(LesTypesExercicesActivity.this, TypeExerciceActivity.class);
                 intent.putExtra("typeExercice",LesTypesExercicesActivity.this.typeExerciceArrayAdapter.getItem(position));
+                startActivity(intent);
+            }
+        });
+
+        //On initialise le bouton de création
+        Button bouton_creer = (Button) findViewById(R.id.button_creerTypeExercice);
+        bouton_creer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LesTypesExercicesActivity.this, TypeExerciceActivity.class);
                 startActivity(intent);
             }
         });
