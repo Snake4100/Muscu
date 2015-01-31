@@ -22,16 +22,13 @@ import android.widget.TextView;
 
 import com.muscu.benjamin.muscu.DAO.ExerciceDAO;
 import com.muscu.benjamin.muscu.DAO.SerieDAO;
+import com.muscu.benjamin.muscu.Entity.Categorie;
 import com.muscu.benjamin.muscu.Entity.Exercice;
-import com.muscu.benjamin.muscu.Entity.ExerciceTypeSeance;
 import com.muscu.benjamin.muscu.Entity.Seance;
 import com.muscu.benjamin.muscu.Entity.Serie;
 import com.muscu.benjamin.muscu.Entity.TypeExercice;
 import com.muscu.benjamin.muscu.Entity.TypeSeanceSerie;
 
-import org.w3c.dom.Text;
-
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -92,7 +89,7 @@ public class ExerciceActivity extends Activity {
         boutonAjouter.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                alertResultatSerie(ExerciceActivity.this.sonExercice.getSeries().size() + 1);
+                resultatSerie(ExerciceActivity.this.sonExercice.getSeries().size() + 1);
             }
         });
 
@@ -130,7 +127,7 @@ public class ExerciceActivity extends Activity {
         listSeries.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ExerciceActivity.this.alertModificationResultatSerie(ExerciceActivity.this.seriesAdapter.getItem(position));
+                ExerciceActivity.this.modificationResultatSerie(ExerciceActivity.this.seriesAdapter.getItem(position));
             }
         });
         listSeries.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -223,18 +220,40 @@ public class ExerciceActivity extends Activity {
         return 60;
     }
 
+    private void resultatSerie(int numeroSerie){
+        //si c'est un exercice de repetition
+        if(this.sonExercice.getTypeExercice().getCategorie().toString().equals(Categorie.Repetition.toString()))
+            alertResultatSerieRepetition(numeroSerie);
+
+        //si c'est un exercice chronometré
+        else if(this.sonExercice.getTypeExercice().getCategorie().toString().equals(Categorie.Chronometre.toString()))
+            alertResultatSerieChronometre(numeroSerie);
+
+    }
+
+    private void modificationResultatSerie(final Serie serie){
+        //si c'est un exercice de repetition
+        if(this.sonExercice.getTypeExercice().getCategorie().toString().equals(Categorie.Repetition.toString()))
+            alertModificationResultatSerieRepetition(serie);
+
+            //si c'est un exercice chronometré
+        else if(this.sonExercice.getTypeExercice().getCategorie().toString().equals(Categorie.Chronometre.toString()))
+            alertModificationResultatSerieChronometre(serie);
+
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void alertResultatSerie(int numeroSerie){
-        LinearLayout layout = (LinearLayout) LinearLayout.inflate(this, R.layout.resultat_serie, null);
+    private void alertResultatSerieRepetition(int numeroSerie){
+        LinearLayout layout = (LinearLayout) LinearLayout.inflate(this, R.layout.resultat_serie_repetition, null);
 
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(ExerciceActivity.this);
         builderSingle.setIcon(R.drawable.ic_launcher);
         builderSingle.setTitle("Série "+numeroSerie);
 
 
-        //on ajoute le layout resultat_serie à l'alert
+        //on ajoute le layout resultat_serie_repetition à l'alert
         try{
-            builderSingle.setView(R.layout.resultat_serie);
+            builderSingle.setView(R.layout.resultat_serie_repetition);
 
         }catch (NoSuchMethodError e) {
             Log.e("Debug", "Older SDK, using old Builder");
@@ -283,8 +302,58 @@ public class ExerciceActivity extends Activity {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void alertModificationResultatSerie(final Serie serie){
-        LinearLayout layout = (LinearLayout) LinearLayout.inflate(this, R.layout.resultat_serie, null);
+    private void alertResultatSerieChronometre(int numeroSerie){
+        LinearLayout layout = (LinearLayout) LinearLayout.inflate(this, R.layout.resultat_serie_chronometre, null);
+
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(ExerciceActivity.this);
+        builderSingle.setIcon(R.drawable.ic_launcher);
+        builderSingle.setTitle("Série "+numeroSerie);
+
+
+        //on ajoute le layout resultat_serie_repetition à l'alert
+        try{
+            builderSingle.setView(R.layout.resultat_serie_chronometre);
+
+        }catch (NoSuchMethodError e) {
+            Log.e("Debug", "Older SDK, using old Builder");
+            builderSingle.setView(layout);
+        }
+
+        //on crée la série
+        final Serie serie = new Serie(this.defaultPoids(), this.defaultNbRepetitions(), this.sonExercice);
+
+        //on initialise le picker pour le temps
+        NumberPicker numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_temps);
+        numberPicker.setOnValueChangedListener( new NumberPicker.OnValueChangeListener() {
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                serie.setTempsTotal(picker.getValue());
+            }
+        });
+        numberPicker.setMinValue(0);
+        numberPicker.setMaxValue(10000);
+        numberPicker.setValue(0);
+
+
+        builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //on ajoute la série à l'adapter
+                ExerciceActivity.this.seriesAdapter.add(serie);
+                //on prévient l'adapter que les données ont changées
+                ExerciceActivity.this.seriesAdapter.notifyDataSetChanged();
+                //on ajoute la série à la bd
+                ExerciceActivity.this.daoSerie.create(serie);
+
+                dialog.dismiss();
+            }
+        });
+
+        builderSingle.show();
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void alertModificationResultatSerieRepetition(final Serie serie){
+        LinearLayout layout = (LinearLayout) LinearLayout.inflate(this, R.layout.resultat_serie_repetition, null);
 
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(ExerciceActivity.this);
         builderSingle.setIcon(R.drawable.ic_launcher);
@@ -293,7 +362,7 @@ public class ExerciceActivity extends Activity {
 
         //on crée la liste view qui va contenir les éléments de l'alert
         try{
-            builderSingle.setView(R.layout.resultat_serie);
+            builderSingle.setView(R.layout.resultat_serie_repetition);
 
         }catch (NoSuchMethodError e) {
             Log.e("Debug", "Older SDK, using old Builder");
@@ -328,6 +397,51 @@ public class ExerciceActivity extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 ExerciceActivity.this.seriesAdapter.notifyDataSetChanged();
                 ExerciceActivity.this.daoSerie.modifier(serie);
+
+                dialog.dismiss();
+            }
+        });
+
+        builderSingle.show();
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void alertModificationResultatSerieChronometre(final Serie serie){
+        LinearLayout layout = (LinearLayout) LinearLayout.inflate(this, R.layout.resultat_serie_chronometre, null);
+
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(ExerciceActivity.this);
+        builderSingle.setIcon(R.drawable.ic_launcher);
+        builderSingle.setTitle("Modification série");
+
+
+        //on ajoute le layout resultat_serie_repetition à l'alert
+        try{
+            builderSingle.setView(R.layout.resultat_serie_chronometre);
+
+        }catch (NoSuchMethodError e) {
+            Log.e("Debug", "Older SDK, using old Builder");
+            builderSingle.setView(layout);
+        }
+
+        //on initialise le picker pour le temps
+        NumberPicker numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_temps);
+        numberPicker.setOnValueChangedListener( new NumberPicker.OnValueChangeListener() {
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                serie.setTempsTotal(picker.getValue());
+            }
+        });
+        numberPicker.setMinValue(0);
+        numberPicker.setMaxValue(10000);
+        numberPicker.setValue(serie.getTempsTotal());
+
+
+        builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //on ajoute la série à la bd
+                ExerciceActivity.this.daoSerie.modifier(serie);
+                //on prévient l'adapter que les données ont changées
+                ExerciceActivity.this.seriesAdapter.notifyDataSetChanged();
 
                 dialog.dismiss();
             }

@@ -24,11 +24,9 @@ import com.muscu.benjamin.muscu.DAO.TypeExerciceDAO;
 import com.muscu.benjamin.muscu.DAO.TypeSeanceSerieDAO;
 import com.muscu.benjamin.muscu.Entity.ExerciceTypeSeance;
 import com.muscu.benjamin.muscu.Entity.TypeExercice;
-import com.muscu.benjamin.muscu.Entity.TypeSeance;
 import com.muscu.benjamin.muscu.Entity.TypeSeanceSerie;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class ExerciceTypeSeanceActivity extends Activity {
@@ -157,9 +155,9 @@ public class ExerciceTypeSeanceActivity extends Activity {
         builderSingle.setTitle("Série "+numeroSerie);
 
 
-        //on ajoute le layout resultat_serie à l'alert
+        //on ajoute le layout resultat_serie_repetition à l'alert
         try{
-            builderSingle.setView(R.layout.resultat_serie);
+            builderSingle.setView(R.layout.resultat_serie_repetition);
 
         }catch (NoSuchMethodError e) {
             Log.e("Debug", "Older SDK, using old Builder");

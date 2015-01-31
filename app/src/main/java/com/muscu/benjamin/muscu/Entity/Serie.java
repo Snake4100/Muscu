@@ -85,7 +85,13 @@ public class Serie implements Parcelable {
     }
 
     public String toString(){
-        return this.repetitions+" répétitions à "+this.poids+"kg";
+        if(this.exercice.getTypeExercice().getCategorie().toString().equals(Categorie.Repetition.toString()))
+            return this.repetitions+" répétitions à "+this.poids+"kg";
+        else if(this.exercice.getTypeExercice().getCategorie().toString().equals(Categorie.Chronometre.toString()))
+            return this.tempsTotal+" secondes";
+
+        else
+            return "gros bug";
     }
 
     public Exercice getExercice() {
