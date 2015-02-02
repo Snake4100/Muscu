@@ -69,4 +69,9 @@ public class TypeSeanceSerieDAO extends DAOBase {
 
         mDb.update(this.TYPESEANCESERIE_TABLE_NAME, value, this.TYPESEANCESERIE_KEY  + " = ?", new String[] {String.valueOf(serie.getId())});
     }
+
+    public void supprimer(long id){
+        mDb.delete(this.TYPESEANCESERIE_TABLE_NAME, this.TYPESEANCESERIE_KEY + " = ?", new String[] {String.valueOf(id)});
+
+    }
 }

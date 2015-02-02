@@ -18,6 +18,7 @@ public class ExerciceTypeSeance implements Parcelable {
     private List<TypeSeanceSerie> listSeries;
     private String indications;
     private int tempsRepos;
+    private List<TypeSeanceSerie> listSeriesAsupp;
 
     //constructeur complet
     public ExerciceTypeSeance(long id, long numeroExercice, TypeExercice typeExercice, TypeSeance typeSeance, String indications, int tempsRepos) {
@@ -28,6 +29,7 @@ public class ExerciceTypeSeance implements Parcelable {
         this.indications = indications;
         this.listSeries = new ArrayList<TypeSeanceSerie>();
         this.tempsRepos = tempsRepos;
+        this.listSeriesAsupp = new ArrayList<TypeSeanceSerie>();
     }
 
     //constructeur numero exerice
@@ -49,7 +51,7 @@ public class ExerciceTypeSeance implements Parcelable {
         this.typeExercice = (TypeExercice) source.readValue(TypeExercice.class.getClassLoader());
         this.typeSeance = (TypeSeance) source.readValue(TypeSeance.class.getClassLoader());
 
-        this.listSeries =new ArrayList<TypeSeanceSerie>();
+        this.listSeries = new ArrayList<TypeSeanceSerie>();
         for(Parcelable obj : source.readParcelableArray(TypeSeanceSerie.class.getClassLoader()))
         {
             this.addSerie((TypeSeanceSerie)obj);
@@ -57,6 +59,12 @@ public class ExerciceTypeSeance implements Parcelable {
 
         this.indications = source.readString();
         this.tempsRepos = source.readInt();
+
+        this.listSeriesAsupp = new ArrayList<TypeSeanceSerie>();
+        for(Parcelable obj : source.readParcelableArray(TypeSeanceSerie.class.getClassLoader()))
+        {
+            this.addSerieAsupp((TypeSeanceSerie)obj);
+        }
     }
 
     public long getId() {
@@ -120,6 +128,19 @@ public class ExerciceTypeSeance implements Parcelable {
         this.tempsRepos = tempsRepos;
     }
 
+    public List<TypeSeanceSerie> getListSeriesAsupp() {
+        return listSeriesAsupp;
+    }
+
+    public void setListSeriesAsupp(List<TypeSeanceSerie> listSeriesAsupp) {
+        this.listSeriesAsupp = listSeriesAsupp;
+    }
+
+    public void addSerieAsupp(TypeSeanceSerie serie){
+        this.listSeries.remove(serie);
+        this.listSeriesAsupp.add(serie);
+    }
+
     public String toString(){
         return this.typeExercice.toString();
     }
@@ -139,6 +160,8 @@ public class ExerciceTypeSeance implements Parcelable {
 
         dest.writeString(this.indications);
         dest.writeInt(this.tempsRepos);
+
+        dest.writeParcelableArray(this.listSeriesAsupp.toArray(new Parcelable[]{}), flags);
     }
 
     public static final Parcelable.Creator<ExerciceTypeSeance> CREATOR = new Parcelable.Creator<ExerciceTypeSeance>() {

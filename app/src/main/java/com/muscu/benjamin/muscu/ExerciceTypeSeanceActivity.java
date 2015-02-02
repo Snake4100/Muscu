@@ -126,6 +126,13 @@ public class ExerciceTypeSeanceActivity extends Activity {
         ListView listViewSeries = (ListView)findViewById(R.id.listView_typeSeanceSeries);
         this.typeSeanceSerieArrayAdapter = new ArrayAdapter<TypeSeanceSerie>(this, android.R.layout.simple_spinner_item, new ArrayList<TypeSeanceSerie>());
         listViewSeries.setAdapter(this.typeSeanceSerieArrayAdapter);
+        listViewSeries.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                ExerciceTypeSeanceActivity.this.alertSuppressionSerie(ExerciceTypeSeanceActivity.this.typeSeanceSerieArrayAdapter.getItem(position));
+                return true;
+            }
+        });
 
         //on met à jours la liste des series
         updateListSeries();
@@ -142,6 +149,36 @@ public class ExerciceTypeSeanceActivity extends Activity {
         String tempsRepos = this.editTextTempsRepos.getText().toString();
         if(tempsRepos.length() != 0)
             this.exercice.setTempsRepos(Integer.valueOf(tempsRepos));
+    }
+
+    private void alertSuppressionSerie(final TypeSeanceSerie serie){
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(ExerciceTypeSeanceActivity.this);
+        builderSingle.setIcon(R.drawable.ic_launcher);
+        builderSingle.setTitle("Voulez vous supprimer la série ?");
+
+        //Boutton pour annuler la suppression
+        builderSingle.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        //Boutton pour supprimer
+        builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                ExerciceTypeSeanceActivity.this.exercice.addSerieAsupp(serie);
+                ExerciceTypeSeanceActivity.this.updateListSeries();
+                dialog.dismiss();
+            }
+        });
+
+
+        builderSingle.show();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

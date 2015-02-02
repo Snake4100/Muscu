@@ -96,6 +96,9 @@ public class ExerciceTypeSeanceDAO extends DAOBase {
 
         mDb.update(this.EXERCICETYPESEANCE_TABLE_NAME, value, this.EXERCICETYPESEANCE_KEY  + " = ?", new String[] {String.valueOf(exercice.getId())});
 
+        for(TypeSeanceSerie serie : exercice.getListSeriesAsupp())
+            this.daoTypeSeanceSerie.supprimer(serie.getId());
+
         this.persistSeries(exercice);
     }
 

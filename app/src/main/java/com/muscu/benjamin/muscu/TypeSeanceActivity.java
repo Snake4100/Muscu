@@ -208,7 +208,8 @@ public class TypeSeanceActivity extends Activity {
                     Log.e("debug", ex.getId() + " == " + exerciceModifie.getId());
                     if (ex.getId() == exerciceModifie.getId()) {
                         Log.e("debug", "true");
-                        ex = exerciceModifie;
+                        //ex = exerciceModifie;
+                        listExerice.set(i,exerciceModifie);
                     }
                 }
             }
