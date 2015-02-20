@@ -41,6 +41,7 @@ public class ExerciceTypeSeance implements Parcelable {
         this.indications = "";
         this.listSeries = new ArrayList<TypeSeanceSerie>();
         this.tempsRepos = 0;
+        this.listSeriesAsupp = new ArrayList<TypeSeanceSerie>();
     }
 
 
