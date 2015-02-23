@@ -10,12 +10,14 @@ public class TypeSeanceSerie implements Parcelable {
     private long id;
     private long numeroSerie;
     private long nbRepetition;
+    private boolean maximum;
     private ExerciceTypeSeance exercice;
 
-    public TypeSeanceSerie(long id, long numeroSerie, long nbRepetition, ExerciceTypeSeance exercice) {
+    public TypeSeanceSerie(long id, long numeroSerie, long nbRepetition, boolean maximum, ExerciceTypeSeance exercice) {
         this.id = id;
         this.numeroSerie = numeroSerie;
         this.nbRepetition = nbRepetition;
+        this.maximum = maximum;
         this.exercice = exercice;
     }
 
@@ -24,6 +26,7 @@ public class TypeSeanceSerie implements Parcelable {
         this.numeroSerie = numeroSerie;
         this.id = -1;
         this.nbRepetition = 0;
+        this.maximum = false;
         this.exercice = null;
     }
 
@@ -31,6 +34,7 @@ public class TypeSeanceSerie implements Parcelable {
         this.id = source.readLong();
         this.numeroSerie = source.readLong();
         this.nbRepetition = source.readLong();
+        this.maximum = (1 == source.readInt());
         this.exercice = null;
     }
 
@@ -66,8 +70,19 @@ public class TypeSeanceSerie implements Parcelable {
         this.exercice = exercice;
     }
 
+    public boolean isMaximum() {
+        return maximum;
+    }
+
+    public void setMaximum(boolean maximum) {
+        this.maximum = maximum;
+    }
+
     public String toString(){
-        return this.nbRepetition+" répétitions";
+        if(this.maximum)
+            return "maximum";
+        else
+            return this.nbRepetition+" répétitions";
     }
 
     @Override
@@ -80,6 +95,7 @@ public class TypeSeanceSerie implements Parcelable {
         dest.writeLong(this.id);
         dest.writeLong(this.numeroSerie);
         dest.writeLong(this.nbRepetition);
+        dest.writeInt(this.maximum? 1 : 0);
     }
 
     public static final Parcelable.Creator<TypeSeanceSerie> CREATOR = new Parcelable.Creator<TypeSeanceSerie>() {

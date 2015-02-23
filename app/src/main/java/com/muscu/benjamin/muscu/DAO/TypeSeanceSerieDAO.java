@@ -18,6 +18,7 @@ public class TypeSeanceSerieDAO extends DAOBase {
     public static final String TYPESEANCESERIE_KEY = "id";
     public static final String TYPESEANCESERIE_NUMEROSERIE = "numero_serie";
     public static final String TYPESEANCESERIE_NBREPETITIONS = "nb_repetitions";
+    public static final String TYPESEANCESERIE_MAXIMUM = "maximum";
     public static final String TYPESEANCESERIE_EXERCICE = "exercice";
 
     public static final String TYPESEANCESERIE_TABLE_NAME = "TypeSeanceSerie";
@@ -26,6 +27,7 @@ public class TypeSeanceSerieDAO extends DAOBase {
                     TYPESEANCESERIE_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     TYPESEANCESERIE_NUMEROSERIE + " INTEGER, " +
                     TYPESEANCESERIE_NBREPETITIONS + " INTEGER, " +
+                    TYPESEANCESERIE_MAXIMUM + " INTEGER, " +
                     TYPESEANCESERIE_EXERCICE + " INTEGER, " +
                     "FOREIGN KEY("+TYPESEANCESERIE_EXERCICE+") REFERENCES "+ExerciceTypeSeanceDAO.EXERCICETYPESEANCE_TABLE_NAME+"("+ExerciceTypeSeanceDAO.EXERCICETYPESEANCE_KEY+") ON DELETE CASCADE " +
                     ");";
@@ -37,7 +39,7 @@ public class TypeSeanceSerieDAO extends DAOBase {
     public List<TypeSeanceSerie> getSerieFromExerciceTypeSeance(ExerciceTypeSeance exercice){
         List<TypeSeanceSerie> lesSeries = new ArrayList<TypeSeanceSerie>();
 
-        Cursor c = mDb.rawQuery("select "+TYPESEANCESERIE_KEY+", "+TYPESEANCESERIE_NUMEROSERIE+", "+TYPESEANCESERIE_NBREPETITIONS+", "+TYPESEANCESERIE_EXERCICE+" "+
+        Cursor c = mDb.rawQuery("select "+TYPESEANCESERIE_KEY+", "+TYPESEANCESERIE_NUMEROSERIE+", "+TYPESEANCESERIE_NBREPETITIONS+", "+TYPESEANCESERIE_MAXIMUM+", "+TYPESEANCESERIE_EXERCICE+" "+
                 "from "+TYPESEANCESERIE_TABLE_NAME+" " +
                 "where "+TYPESEANCESERIE_EXERCICE+" = ? " +
                 "order by "+TYPESEANCESERIE_NUMEROSERIE,new String[]{String.valueOf(exercice.getId())});
@@ -46,7 +48,7 @@ public class TypeSeanceSerieDAO extends DAOBase {
         //on parcours la liste
         while(c.moveToNext()){
             //on crée le type exercice
-            lesSeries.add(new TypeSeanceSerie(c.getLong(0), c.getLong(1), c.getLong(2), exercice));
+            lesSeries.add(new TypeSeanceSerie(c.getLong(0), c.getLong(1), c.getLong(2), (1 == c.getLong(3)), exercice));
         }
 
         return lesSeries;
@@ -56,6 +58,7 @@ public class TypeSeanceSerieDAO extends DAOBase {
         ContentValues value = new ContentValues();
         value.put(this.TYPESEANCESERIE_NUMEROSERIE, serie.getNumeroSerie());
         value.put(this.TYPESEANCESERIE_NBREPETITIONS, serie.getNbRepetition());
+        value.put(this.TYPESEANCESERIE_MAXIMUM, serie.isMaximum());
         value.put(this.TYPESEANCESERIE_EXERCICE, serie.getExercice().getId());
 
         return mDb.insert(TYPESEANCESERIE_TABLE_NAME, null, value);
@@ -65,6 +68,7 @@ public class TypeSeanceSerieDAO extends DAOBase {
         ContentValues value = new ContentValues();
         value.put(this.TYPESEANCESERIE_NUMEROSERIE, serie.getNumeroSerie());
         value.put(this.TYPESEANCESERIE_NBREPETITIONS, serie.getNbRepetition());
+        value.put(this.TYPESEANCESERIE_MAXIMUM, serie.isMaximum());
         value.put(this.TYPESEANCESERIE_EXERCICE, serie.getExercice().getId());
 
         mDb.update(this.TYPESEANCESERIE_TABLE_NAME, value, this.TYPESEANCESERIE_KEY  + " = ?", new String[] {String.valueOf(serie.getId())});

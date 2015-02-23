@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -31,6 +32,7 @@ import com.muscu.benjamin.muscu.Entity.TypeSeanceSerie;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Timer;
 
 
 public class ExerciceActivity extends Activity {
@@ -41,6 +43,7 @@ public class ExerciceActivity extends Activity {
     private SerieDAO daoSerie;
     private TextView timer;
     private CountDownTimer countDown = null;
+    private Timer chronometre_timer = null;
 
     /*
         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -165,7 +168,7 @@ public class ExerciceActivity extends Activity {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void alertConfigurationExercice(Seance laSeanceEnCours,TypeExercice typeExercice) {
+    private void alertConfigurationExercice(Seance laSeanceEnCours, TypeExercice typeExercice) {
 
         LinearLayout layout = (LinearLayout) LinearLayout.inflate(this, R.layout.configuration_exercice, null);
 
@@ -242,11 +245,6 @@ public class ExerciceActivity extends Activity {
         //si c'est un exercice de repetition
         if(this.sonExercice.getTypeExercice().getCategorie().toString().equals(Categorie.Repetition.toString()))
             alertModificationResultatSerieRepetition(serie);
-
-            //si c'est un exercice chronometré
-        else if(this.sonExercice.getTypeExercice().getCategorie().toString().equals(Categorie.Chronometre.toString()))
-            alertModificationResultatSerieChronometre(serie);
-
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -329,33 +327,47 @@ public class ExerciceActivity extends Activity {
         //on crée la série
         final Serie serie = new Serie(this.defaultPoids(), this.defaultNbRepetitions(), this.sonExercice);
 
-        //on initialise le picker pour le temps
-        NumberPicker numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_temps);
-        numberPicker.setOnValueChangedListener( new NumberPicker.OnValueChangeListener() {
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                serie.setTempsTotal(picker.getValue());
+        //on désactive le bouton stop et on l'activera quand le chrono sera lancé
+        final Button button_stop = (Button)layout.findViewById(R.id.button_stopChronoSerie);
+
+        Button button_start = (Button)layout.findViewById(R.id.button_startChronoSerie);
+        button_start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               /* //s'il y avait deja un timer on l'arréte
+                if(ExerciceActivity.this.chronometre != null){
+                    ExerciceActivity.this.chronometre.cancel();
+                }
+
+                //on crée le timer
+                ExerciceActivity.this.chronometre = new Timer(ExerciceActivity.this.sonExercice.getTempsRepos()*1000, 1000) {
+
+                    public void onTick(long millisUntilFinished) {
+                        long secondesUntilFinished = millisUntilFinished / 1000;
+                        ExerciceActivity.this.setTime(secondesUntilFinished);
+                    }
+
+                    public void onFinish() {
+                        ExerciceActivity.this.setTime(0);
+                    }
+                }.start();*/
             }
         });
-        numberPicker.setMinValue(0);
-        numberPicker.setMaxValue(10000);
-        numberPicker.setValue(0);
 
-
-        builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        final AlertDialog a = builderSingle.show();
+        button_stop.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
                 //on ajoute la série à l'adapter
                 ExerciceActivity.this.seriesAdapter.add(serie);
                 //on prévient l'adapter que les données ont changées
                 ExerciceActivity.this.seriesAdapter.notifyDataSetChanged();
                 //on ajoute la série à la bd
                 ExerciceActivity.this.daoSerie.create(serie);
-
-                dialog.dismiss();
+                a.dismiss();
             }
         });
 
-        builderSingle.show();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -412,51 +424,6 @@ public class ExerciceActivity extends Activity {
         builderSingle.show();
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void alertModificationResultatSerieChronometre(final Serie serie){
-        LinearLayout layout = (LinearLayout) LinearLayout.inflate(this, R.layout.resultat_serie_chronometre, null);
-
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(ExerciceActivity.this);
-        builderSingle.setIcon(R.drawable.ic_launcher);
-        builderSingle.setTitle("Modification série");
-
-
-        //on ajoute le layout resultat_serie_repetition à l'alert
-        try{
-            builderSingle.setView(R.layout.resultat_serie_chronometre);
-
-        }catch (NoSuchMethodError e) {
-            Log.e("Debug", "Older SDK, using old Builder");
-            builderSingle.setView(layout);
-        }
-
-        //on initialise le picker pour le temps
-        NumberPicker numberPicker = (NumberPicker)layout.findViewById(R.id.numberPicker_temps);
-        numberPicker.setOnValueChangedListener( new NumberPicker.OnValueChangeListener() {
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                serie.setTempsTotal(picker.getValue());
-            }
-        });
-        numberPicker.setMinValue(0);
-        numberPicker.setMaxValue(10000);
-        numberPicker.setValue(serie.getTempsTotal());
-
-
-        builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //on ajoute la série à la bd
-                ExerciceActivity.this.daoSerie.modifier(serie);
-                //on prévient l'adapter que les données ont changées
-                ExerciceActivity.this.seriesAdapter.notifyDataSetChanged();
-
-                dialog.dismiss();
-            }
-        });
-
-        builderSingle.show();
-    }
-
     private int defaultPoids()
     {
         return 0;
@@ -494,7 +461,10 @@ public class ExerciceActivity extends Activity {
             String repetitions = "";
             List<TypeSeanceSerie> listSeries = this.sonExercice.getExerciceTypeSeance().getListSeries();
             for(TypeSeanceSerie serie : listSeries){
-                repetitions+=String.valueOf(serie.getNbRepetition());
+                if(serie.isMaximum())
+                    repetitions+="maximum";
+                else
+                    repetitions+=String.valueOf(serie.getNbRepetition());
 
                 if(listSeries.indexOf(serie) != listSeries.size()-1){
                     repetitions+=" - ";

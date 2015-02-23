@@ -60,6 +60,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.update(TypeExerciceDAO.TYPE_EXERCICE_TABLE_NAME, value, TypeExerciceDAO.TYPE_EXERCICE_NOM  + " = ? ", new String[]{"Course à pied"});
         */
 
+        //db.execSQL("ALTER TABLE "+TypeSeanceSerieDAO.TYPESEANCESERIE_TABLE_NAME+" ADD COLUMN "+TypeSeanceSerieDAO.TYPESEANCESERIE_MAXIMUM+" INTEGER");
+
 
     }
 

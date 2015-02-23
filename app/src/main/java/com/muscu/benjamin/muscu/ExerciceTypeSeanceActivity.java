@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -214,6 +216,14 @@ public class ExerciceTypeSeanceActivity extends Activity {
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(10000);
         numberPicker.setValue(0);
+
+        CheckBox checkBox_maximumRepetitions = (CheckBox) layout.findViewById(R.id.checkBox_maximumRepetitions);
+        checkBox_maximumRepetitions.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                serie.setMaximum(isChecked);
+            }
+        });
 
         builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
