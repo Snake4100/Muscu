@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
@@ -33,6 +35,7 @@ import com.muscu.benjamin.muscu.Entity.TypeSeanceSerie;
 import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class ExerciceActivity extends Activity {
@@ -43,7 +46,8 @@ public class ExerciceActivity extends Activity {
     private SerieDAO daoSerie;
     private TextView timer;
     private CountDownTimer countDown = null;
-    private Timer chronometre_timer = null;
+    private Chronometer chronometer = null;
+    private boolean isChronometerRunning = false;
 
     /*
         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -85,7 +89,7 @@ public class ExerciceActivity extends Activity {
         //si on a passé un exercice en parametre, c'est une visualisation d'un exercice deja fait
         else if(this.sonExercice != null){
             this.sonExercice.setSeries(this.daoSerie.getSeriesExercice(this.sonExercice));
-            this.setTime(this.sonExercice.getTempsRepos());
+            this.setTime(this.sonExercice.getTempsRepos(), ExerciceActivity.this.timer);
         }
         else {
 
@@ -118,11 +122,11 @@ public class ExerciceActivity extends Activity {
 
                     public void onTick(long millisUntilFinished) {
                         long secondesUntilFinished = millisUntilFinished / 1000;
-                        ExerciceActivity.this.setTime(secondesUntilFinished);
+                        ExerciceActivity.this.setTime(secondesUntilFinished, ExerciceActivity.this.timer);
                     }
 
                     public void onFinish() {
-                        ExerciceActivity.this.setTime(0);
+                        ExerciceActivity.this.setTime(0, ExerciceActivity.this.timer);
                     }
                 }.start();
             }
@@ -150,7 +154,7 @@ public class ExerciceActivity extends Activity {
 
     }
 
-    private void setTime(long secondesUntilFinished){
+    private void setTime(long secondesUntilFinished, TextView textView){
         long minutes = secondesUntilFinished / 60;
         long secondes = secondesUntilFinished % 60;
 
@@ -164,7 +168,7 @@ public class ExerciceActivity extends Activity {
             stringSecondes = "0" + stringSecondes;
         }
 
-        this.timer.setText(stringMinutes + ":" + stringSecondes);
+        textView.setText(stringMinutes + ":" + stringSecondes);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -215,7 +219,7 @@ public class ExerciceActivity extends Activity {
                 ExerciceActivity.this.daoExercice.modifier(ExerciceActivity.this.sonExercice);
 
                 //on initialise le timer
-                ExerciceActivity.this.setTime(ExerciceActivity.this.sonExercice.getTempsRepos());
+                ExerciceActivity.this.setTime(ExerciceActivity.this.sonExercice.getTempsRepos(), ExerciceActivity.this.timer);
 
                 //on ferme la fenetre
                 dialog.dismiss();
@@ -308,7 +312,11 @@ public class ExerciceActivity extends Activity {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void alertResultatSerieChronometre(int numeroSerie){
-        LinearLayout layout = (LinearLayout) LinearLayout.inflate(this, R.layout.resultat_serie_chronometre, null);
+        final LinearLayout layout = (LinearLayout) LinearLayout.inflate(this, R.layout.resultat_serie_chronometre, null);
+
+        this.chronometer = (Chronometer) layout.findViewById(R.id.chronometer);
+        this.chronometer.setTextSize(36);
+
 
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(ExerciceActivity.this);
         builderSingle.setIcon(R.drawable.ic_launcher);
@@ -334,23 +342,11 @@ public class ExerciceActivity extends Activity {
         button_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* //s'il y avait deja un timer on l'arréte
-                if(ExerciceActivity.this.chronometre != null){
-                    ExerciceActivity.this.chronometre.cancel();
-                }
+                //on démare le timer
+                chronometer.setBase(SystemClock.elapsedRealtime());
+                chronometer.start();
+                isChronometerRunning = true;
 
-                //on crée le timer
-                ExerciceActivity.this.chronometre = new Timer(ExerciceActivity.this.sonExercice.getTempsRepos()*1000, 1000) {
-
-                    public void onTick(long millisUntilFinished) {
-                        long secondesUntilFinished = millisUntilFinished / 1000;
-                        ExerciceActivity.this.setTime(secondesUntilFinished);
-                    }
-
-                    public void onFinish() {
-                        ExerciceActivity.this.setTime(0);
-                    }
-                }.start();*/
             }
         });
 
@@ -358,12 +354,23 @@ public class ExerciceActivity extends Activity {
         button_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //on récupére le temps du chronometre
+                if(isChronometerRunning){
+                    serie.setTempsTotal((int)(SystemClock.elapsedRealtime() - ExerciceActivity.this.chronometer.getBase())/1000);
+                    isChronometerRunning = false;
+                    ExerciceActivity.this.chronometer.stop();
+                }
+
+                else
+                    serie.setTempsTotal(0);
+
                 //on ajoute la série à l'adapter
                 ExerciceActivity.this.seriesAdapter.add(serie);
                 //on prévient l'adapter que les données ont changées
                 ExerciceActivity.this.seriesAdapter.notifyDataSetChanged();
                 //on ajoute la série à la bd
                 ExerciceActivity.this.daoSerie.create(serie);
+
                 a.dismiss();
             }
         });
