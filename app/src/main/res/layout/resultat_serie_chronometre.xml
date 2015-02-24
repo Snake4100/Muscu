@@ -3,16 +3,47 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Temps"
-        android:id="@+id/textView17"
-        android:layout_gravity="center_horizontal" />
 
-    <NumberPicker
+    <!--<TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/numberPicker_temps"
+        android:text="New Text"
+        android:id="@+id/textView_chronometreSerie"
+        android:textSize="36dp"
+        android:layout_gravity="center_horizontal" />-->
+    <Chronometer
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/chronometer"
         android:layout_gravity="center_horizontal" />
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_width="0dp"
+                android:text="Start"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:id="@+id/button_startChronoSerie"
+                android:background="#ff47ff00" />
+
+            <Button
+                android:layout_width="0dp"
+                android:text="Stop"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:id="@+id/button_stopChronoSerie"
+                android:background="#ffff000a">
+            </Button>
+        </LinearLayout>
+
+
+    </TableRow>
+
+
 </LinearLayout>
