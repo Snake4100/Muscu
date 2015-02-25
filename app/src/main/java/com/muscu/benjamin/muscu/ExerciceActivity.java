@@ -336,8 +336,29 @@ public class ExerciceActivity extends Activity {
         }
         ft.addToBackStack(null);
 
+        long tempsAfaire = -1;
+
+
+        //s'il y a une une indication pour cet exercice
+        if(sonExercice.getExerciceTypeSeance() != null)
+        {
+            Log.e("debug","il y a une indication d'exercice. numero serie : "+numeroSerie+". Liste : "+sonExercice.getExerciceTypeSeance().getListSeries().size());
+            //si la série que l'on veut faire était prévue
+            if(numeroSerie-1 < sonExercice.getExerciceTypeSeance().getListSeries().size())
+            {
+                Log.e("debug","nombre de série correcte");
+
+                //si ce n'est pas une série maximum
+                if(!sonExercice.getExerciceTypeSeance().getListSeries().get(numeroSerie-1).isMaximum()){
+                    tempsAfaire = sonExercice.getExerciceTypeSeance().getListSeries().get(numeroSerie-1).getNbRepetition();
+                    Log.e("debug","temps à faire : "+tempsAfaire);
+                }
+            }
+
+        }
+
         // Create and show the dialog.
-        DialogFragment newFragment = Chronometre_serie.newInstance(mStackLevel);
+        DialogFragment newFragment = Chronometre_serie.newInstance(mStackLevel, tempsAfaire);
         newFragment.show(ft, "dialog");
 
 
