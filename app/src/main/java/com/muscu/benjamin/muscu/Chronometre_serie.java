@@ -133,7 +133,7 @@ public class Chronometre_serie extends DialogFragment{
         else{
             //on vire le chrono
             v.findViewById(R.id.chronometer).setVisibility(View.GONE);
-
+            setTime(this.tempsAfaire,this.textView_chrono);
             //on récupér le bouton
             final Button button_stop = (Button)v.findViewById(R.id.button_stopChronoSerie);
 
