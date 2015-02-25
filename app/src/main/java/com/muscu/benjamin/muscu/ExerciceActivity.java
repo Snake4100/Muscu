@@ -3,6 +3,10 @@ package com.muscu.benjamin.muscu;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
@@ -46,8 +50,6 @@ public class ExerciceActivity extends Activity {
     private SerieDAO daoSerie;
     private TextView timer;
     private CountDownTimer countDown = null;
-    private Chronometer chronometer = null;
-    private boolean isChronometerRunning = false;
 
     /*
         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -153,6 +155,16 @@ public class ExerciceActivity extends Activity {
         });
 
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Log.e("debug","onResume ExerciceActivity");
+
+    }
+
 
     private void setTime(long secondesUntilFinished, TextView textView){
         long minutes = secondesUntilFinished / 60;
@@ -312,69 +324,35 @@ public class ExerciceActivity extends Activity {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void alertResultatSerieChronometre(int numeroSerie){
-        final LinearLayout layout = (LinearLayout) LinearLayout.inflate(this, R.layout.resultat_serie_chronometre, null);
+        int mStackLevel = 1;
 
-        this.chronometer = (Chronometer) layout.findViewById(R.id.chronometer);
-        this.chronometer.setTextSize(36);
-
-
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(ExerciceActivity.this);
-        builderSingle.setIcon(R.drawable.ic_launcher);
-        builderSingle.setTitle("Série "+numeroSerie);
-
-
-        //on ajoute le layout resultat_serie_repetition à l'alert
-        try{
-            builderSingle.setView(R.layout.resultat_serie_chronometre);
-
-        }catch (NoSuchMethodError e) {
-            Log.e("Debug", "Older SDK, using old Builder");
-            builderSingle.setView(layout);
+        // DialogFragment.show() will take care of adding the fragment
+        // in a transaction.  We also want to remove any currently showing
+        // dialog, so make our own transaction and take care of that here.
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
         }
+        ft.addToBackStack(null);
 
-        //on crée la série
-        final Serie serie = new Serie(this.defaultPoids(), this.defaultNbRepetitions(), this.sonExercice);
+        // Create and show the dialog.
+        DialogFragment newFragment = Chronometre_serie.newInstance(mStackLevel);
+        newFragment.show(ft, "dialog");
 
-        //on désactive le bouton stop et on l'activera quand le chrono sera lancé
-        final Button button_stop = (Button)layout.findViewById(R.id.button_stopChronoSerie);
 
-        Button button_start = (Button)layout.findViewById(R.id.button_startChronoSerie);
-        button_start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //on démare le timer
-                chronometer.setBase(SystemClock.elapsedRealtime());
-                chronometer.start();
-                isChronometerRunning = true;
+    }
 
-            }
-        });
-
-        final AlertDialog a = builderSingle.show();
-        button_stop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //on récupére le temps du chronometre
-                if(isChronometerRunning){
-                    serie.setTempsTotal((int)(SystemClock.elapsedRealtime() - ExerciceActivity.this.chronometer.getBase())/1000);
-                    isChronometerRunning = false;
-                    ExerciceActivity.this.chronometer.stop();
-                }
-
-                else
-                    serie.setTempsTotal(0);
-
-                //on ajoute la série à l'adapter
-                ExerciceActivity.this.seriesAdapter.add(serie);
-                //on prévient l'adapter que les données ont changées
-                ExerciceActivity.this.seriesAdapter.notifyDataSetChanged();
-                //on ajoute la série à la bd
-                ExerciceActivity.this.daoSerie.create(serie);
-
-                a.dismiss();
-            }
-        });
-
+    public void addSerieChronometre(int resultat)
+    {
+        Serie serie = new Serie(this.defaultPoids(), this.defaultNbRepetitions(), this.sonExercice);
+        serie.setTempsTotal(resultat);
+        //on ajoute la série à l'adapter
+        this.seriesAdapter.add(serie);
+        //on prévient l'adapter que les données ont changées
+        this.seriesAdapter.notifyDataSetChanged();
+        //on ajoute la série à la bd
+        this.daoSerie.create(serie);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

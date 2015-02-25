@@ -22,5 +22,6 @@
     <string name="title_activity_types_seances">TypesSeancesActivity</string>
     <string name="title_activity_type_seance">TypeSeanceActivity</string>
     <string name="title_activity_exercice_type_seance">ExerciceTypeSeanceActivity</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
