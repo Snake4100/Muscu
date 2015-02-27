@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Muscu</string>
-    <string name="acceuil_text">Accueil</string>
+    <string name="acceuil_text">Acceuil</string>
     <string name="action_settings">Settings</string>
     <string name="mesSeances_text">Mes Séances</string>
     <string name="exercices_text">Exercices</string>

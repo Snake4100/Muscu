@@ -16,6 +16,7 @@ public class AcceuilActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acceuil);
+        this.setTitle(R.string.acceuil_text);
         Log.e("debug","Acceuil");
         Button button_mesSeances = (Button) findViewById(R.id.button_mesSeances);
         button_mesSeances.setOnClickListener(new View.OnClickListener() {
