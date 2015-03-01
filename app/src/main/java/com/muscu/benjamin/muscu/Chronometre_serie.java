@@ -87,7 +87,7 @@ public class Chronometre_serie extends DialogFragment{
         super.onCreateView(inflater,container,savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_chronometre_serie, container, false);
 
-
+        getDialog().setTitle("Chronometer");
         this.chronometer = (Chronometer) v.findViewById(R.id.chronometer);
         this.chronometer.setTextSize(36);
 

@@ -30,7 +30,11 @@
                     android:layout_height="wrap_content"
                     android:layout_weight=".5"
                     android:id="@+id/button_startChronoSerie"
-                    android:background="#ff47ff00" />
+                    android:background="@drawable/button_start_chrono"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="2.5dp"/>
 
                 <Button
                     android:layout_width="0dp"
@@ -38,7 +42,11 @@
                     android:layout_height="wrap_content"
                     android:layout_weight=".5"
                     android:id="@+id/button_stopChronoSerie"
-                    android:background="#ffff000a">
+                    android:background="@drawable/button_stop_schrono"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="2.5dp"
+                    android:layout_marginRight="5dp">
                 </Button>
             </LinearLayout>
 
