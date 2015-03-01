@@ -20,5 +20,6 @@
         android:id="@+id/button_newSeance"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/button"/>
 </RelativeLayout>

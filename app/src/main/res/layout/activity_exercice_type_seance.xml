@@ -94,11 +94,11 @@
         <Button
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:text="+"
             android:id="@+id/button_ajouterTypeSeanceSerie"
             android:layout_above="@+id/button_valierExerciceTypeSeance"
             android:layout_marginBottom="0dp"
-            android:layout_gravity="right" />
+            android:layout_gravity="right"
+            android:background="@android:drawable/ic_input_add"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -106,7 +106,8 @@
             android:text="Valider"
             android:id="@+id/button_valierExerciceTypeSeance"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="0dp"/>
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/button"/>
     </LinearLayout>
 
 </RelativeLayout>

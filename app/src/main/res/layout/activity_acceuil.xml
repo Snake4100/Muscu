@@ -30,7 +30,8 @@
             android:layout_below="@+id/acceuil_textview"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="55dp"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/button"/>
 
         <Button
             android:layout_width="match_parent"
@@ -40,7 +41,9 @@
             android:layout_above="@+id/button_exercices"
             android:layout_alignRight="@+id/button_mesSeances"
             android:layout_alignEnd="@+id/button_mesSeances"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button"/>
 
         <Button
             android:layout_width="match_parent"
@@ -49,8 +52,9 @@
             android:id="@+id/button_exercices"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="147dp"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button"/>
 
     </LinearLayout>
 </RelativeLayout>

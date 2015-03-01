@@ -115,7 +115,8 @@
             android:layout_gravity="center_horizontal">
 
             <Button
-                android:id="@+id/button_validerTypeExercice" />
+                android:id="@+id/button_validerTypeExercice"
+                android:background="@drawable/button"/>
         </TableRow>
 
     </LinearLayout>

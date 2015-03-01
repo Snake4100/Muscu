@@ -48,15 +48,16 @@
         <Button
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:text="+"
             android:id="@+id/button_ajoutExerciceTypeSeance"
-            android:layout_gravity="right" />
+            android:layout_gravity="right"
+            android:background="@android:drawable/ic_input_add"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Confirmer"
             android:id="@+id/button_confirmerTypeSeance"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/button"/>
     </LinearLayout>
 </RelativeLayout>

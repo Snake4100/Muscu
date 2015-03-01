@@ -12,7 +12,8 @@
         android:text="@string/creerExercice_button"
         android:id="@+id/button_creerTypeExercice"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button"/>
 
     <ListView
         android:layout_width="wrap_content"

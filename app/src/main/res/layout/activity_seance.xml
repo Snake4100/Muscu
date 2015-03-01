@@ -31,16 +31,17 @@
         android:text="@string/cloreSeance_button"
         android:id="@+id/button_cloreSeance"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button"/>
 
     <Button
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:text="+"
         android:id="@+id/button_nouvelExercice"
         android:layout_gravity="center_horizontal"
         android:layout_above="@+id/button_cloreSeance"
         android:layout_alignRight="@+id/listExerciceSeance"
-        android:layout_alignEnd="@+id/listExerciceSeance" />
+        android:layout_alignEnd="@+id/listExerciceSeance"
+        android:background="@android:drawable/ic_input_add"/>
 
 </RelativeLayout>

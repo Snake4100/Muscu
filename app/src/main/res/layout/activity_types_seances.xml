@@ -17,10 +17,10 @@
     <Button
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:text="+"
         android:id="@+id/button_ajouterTypeSeance"
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/listView_typesSeances"
-        android:layout_alignEnd="@+id/listView_typesSeances" />
+        android:layout_alignEnd="@+id/listView_typesSeances"
+        android:background="@android:drawable/ic_input_add"/>
 
 </RelativeLayout>
