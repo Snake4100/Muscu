@@ -161,6 +161,7 @@ public class Chronometre_serie extends DialogFragment{
                             Chronometre_serie.this.setTime(0, Chronometre_serie.this.textView_chrono);
                         }
                     }.start();
+                    Chronometre_serie.this.setCancelable(false);
 
                 }
             });
