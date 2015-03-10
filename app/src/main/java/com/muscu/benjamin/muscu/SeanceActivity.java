@@ -3,11 +3,13 @@ package com.muscu.benjamin.muscu;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -215,12 +217,18 @@ public class SeanceActivity extends Activity {
                 android.R.layout.select_dialog_singlechoice);
         arrayAdapter.addAll(this.daoTypeSeance.getAll());
 
-        TextView text = new TextView(this);
-        text.setText("Cliquez sur annulez si vous le voulez pas choisir de séance type");
+        builderSingle.setNegativeButton("Annuler",
+                new DialogInterface.OnClickListener() {
 
-        builderSingle.setView(text);
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        SeanceActivity.this.daoSeance.supprimer(SeanceActivity.this.laSeance.getId());
+                        SeanceActivity.this.finish();
+                    }
+                });
 
-        builderSingle.setNegativeButton("cancel",
+        builderSingle.setPositiveButton("Aucune",
                 new DialogInterface.OnClickListener() {
 
                     @Override
@@ -228,6 +236,19 @@ public class SeanceActivity extends Activity {
                         dialog.dismiss();
                     }
                 });
+
+        //bouton retour
+        builderSingle.setOnKeyListener(new Dialog.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    dialog.dismiss();
+                    SeanceActivity.this.daoSeance.supprimer(SeanceActivity.this.laSeance.getId());
+                    SeanceActivity.this.finish();
+                }
+                return true;
+            }
+        });
 
         builderSingle.setAdapter(arrayAdapter,
                 new DialogInterface.OnClickListener() {
