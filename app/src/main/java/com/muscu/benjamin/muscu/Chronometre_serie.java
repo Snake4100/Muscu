@@ -109,6 +109,7 @@ public class Chronometre_serie extends DialogFragment{
                     chronometer.setBase(SystemClock.elapsedRealtime());
                     chronometer.start();
                     isChronometerRunning = true;
+                    Chronometre_serie.this.setCancelable(false);
 
                 }
             });
