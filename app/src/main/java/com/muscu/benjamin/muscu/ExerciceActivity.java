@@ -102,37 +102,49 @@ public class ExerciceActivity extends Activity {
 
         //bouton pour ajouter série
         Button boutonAjouter = (Button) findViewById(R.id.button_ajouterSerie);
-        boutonAjouter.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                resultatSerie(ExerciceActivity.this.sonExercice.getSeries().size() + 1);
-            }
-        });
-
         //bouton démarer timer
         Button boutonDemarrer = (Button) findViewById(R.id.button_demarrerChrono);
-        boutonDemarrer.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        //si la séance n'est pas close
+        if(!this.sonExercice.getSeance().isClose())
+        {
 
-                //s'il y avait deja un timer on l'arréte
-                if(ExerciceActivity.this.countDown != null){
-                    ExerciceActivity.this.countDown.cancel();
+            boutonAjouter.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+
+                    resultatSerie(ExerciceActivity.this.sonExercice.getSeries().size() + 1);
                 }
+            });
 
-                //on crée le timer
-                ExerciceActivity.this.countDown = new CountDownTimer(ExerciceActivity.this.sonExercice.getTempsRepos()*1000, 1000) {
 
-                    public void onTick(long millisUntilFinished) {
-                        long secondesUntilFinished = millisUntilFinished / 1000;
-                        ExerciceActivity.this.setTime(secondesUntilFinished, ExerciceActivity.this.timer);
+            boutonDemarrer.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+
+                    //s'il y avait deja un timer on l'arréte
+                    if(ExerciceActivity.this.countDown != null){
+                        ExerciceActivity.this.countDown.cancel();
                     }
 
-                    public void onFinish() {
-                        ExerciceActivity.this.setTime(0, ExerciceActivity.this.timer);
-                    }
-                }.start();
-            }
-        });
+                    //on crée le timer
+                    ExerciceActivity.this.countDown = new CountDownTimer(ExerciceActivity.this.sonExercice.getTempsRepos()*1000, 1000) {
+
+                        public void onTick(long millisUntilFinished) {
+                            long secondesUntilFinished = millisUntilFinished / 1000;
+                            ExerciceActivity.this.setTime(secondesUntilFinished, ExerciceActivity.this.timer);
+                        }
+
+                        public void onFinish() {
+                            ExerciceActivity.this.setTime(0, ExerciceActivity.this.timer);
+                        }
+                    }.start();
+                }
+            });
+        }
+
+        else{
+            boutonAjouter.setVisibility(View.GONE);
+            boutonDemarrer.setVisibility(View.GONE);
+            this.timer.setVisibility(View.GONE);
+        }
 
 
 
