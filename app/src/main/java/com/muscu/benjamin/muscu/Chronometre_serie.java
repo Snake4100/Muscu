@@ -92,6 +92,13 @@ public class Chronometre_serie extends DialogFragment{
         this.chronometer.setTextSize(36);
 
         this.textView_chrono = (TextView) v.findViewById(R.id.textView_chronometer);
+
+        //on récupér le bouton
+        final Button button_stop = (Button)v.findViewById(R.id.button_stopChronoSerie);
+        button_stop.setVisibility(View.GONE);
+
+        final Button button_start = (Button)v.findViewById(R.id.button_startChronoSerie);
+
         //si c'est un chrono maximum
         if(tempsAfaire == -1)
         {
@@ -99,9 +106,6 @@ public class Chronometre_serie extends DialogFragment{
             this.textView_chrono.setVisibility(View.GONE);
 
             //on récupér le bouton
-            final Button button_stop = (Button)v.findViewById(R.id.button_stopChronoSerie);
-
-            Button button_start = (Button)v.findViewById(R.id.button_startChronoSerie);
             button_start.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -110,6 +114,11 @@ public class Chronometre_serie extends DialogFragment{
                     chronometer.start();
                     isChronometerRunning = true;
                     Chronometre_serie.this.setCancelable(false);
+
+                    //on affiche le bouton stop
+                    button_stop.setVisibility(View.VISIBLE);
+                    //on cache le bouton start
+                    button_start.setVisibility(View.GONE);
 
                 }
             });
@@ -135,10 +144,6 @@ public class Chronometre_serie extends DialogFragment{
             //on vire le chrono
             v.findViewById(R.id.chronometer).setVisibility(View.GONE);
             setTime(this.tempsAfaire,this.textView_chrono);
-            //on récupér le bouton
-            final Button button_stop = (Button)v.findViewById(R.id.button_stopChronoSerie);
-
-            Button button_start = (Button)v.findViewById(R.id.button_startChronoSerie);
 
             button_start.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -163,6 +168,11 @@ public class Chronometre_serie extends DialogFragment{
                         }
                     }.start();
                     Chronometre_serie.this.setCancelable(false);
+
+                    //on affiche le bouton stop
+                    button_stop.setVisibility(View.VISIBLE);
+                    //on cache le bouton start
+                    button_start.setVisibility(View.GONE);
 
                 }
             });
