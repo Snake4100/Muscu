@@ -104,6 +104,13 @@ public class ExerciceActivity extends Activity {
         Button boutonAjouter = (Button) findViewById(R.id.button_ajouterSerie);
         //bouton démarer timer
         Button boutonDemarrer = (Button) findViewById(R.id.button_demarrerChrono);
+
+        //on crée l'adapter de la listeview des series
+        this.seriesAdapter = new ArrayAdapter<Serie>(this, android.R.layout.simple_list_item_1, this.sonExercice.getSeries());
+        ListView listSeries = (ListView) findViewById(R.id.listView_series);
+        listSeries.setAdapter(this.seriesAdapter);
+
+
         //si la séance n'est pas close
         if(!this.sonExercice.getSeance().isClose())
         {
@@ -138,6 +145,23 @@ public class ExerciceActivity extends Activity {
                     }.start();
                 }
             });
+
+            //modification d'une série
+            listSeries.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    ExerciceActivity.this.modificationResultatSerie(ExerciceActivity.this.seriesAdapter.getItem(position));
+                }
+            });
+
+            //suppression d'une série
+            listSeries.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    ExerciceActivity.this.alertSuppressionSerie(ExerciceActivity.this.seriesAdapter.getItem(position));
+                    return true;
+                }
+            });
         }
 
         else{
@@ -145,26 +169,6 @@ public class ExerciceActivity extends Activity {
             boutonDemarrer.setVisibility(View.GONE);
             this.timer.setVisibility(View.GONE);
         }
-
-
-
-        //on crée l'adapter de la listeview des series
-        this.seriesAdapter = new ArrayAdapter<Serie>(this, android.R.layout.simple_list_item_1, this.sonExercice.getSeries());
-        ListView listSeries = (ListView) findViewById(R.id.listView_series);
-        listSeries.setAdapter(this.seriesAdapter);
-        listSeries.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ExerciceActivity.this.modificationResultatSerie(ExerciceActivity.this.seriesAdapter.getItem(position));
-            }
-        });
-        listSeries.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                ExerciceActivity.this.alertSuppressionSerie(ExerciceActivity.this.seriesAdapter.getItem(position));
-                return true;
-            }
-        });
 
     }
 
