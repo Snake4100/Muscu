@@ -32,7 +32,7 @@ public class SeanceDAO extends DAOBase{
                     SEANCE_DATE + " TEXT, " +
                     SEANCE_NOM + " TEXT," +
                     SEANCE_CLOSE + " INTEGER," +
-                    SEANCE_TYPESEANCE +" INTEGER" +
+                    SEANCE_TYPESEANCE +" INTEGER," +
                     "FOREIGN KEY("+SEANCE_TYPESEANCE+") REFERENCES "+TypeSeanceDAO.TYPESEANCE_TABLE_NAME+"("+TypeSeanceDAO.TYPESEANCE_KEY+") ON DELETE SET NULL);";
 
     public SeanceDAO(Context pContext) {
